@@ -5,9 +5,16 @@ from typing import Any
 
 import numpy as np
 import pandas as pd
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
-from sklearn.model_selection import train_test_split
+try:
+    from sklearn.ensemble import RandomForestRegressor
+    from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+    from sklearn.model_selection import train_test_split
+except ImportError:
+    RandomForestRegressor = None
+    mean_absolute_error = None
+    mean_squared_error = None
+    r2_score = None
+    train_test_split = None
 
 try:
     from SmartVesselAI.ml.tft_model import TemporalFusionTransformerRegressor

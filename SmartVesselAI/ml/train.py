@@ -15,9 +15,17 @@ import pickle
 from datetime import datetime
 import pandas as pd
 import numpy as np
-from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
-from sklearn.ensemble import RandomForestRegressor, ExtraTreesRegressor
-from sklearn.linear_model import Ridge
+try:
+    from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+    from sklearn.ensemble import RandomForestRegressor, ExtraTreesRegressor
+    from sklearn.linear_model import Ridge
+except ImportError:
+    mean_squared_error = None
+    mean_absolute_error = None
+    r2_score = None
+    RandomForestRegressor = None
+    ExtraTreesRegressor = None
+    Ridge = None
 
 SMARTVESSEL_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 if SMARTVESSEL_DIR not in sys.path:

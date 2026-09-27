@@ -31,7 +31,11 @@ from SmartVesselAI.backend.schemas import (
 )
 from SmartVesselAI.ml.predict import FreightPredictor
 from SmartVesselAI.optimization.charter_optimizer import CharterOptimizer
-from SmartVesselAI.ml.train import train_freight_models
+try:
+    from SmartVesselAI.ml.train import train_freight_models
+except Exception as train_imp_err:
+    train_freight_models = None
+    print(f"Notice importing train_freight_models: {train_imp_err}")
 
 MODEL_DIR = Path(__file__).resolve().parent / "models"
 
