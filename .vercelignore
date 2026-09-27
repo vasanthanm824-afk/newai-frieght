@@ -1,0 +1,12 @@
+.venv/
+*.jpg
+*.png
+*.ipynb
+*.db
+*.sqlite3
+smartvessel_*.jpg
+catboost_info/
+scratch/
+test_*.py
+uv.lock
+
