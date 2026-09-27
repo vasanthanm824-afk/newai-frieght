@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartVesselAI — Live Route & AIS Vessel Tracking</title>
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Leaflet.js Maps -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/static/style.css?v=20260919_v5">
+  <script src="/static/js/workflowState.js"></script>
+  <style>
+    .map-tooltip {
+      background: rgba(248, 252, 255, 0.95) !important;
+      border: 1px solid rgba(22, 139, 255, 0.4) !important;
+      color: #0f172a !important;
+      font-size: 0.75rem !important;
+      font-weight: 700 !important;
+      border-radius: 6px !important;
+      padding: 4px 10px !important;
+      box-shadow: 0 4px 15px rgba(15,23,42,0.12) !important;
+    }
+    .leaflet-container { background: #475569 !important; }
+    .dashboard-layout { display: flex; min-height: calc(100vh - 70px); }
+    .main-content-custom { flex-grow: 1; padding: 1.5rem 2rem; overflow-x: hidden; }
+  </style>
+</head>
+<body>
+  <!-- SEPARATE MULTI-LAYER ANIMATED PHOTOREALISTIC MARITIME BACKGROUND SYSTEM -->
+  <div id="maritime-animated-bg-container" class="no-print">
+    <!-- Photorealistic Ocean & Sunset Background Layer -->
+    <div id="photorealistic-ocean-bg" style="position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:-3; background: url('/static/assets/photorealistic_ocean_bg.jpg') center center / cover no-repeat; filter: brightness(0.88) contrast(1.05);"></div>
+
+    <!-- Dynamic 2D/WebGL Ocean Wave Ripples, Bow Spray Particles, Stern Wake & Seagulls Canvas -->
+    <canvas id="maritime-3d-bg-canvas" style="position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:-2; pointer-events:none; background:transparent;"></canvas>
+    
+    <!-- Dedicated Photorealistic White Passenger Cruise Ship Layer -->
+    <div id="vessel-ship-layer">
+      <img src="/static/assets/photorealistic_cruise_ship.png" class="photorealistic-ship-img" alt="Photorealistic Luxury Passenger Cruise Ship" />
+    </div>
+  </div>
+
+
+  <!-- Top Header Navigation Bar -->
+  <nav class="navbar navbar-expand-lg navbar-custom px-3 py-2 border-bottom border-secondary border-opacity-25">
+    <div class="container-fluid px-0">
+      <a class="navbar-brand brand-logo d-flex align-items-center gap-2.5 text-decoration-none" href="index.html">
+        <img src="/static/assets/smartvessel_logo.png" alt="SmartVesselAI Logo" style="height: 44px; width: 44px; object-fit: contain; filter: drop-shadow(0 2px 8px rgba(22, 139, 255, 0.25)); border-radius: 8px;">
+        <div>
+          <div class="fw-bold text-dark-navy d-flex align-items-center" style="font-size: 1.35rem; letter-spacing: -0.02em; line-height: 1.1;">
+            <span>SMARTVESSEL</span>
+            <span style="background: linear-gradient(135deg, #168bff, #0284c7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-left: 4px; font-weight: 800;">AI</span>
+          </div>
+          <div class="fs-8 text-muted fw-semibold" style="margin-top: -1px; letter-spacing: 0.02em;">Intelligent Chartering & Freight Optimizer</div>
+        </div>
+      </a>
+      <div class="d-flex align-items-center gap-3">
+        <div class="d-flex align-items-center gap-2 bg-success bg-opacity-10 text-success px-3 py-1.5 rounded-3 border border-success border-opacity-25 fs-7">
+          <span class="pulse-dot"></span>
+          <span>System Status: <strong>ONLINE</strong></span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="dashboard-layout">
+    <!-- Left Navigation Sidebar -->
+    <aside class="sidebar-custom d-none d-lg-flex">
+      <div>
+        <a href="index.html" class="sidebar-link"><i class="fa-solid fa-gauge-high"></i> Dashboard</a>
+        <a href="forecast.html" class="sidebar-link"><i class="fa-solid fa-chart-line"></i> Freight Forecasting</a>
+        <a href="vessels.html" class="sidebar-link"><i class="fa-solid fa-anchor"></i> Vessel Intelligence</a>
+        <a href="ports.html" class="sidebar-link"><i class="fa-solid fa-warehouse"></i> Port Intelligence</a>
+        <a href="optimization.html" class="sidebar-link"><i class="fa-solid fa-calculator"></i> Cost & Optimization</a>
+        <a href="risk.html" class="sidebar-link"><i class="fa-solid fa-shield-halved"></i> Risk Center</a>
+        <a href="whatif.html" class="sidebar-link"><i class="fa-solid fa-sliders"></i> What-If Simulator</a>
+        <a href="tracking.html" class="sidebar-link active"><i class="fa-solid fa-globe"></i> Live Tracking</a>
+        <a href="alerts.html" class="sidebar-link"><i class="fa-solid fa-bell"></i> Alerts & Notifications</a>
+        <a href="billing.html" class="sidebar-link"><i class="fa-solid fa-file-invoice-dollar"></i> Reports & Downloads</a>
+        <a href="health.html" class="sidebar-link"><i class="fa-solid fa-server"></i> Data & AI Health</a>
+        <a href="settings.html" class="sidebar-link"><i class="fa-solid fa-gear"></i> Settings</a>
+      </div>
+      <div class="p-3 glass-card bg-opacity-50 rounded-3 border border-secondary border-opacity-25 mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <span class="fs-8 text-muted fw-bold"><i class="fa-solid fa-brain text-info me-1"></i> AI MODEL STATUS</span>
+          <span class="badge bg-success fs-8">🟢 Healthy</span>
+        </div>
+        <div class="fs-7 text-dark-navy mb-1">Model: <strong>XGBoost v2.4</strong></div>
+        <div class="fs-7 text-dark-navy mb-1">Accuracy ($R^2$): <strong class="text-info">91.4%</strong></div>
+        <div class="fs-8 text-muted">Last Trained: 02 Sep 2026</div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content-custom">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h2 class="fw-bold mb-1"><i class="fa-solid fa-globe text-info me-2"></i>Live AIS Route & Vessel Tracking</h2>
+          <p class="text-muted mb-0">Real-time global AIS satellite tracking, voyage trajectory, and ETA delay prediction</p>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+          <span class="badge bg-info px-3 py-2 fs-7">Active Track: 5 Vessels</span>
+          <button class="btn btn-sm btn-outline-primary fw-bold" id="btn-refresh-tracking" onclick="triggerButtonRefresh(this, initFullRouteMap, 'AIS satellite positions synchronized')">
+            <i class="fa-solid fa-rotate-right me-1"></i> Refresh Tracking
+          </button>
+        </div>
+      </div>
+
+      <!-- Map Tracking Card -->
+      <div class="glass-card mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="d-flex align-items-center">
+            <h5 class="fw-bold mb-0"><i class="fa-solid fa-map-location-dot text-info me-2"></i>Global Ocean Freight Trajectory</h5>
+            <span class="badge bg-secondary fs-8"><i class="fa-solid fa-satellite-dish me-1"></i> AIS SATELLITE LIVE</span>
+          </div>
+          <span class="text-muted fs-7">Active Vessel: <strong class="text-dark-navy" id="tr-vessel-title">Panamax Explorer (VES-001)</strong></span>
+        </div>
+
+        <!-- Leaflet Map Container -->
+        <div id="full-route-map" style="height: 420px; width: 100%; border-radius: 8px;" class="border border-secondary border-opacity-25 mb-4"></div>
+
+        <div class="row text-center text-dark-navy g-3 glass-card p-3 rounded-3 border border-secondary border-opacity-25 fs-7 mb-4">
+          <div class="col-md-3">Distance Remaining: <strong class="text-info fs-6" id="tr-dist">2,310 NM</strong></div>
+          <div class="col-md-3">Current Speed: <strong class="text-info fs-6" id="tr-speed">11.4 kn</strong></div>
+          <div class="col-md-3">Course Heading: <strong class="text-info fs-6" id="tr-course">298°</strong></div>
+          <div class="col-md-3">Predicted ETA: <strong class="text-warning fs-6" id="tr-eta">18 Sep 2026</strong></div>
+        </div>
+
+        <!-- Dynamic Doubly Linked List Route Waypoints -->
+        <div class="glass-card p-3 rounded-3 border border-secondary border-opacity-25">
+          <h6 class="fw-bold text-dark-navy mb-3"><i class="fa-solid fa-route text-info me-2"></i>Doubly Linked List Route Waypoints & Bunkering Legs</h6>
+          <div id="route-waypoints-container" class="row g-2 text-center fs-8">
+            <div class="col">
+              <div class="p-2 border rounded bg-white shadow-sm">
+                <div class="text-muted">Node 1 (Origin)</div>
+                <strong class="text-primary fs-7">Hay Point</strong>
+                <div class="badge bg-success mt-1">Departed</div>
+              </div>
+            </div>
+            <div class="col-auto d-flex align-items-center"><i class="fa-solid fa-arrow-right text-muted"></i></div>
+            <div class="col">
+              <div class="p-2 border rounded bg-white shadow-sm">
+                <div class="text-muted">Node 2 (Transit)</div>
+                <strong class="text-dark fs-7">Indian Ocean S.</strong>
+                <div class="badge bg-info mt-1">Underway</div>
+              </div>
+            </div>
+            <div class="col-auto d-flex align-items-center"><i class="fa-solid fa-arrow-right text-muted"></i></div>
+            <div class="col">
+              <div class="p-2 border rounded bg-white shadow-sm">
+                <div class="text-muted">Node 3 (Bunker)</div>
+                <strong class="text-warning fs-7">Singapore Hub</strong>
+                <div class="badge bg-secondary mt-1">Refueling</div>
+              </div>
+            </div>
+            <div class="col-auto d-flex align-items-center"><i class="fa-solid fa-arrow-right text-muted"></i></div>
+            <div class="col">
+              <div class="p-2 border rounded bg-white shadow-sm">
+                <div class="text-muted">Node 4 (Transit)</div>
+                <strong class="text-dark fs-7">Bay of Bengal</strong>
+                <div class="badge bg-secondary mt-1">En Route</div>
+              </div>
+            </div>
+            <div class="col-auto d-flex align-items-center"><i class="fa-solid fa-arrow-right text-muted"></i></div>
+            <div class="col">
+              <div class="p-2 border rounded bg-white shadow-sm">
+                <div class="text-muted">Node 5 (Dest)</div>
+                <strong class="text-success fs-7">Paradip Port</strong>
+                <div class="badge bg-primary mt-1">Discharge</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/static/js/maritime3d.js?v=20260919_v5"></script>
+  <script>
+    let mapInstance = null;
+
+    async function initFullRouteMap() {
+      if (mapInstance) return;
+
+      const mapEl = document.getElementById('full-route-map');
+      if (!mapEl) return;
+
+      mapInstance = L.map('full-route-map', {
+        center: [-2.0, 110.0],
+        zoom: 3,
+        attributionControl: false
+      });
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 18,
+        attribution: '&copy; OpenStreetMap'
+      }).addTo(mapInstance);
+
+      let shipCoords = [-2.5, 105.0];
+      let vSpeed = 11.4;
+      let vCourse = 298.0;
+      let vName = "Panamax Explorer (VES-001)";
+      let distRem = 2310;
+      let etaVal = "18 Sep 2026";
+
+      try {
+        const resp = await fetch('/api/tracking/live');
+        if (resp.ok) {
+          const tData = await resp.json();
+          const vessels = tData.active_vessels || [];
+          if (vessels.length > 0) {
+            const v0 = vessels[0];
+            vName = `${v0.vessel_name} (${v0.vessel_id})`;
+            shipCoords = [v0.latitude, v0.longitude];
+            vSpeed = v0.speed_knots;
+            vCourse = v0.course_deg;
+            distRem = v0.distance_remaining_nm;
+            etaVal = v0.eta_date;
+
+            if (document.getElementById('tr-vessel-title')) document.getElementById('tr-vessel-title').innerText = vName;
+            if (document.getElementById('tr-dist')) document.getElementById('tr-dist').innerText = `${distRem.toLocaleString()} NM`;
+            if (document.getElementById('tr-speed')) document.getElementById('tr-speed').innerText = `${vSpeed} kn`;
+            if (document.getElementById('tr-course')) document.getElementById('tr-course').innerText = `${vCourse}°`;
+            if (document.getElementById('tr-eta')) document.getElementById('tr-eta').innerText = etaVal;
+          }
+        }
+      } catch (e) {
+        console.warn("Could not fetch live telemetry, using calibrated defaults:", e);
+      }
+
+      const ausCoords = [-21.28, 149.30];
+      const indCoords = [20.26, 86.67];
+
+      const routeLine = L.polyline([ausCoords, shipCoords, indCoords], {
+        color: '#38bdf8',
+        weight: 4,
+        dashArray: '8, 8'
+      }).addTo(mapInstance);
+
+      L.circleMarker(ausCoords, { radius: 7, color: '#38bdf8', fillColor: '#0284c7', fillOpacity: 1 }).addTo(mapInstance)
+        .bindTooltip("Origin: Hay Point, Australia 📍", { permanent: true, direction: 'bottom', className: 'map-tooltip' });
+
+      L.circleMarker(indCoords, { radius: 7, color: '#22c55e', fillColor: '#15803d', fillOpacity: 1 }).addTo(mapInstance)
+        .bindTooltip("Destination: Paradip, India 📍", { permanent: true, direction: 'top', className: 'map-tooltip' });
+
+      L.circleMarker(shipCoords, { radius: 9, color: '#f59e0b', fillColor: '#d97706', fillOpacity: 1 }).addTo(mapInstance)
+        .bindTooltip(`🚢 ${vName} (${vSpeed} kn | ${vCourse}°)`, { permanent: true, direction: 'right', className: 'map-tooltip' });
+
+      mapInstance.fitBounds(routeLine.getBounds(), { padding: [35, 35] });
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      initFullRouteMap();
+    });
+  </script>
+</body>
+</html>

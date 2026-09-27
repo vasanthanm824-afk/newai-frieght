@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartVesselAI — Port Constraint & Compatibility Matrix</title>
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <!-- Custom CSS & Workflow Engine -->
+  <link rel="stylesheet" href="/static/style.css?v=20260923_ref">
+  <script src="/static/js/workflowState.js"></script>
+</head>
+<body>
+
+  <!-- Top Header Navigation Bar -->
+  <nav class="navbar navbar-custom navbar-expand-lg">
+    <div class="container-fluid px-2">
+      
+      <!-- Brand -->
+      <div class="header-brand-container">
+        <a class="smartvessel-brand" href="index.html">
+          <div class="smartvessel-brand-icon">
+            <i class="fa-solid fa-ship"></i>
+          </div>
+          <div>
+            <div class="smartvessel-brand-title">SmartVessel<span>AI</span></div>
+            <div class="smartvessel-brand-sub">Maritime Intelligence & Optimization</div>
+          </div>
+        </a>
+      </div>
+
+      <!-- Top Header Navigation Tabs -->
+      <div class="collapse navbar-collapse show" id="headerNavTabs">
+        <div class="header-top-nav me-auto">
+          <a href="index.html" class="nav-item-link"><i class="fa-solid fa-house"></i> Dashboard</a>
+          <a href="forecast.html" class="nav-item-link"><i class="fa-solid fa-chart-line"></i> Forecast</a>
+          <a href="optimization.html" class="nav-item-link"><i class="fa-solid fa-chart-pie"></i> Analytics</a>
+          <a href="billing.html" class="nav-item-link"><i class="fa-solid fa-file-contract"></i> Reports</a>
+        </div>
+      </div>
+
+      <!-- Header Right User & Controls -->
+      <div class="header-user-badge">
+        <button class="btn btn-light rounded-circle position-relative border p-2 shadow-sm" style="width:38px; height:38px;" title="Notifications" onclick="location.href='alerts.html'">
+          <i class="fa-regular fa-bell text-dark fs-6"></i>
+          <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
+        </button>
+
+        <div class="user-avatar-btn dropdown">
+          <div class="avatar-circle">V</div>
+          <div class="text-start d-none d-sm-block">
+            <div class="user-name-text">Vasanthan M</div>
+            <div class="user-role-text">Admin</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </nav>
+
+  <!-- Dashboard Main Layout -->
+  <div class="dashboard-layout">
+    
+    <!-- Left Navy Navigation Sidebar -->
+    <aside class="sidebar-custom d-none d-lg-flex">
+      <div class="sidebar-menu-group">
+        <a href="index.html" class="sidebar-link">
+          <div class="sidebar-link-content"><i class="fa-solid fa-house"></i> Dashboard</div>
+          <span class="sidebar-chevron"><i class="fa-solid fa-chevron-right"></i></span>
+        </a>
+        <a href="forecast.html" class="sidebar-link">
+          <div class="sidebar-link-content"><i class="fa-solid fa-chart-line"></i> Freight Forecast</div>
+          <span class="sidebar-chevron"><i class="fa-solid fa-chevron-right"></i></span>
+        </a>
+        <a href="vessels.html" class="sidebar-link">
+          <div class="sidebar-link-content"><i class="fa-solid fa-ship"></i> Vessel Chartering</div>
+          <span class="sidebar-chevron"><i class="fa-solid fa-chevron-right"></i></span>
+        </a>
+        <a href="ports.html" class="sidebar-link active">
+          <div class="sidebar-link-content"><i class="fa-solid fa-cubes"></i> Bulk Cargo Procurement</div>
+          <span class="sidebar-chevron"><i class="fa-solid fa-chevron-right"></i></span>
+        </a>
+        <a href="risk.html" class="sidebar-link">
+          <div class="sidebar-link-content"><i class="fa-solid fa-globe"></i> Market Intelligence</div>
+          <span class="sidebar-chevron"><i class="fa-solid fa-chevron-right"></i></span>
+        </a>
+        <a href="billing.html" class="sidebar-link">
+          <div class="sidebar-link-content"><i class="fa-solid fa-file-lines"></i> Reports</div>
+          <span class="sidebar-chevron"><i class="fa-solid fa-chevron-right"></i></span>
+        </a>
+        <a href="settings.html" class="sidebar-link">
+          <div class="sidebar-link-content"><i class="fa-solid fa-gear"></i> Settings</div>
+          <span class="sidebar-chevron"><i class="fa-solid fa-chevron-right"></i></span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content-custom">
+      
+      <!-- HERO BANNER SECTION -->
+      <div class="ref-hero-banner">
+        <div>
+          <div class="hero-sub-tag">INTELLIGENT PORT CONSTRAINT & COMPATIBILITY</div>
+          <h1 class="hero-main-title">Port Constraint &<br>Compatibility Matrix</h1>
+          <p class="hero-description">
+            Direct verification of Vessel Draft, LOA, Beam, and Handling Capacity against Global Ports
+          </p>
+          <div class="hero-actions-group">
+            <button class="btn-hero-solid" id="btn-refresh-ports" onclick="triggerButtonRefresh(this, initPortPage, 'Port compatibility & draft matrix refreshed')">
+              <i class="fa-solid fa-rotate me-1"></i> Refresh Port Matrix
+            </button>
+          </div>
+        </div>
+
+        <!-- Floating Feature Overlay Card -->
+        <div class="hero-right-widget ms-auto d-none d-xl-flex">
+          <div class="hero-feature-item">
+            <div class="hero-feature-icon"><i class="fa-solid fa-anchor"></i></div>
+            <span>Real-time Port Drafts</span>
+          </div>
+          <div class="hero-feature-item">
+            <div class="hero-feature-icon"><i class="fa-solid fa-warehouse"></i></div>
+            <span>Handling Capacity</span>
+          </div>
+          <div class="hero-feature-item">
+            <div class="hero-feature-icon"><i class="fa-solid fa-clock"></i></div>
+            <span>Waiting Time Analytics</span>
+          </div>
+          <div class="hero-feature-item">
+            <div class="hero-feature-icon"><i class="fa-solid fa-check-double"></i></div>
+            <span>Compatibility Checker</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- WORKFLOW PROGRESS CONTAINER -->
+      <div id="workflow-progress-container"></div>
+
+      <!-- GLOBAL PORTS CARDS GRID (3 COLUMNS) -->
+      <div class="row g-3 mb-4" id="ports-card-container">
+        <!-- Port Cards dynamically injected by JS -->
+      </div>
+
+      <!-- INTERACTIVE COMPATIBILITY TESTER CARD -->
+      <div class="card-ref">
+        <h5 class="card-ref-title mb-3"><i class="fa-solid fa-diagram-project text-primary me-2"></i>Interactive Compatibility Tester</h5>
+
+        <div class="row g-3 mb-3">
+          <div class="col-md-4">
+            <label class="form-label text-muted fs-8 font-semibold">Select Vessel</label>
+            <select class="form-select form-select-custom" id="diag-vessel">
+              <!-- Dynamic vessel options -->
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label text-muted fs-8 font-semibold">Select Target Port</label>
+            <select class="form-select form-select-custom" id="diag-port">
+              <!-- Dynamic port options -->
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label text-muted fs-8 font-semibold">Cargo Tonnage (MT)</label>
+            <input type="number" class="form-control form-control-custom" id="diag-cargo" value="80000" step="5000">
+          </div>
+        </div>
+
+        <!-- Diagnostic Verification Summary Box -->
+        <div class="p-3 bg-light rounded-3 border border-secondary border-opacity-25" id="diag-result-box">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h6 class="fw-bold text-dark mb-0 fs-7">Diagnostic Verification Summary</h6>
+            <span class="badge bg-primary fs-7" id="diag-badge"><i class="fa-solid fa-circle-info me-1"></i> SELECT VESSEL & PORT</span>
+          </div>
+          <hr class="border-secondary opacity-25 my-2">
+          <div class="row text-center mt-3" id="diag-metrics-grid">
+            <!-- Draft, LOA, Beam, Capacity checks dynamically injected -->
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer-custom">
+    <div>SmartVessel AI Enterprise Maritime System</div>
+    <div class="footer-links">
+      <a href="#">Privacy Policy</a>
+      <span>|</span>
+      <a href="#">Terms & Conditions</a>
+      <span>|</span>
+      <a href="#">Contact Us</a>
+    </div>
+    <div class="footer-brand">
+      <i class="fa-solid fa-ship text-primary"></i> Powered by SmartVesselAI
+    </div>
+  </footer>
+
+  <!-- DYNAMIC PORT DATA SCRIPT -->
+  <script>
+    let globalVessels = [];
+    let globalPorts = [];
+
+    const defaultPortCatalog = [
+      {port_name: "Fremantle", country: "Australia", max_draft: 13.5, max_loa: 240, max_beam: 35, handling_capacity: 40000, avg_waiting_days: 1.1},
+      {port_name: "Gladstone", country: "Australia", max_draft: 16.0, max_loa: 280, max_beam: 45, handling_capacity: 70000, avg_waiting_days: 1.6},
+      {port_name: "Hay Point", country: "Australia", max_draft: 17.5, max_loa: 300, max_beam: 50, handling_capacity: 85000, avg_waiting_days: 1.4},
+      {port_name: "Newcastle", country: "Australia", max_draft: 15.2, max_loa: 290, max_beam: 47, handling_capacity: 60000, avg_waiting_days: 1.2},
+      {port_name: "Port Hedland", country: "Australia", max_draft: 19.5, max_loa: 340, max_beam: 58, handling_capacity: 120000, avg_waiting_days: 1.0},
+      {port_name: "Itaqui", country: "Brazil", max_draft: 18.5, max_loa: 320, max_beam: 52, handling_capacity: 80000, avg_waiting_days: 2.1},
+      {port_name: "Santos", country: "Brazil", max_draft: 14.5, max_loa: 280, max_beam: 42, handling_capacity: 55000, avg_waiting_days: 3.5},
+      {port_name: "Tubarao", country: "Brazil", max_draft: 23.0, max_loa: 360, max_beam: 65, handling_capacity: 130000, avg_waiting_days: 1.9},
+      {port_name: "Vancouver", country: "Canada", max_draft: 15.5, max_loa: 300, max_beam: 46, handling_capacity: 60000, avg_waiting_days: 2.0},
+      {port_name: "Paradip", country: "India", max_draft: 14.5, max_loa: 230, max_beam: 32.2, handling_capacity: 50000, avg_waiting_days: 2.5},
+      {port_name: "Vizag", country: "India", max_draft: 16.5, max_loa: 280, max_beam: 42, handling_capacity: 65000, avg_waiting_days: 2.0},
+      {port_name: "Qingdao", country: "China", max_draft: 18.0, max_loa: 320, max_beam: 50, handling_capacity: 110000, avg_waiting_days: 1.8}
+    ];
+
+    async function initPortPage() {
+      try {
+        const [vResp, pResp] = await Promise.all([fetch('/api/vessels'), fetch('/api/ports')]);
+        let vData = await vResp.json();
+        let pData = await pResp.json();
+
+        globalVessels = Array.isArray(vData) && vData.length > 0 ? vData : [
+          {vessel_name: "Panamax Pioneer", vessel_type: "Panamax", draft: 13.2},
+          {vessel_name: "Panamax Explorer", vessel_type: "Panamax", draft: 13.8},
+          {vessel_name: "Cape Titan", vessel_type: "Capesize", draft: 17.5},
+          {vessel_name: "Supramax Horizon", vessel_type: "Supramax", draft: 12.5},
+          {vessel_name: "Handy Wave", vessel_type: "Handysize", draft: 10.2}
+        ];
+
+        let loadedPorts = Array.isArray(pData) && pData.length > 0 ? pData : defaultPortCatalog;
+        
+        // Ensure default catalog ports are included if backend list is small
+        if (loadedPorts.length < defaultPortCatalog.length) {
+          loadedPorts = defaultPortCatalog;
+        }
+        globalPorts = loadedPorts;
+
+        // Render Port Cards
+        const pContainer = document.getElementById('ports-card-container');
+        pContainer.innerHTML = globalPorts.map(p => {
+          const draftVal = p.max_draft ?? p.max_draft_m ?? 14.5;
+          const loaVal = p.max_loa ?? p.max_loa_m ?? 230;
+          const beamVal = p.max_beam ?? p.max_beam_m ?? 32.2;
+          const capVal = (p.handling_capacity != null && !isNaN(p.handling_capacity)) ? Number(p.handling_capacity).toLocaleString() : '50,000';
+          const waitVal = p.avg_waiting_days ?? 2.5;
+
+          return `
+          <div class="col-md-4">
+            <div class="card-ref h-100 p-3">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <h5 class="fw-bold text-dark mb-0 fs-6">${p.port_name || 'Port'}</h5>
+                <span class="badge bg-secondary bg-opacity-25 text-dark fs-8">${p.country || 'India'}</span>
+              </div>
+              <div class="mt-2">
+                <div class="d-flex justify-content-between fs-7 text-muted mb-1">
+                  <span>Max Draft:</span> <strong class="text-primary fs-7">${draftVal} m</strong>
+                </div>
+                <div class="d-flex justify-content-between fs-7 text-muted mb-1">
+                  <span>Max LOA:</span> <strong class="text-dark fs-7">${loaVal} m</strong>
+                </div>
+                <div class="d-flex justify-content-between fs-7 text-muted mb-1">
+                  <span>Max Beam:</span> <strong class="text-dark fs-7">${beamVal} m</strong>
+                </div>
+                <div class="d-flex justify-content-between fs-7 text-muted mb-1">
+                  <span>Handling Capacity:</span> <strong class="text-dark fs-7">${capVal} T/day</strong>
+                </div>
+                <div class="d-flex justify-content-between fs-7 text-muted">
+                  <span>Avg Waiting Time:</span> <strong class="text-warning fs-7">${waitVal} Days</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+        `}).join('');
+
+        // Populate Select Dropdowns
+        const vSelect = document.getElementById('diag-vessel');
+        if (vSelect) {
+          vSelect.innerHTML = globalVessels.map(v => `<option value="${v.vessel_name || v.name}">${v.vessel_name || v.name} (${v.vessel_type || v.type} - ${v.draft_m || v.draft || 13.0}m draft)</option>`).join('');
+        }
+
+        const pSelect = document.getElementById('diag-port');
+        if (pSelect) {
+          pSelect.innerHTML = globalPorts.map(p => `<option value="${p.port_name}">${p.port_name} (${p.country} - ${p.max_draft || 14.5}m max draft)</option>`).join('');
+        }
+
+        runDiagnostic();
+
+        if (vSelect) vSelect.addEventListener('change', runDiagnostic);
+        if (pSelect) pSelect.addEventListener('change', runDiagnostic);
+        if (document.getElementById('diag-cargo')) document.getElementById('diag-cargo').addEventListener('input', runDiagnostic);
+
+      } catch (err) {
+        console.error("Port page init error:", err);
+      }
+    }
+
+    async function runDiagnostic() {
+      const vSelect = document.getElementById('diag-vessel');
+      const pSelect = document.getElementById('diag-port');
+      if (!vSelect || !pSelect) return;
+
+      const vName = vSelect.value;
+      const pName = pSelect.value;
+      const cargo = parseFloat(document.getElementById('diag-cargo').value) || 80000;
+
+      if (!vName || !pName) return;
+
+      try {
+        const resp = await fetch('/api/compatibility', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({vessel_name: vName, cargo_tonnes: cargo, port_name: pName})
+        });
+        const data = await resp.json();
+
+        const badgeEl = document.getElementById('diag-badge');
+        if (badgeEl) {
+          badgeEl.innerText = data.is_compatible ? '✓ PORT COMPATIBILITY PASSED' : '❌ PORT COMPATIBILITY FAILED';
+          badgeEl.className = data.is_compatible ? 'badge bg-success fs-7 px-3 py-1.5' : 'badge bg-danger fs-7 px-3 py-1.5';
+        }
+
+        const grid = document.getElementById('diag-metrics-grid');
+        if (grid) {
+          grid.innerHTML = `
+            <div class="col-3">
+              <div class="p-2 border rounded-2 ${data.draft_check.pass ? 'border-success bg-success bg-opacity-10' : 'border-danger bg-danger bg-opacity-10'}">
+                <div class="text-muted fs-8">Draft Check</div>
+                <div class="fw-bold fs-7 ${data.draft_check.pass ? 'text-success' : 'text-danger'}">
+                  ${data.draft_check.vessel}m / ${data.draft_check.port_max}m
+                </div>
+              </div>
+            </div>
+            <div class="col-3">
+              <div class="p-2 border rounded-2 ${data.loa_check.pass ? 'border-success bg-success bg-opacity-10' : 'border-danger bg-danger bg-opacity-10'}">
+                <div class="text-muted fs-8">LOA Check</div>
+                <div class="fw-bold fs-7 ${data.loa_check.pass ? 'text-success' : 'text-danger'}">
+                  ${data.loa_check.vessel}m / ${data.loa_check.port_max}m
+                </div>
+              </div>
+            </div>
+            <div class="col-3">
+              <div class="p-2 border rounded-2 ${data.beam_check.pass ? 'border-success bg-success bg-opacity-10' : 'border-danger bg-danger bg-opacity-10'}">
+                <div class="text-muted fs-8">Beam Check</div>
+                <div class="fw-bold fs-7 ${data.beam_check.pass ? 'text-success' : 'text-danger'}">
+                  ${data.beam_check.vessel}m / ${data.beam_check.port_max}m
+                </div>
+              </div>
+            </div>
+            <div class="col-3">
+              <div class="p-2 border rounded-2 ${data.capacity_check.pass ? 'border-success bg-success bg-opacity-10' : 'border-danger bg-danger bg-opacity-10'}">
+                <div class="text-muted fs-8">Capacity Check</div>
+                <div class="fw-bold fs-7 ${data.capacity_check.pass ? 'text-success' : 'text-danger'}">
+                  ${(data.capacity_check.cargo/1000).toFixed(0)}k / ${(data.capacity_check.vessel_capacity/1000).toFixed(0)}k T
+                </div>
+              </div>
+            </div>
+          `;
+        }
+
+      } catch (err) {
+        console.error("Diagnostic error:", err);
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', async () => {
+      await initPortPage();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,978 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+
+:root {
+  --bg-primary: #f1f5f9;
+  --bg-card: #ffffff;
+  --bg-card-hover: #ffffff;
+  --border-color: #e2e8f0;
+  --border-glow: #3b82f6;
+  
+  --text-main: #0f172a;       /* Dark slate navy text */
+  --text-muted: #64748b;      /* Muted text */
+  --text-light: #475569;
+  
+  --accent-blue: #1d4ed8;     /* Government / Corporate Blue */
+  --accent-cyan: #0284c7;     /* Sky Blue */
+  --accent-teal: #0d9488;     /* Teal */
+  --accent-green: #16a34a;    /* Success green */
+  --accent-amber: #d97706;    /* Warning amber */
+  --accent-red: #dc2626;      /* Danger red */
+  
+  --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06);
+  --shadow-main: 0 4px 12px rgba(15, 23, 42, 0.05);
+  --sidebar-bg: #0c2340;      /* Dark navy sidebar */
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background-color: #f1f5f9 !important;
+  color: var(--text-main);
+  min-height: 100vh;
+  margin: 0;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Background canvas setup */
+#maritime-animated-bg-container {
+  display: none !important; /* Hide crude floating cruise ship for reference layout */
+}
+
+/* Dashboard Overall Container Layout */
+.dashboard-layout {
+  display: flex;
+  min-height: calc(100vh - 68px);
+}
+
+.main-content-custom {
+  flex-grow: 1;
+  padding: 1.25rem 1.5rem;
+  overflow-x: hidden;
+  background-color: #f1f5f9;
+}
+
+/* ==========================================
+   TOP HEADER NAVIGATION BAR
+   ========================================== */
+.navbar-custom {
+  background: #ffffff !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+  padding: 0.4rem 1.25rem;
+  min-height: 68px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+}
+
+.header-brand-container {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.govt-brand-box {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding-right: 1.25rem;
+  border-right: 1px solid #cbd5e1;
+}
+
+.govt-brand-box img {
+  height: 38px;
+  width: auto;
+  object-fit: contain;
+}
+
+.govt-brand-title {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #1e293b;
+  line-height: 1.25;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.govt-brand-subtitle {
+  font-size: 0.65rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.smartvessel-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  text-decoration: none;
+}
+
+.smartvessel-brand-icon {
+  width: 38px;
+  height: 38px;
+  background: linear-gradient(135deg, #1d4ed8, #0284c7);
+  color: white;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: justify;
+  font-size: 1.2rem;
+  box-shadow: 0 2px 6px rgba(29, 78, 216, 0.25);
+}
+
+.smartvessel-brand-title {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #0c2340;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+.smartvessel-brand-title span {
+  color: #1d4ed8;
+}
+
+.smartvessel-brand-sub {
+  font-size: 0.68rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+/* Header Top Navigation Menu Links */
+.header-top-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: 1.5rem;
+}
+
+.header-top-nav .nav-item-link {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.9rem;
+  color: #475569;
+  text-decoration: none;
+  font-size: 0.88rem;
+  font-weight: 600;
+  border-radius: 6px;
+  transition: all 0.15s ease;
+  position: relative;
+}
+
+.header-top-nav .nav-item-link:hover {
+  color: #1d4ed8;
+  background: #f8fafc;
+}
+
+.header-top-nav .nav-item-link.active {
+  color: #1d4ed8;
+  font-weight: 700;
+}
+
+.header-top-nav .nav-item-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: -9px;
+  left: 15%;
+  right: 15%;
+  height: 3px;
+  background-color: #1d4ed8;
+  border-radius: 2px;
+}
+
+/* Header Right Actions & User Avatar */
+.header-user-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.user-avatar-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  padding: 0.35rem 0.75rem;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.user-avatar-btn:hover {
+  border-color: #cbd5e1;
+  background: #f8fafc;
+}
+
+.avatar-circle {
+  width: 32px;
+  height: 32px;
+  background: #0c2340;
+  color: #ffffff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.user-name-text {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.1;
+}
+
+.user-role-text {
+  font-size: 0.7rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+/* ==========================================
+   LEFT NAVY SIDEBAR
+   ========================================== */
+.sidebar-custom {
+  width: 250px;
+  background: #0c2340 !important;
+  color: #ffffff;
+  padding: 1rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-shrink: 0;
+  overflow-y: auto;
+  max-height: calc(100vh - 68px);
+  position: sticky;
+  top: 68px;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.sidebar-menu-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.7rem 0.85rem;
+  color: #cbd5e1 !important;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 0.86rem;
+  font-weight: 600;
+  transition: all 0.15s ease;
+  border: 1px solid transparent;
+}
+
+.sidebar-link-content {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.sidebar-link i.fa-solid {
+  font-size: 0.95rem;
+  width: 18px;
+  text-align: center;
+  color: #94a3b8;
+}
+
+.sidebar-link:hover {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+}
+
+.sidebar-link:hover i.fa-solid {
+  color: #38bdf8;
+}
+
+.sidebar-link.active {
+  color: #ffffff !important;
+  background: #1d4ed8 !important;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(29, 78, 216, 0.35);
+}
+
+.sidebar-link.active i.fa-solid {
+  color: #ffffff;
+}
+
+.sidebar-chevron {
+  font-size: 0.75rem;
+  opacity: 0.7;
+}
+
+/* Sidebar Bottom Footer Badge */
+.sidebar-footer-govt {
+  padding: 1rem 0.75rem 0.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  margin-top: 1.5rem;
+}
+
+.sidebar-govt-emblem {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.5rem;
+}
+
+.sidebar-govt-emblem img {
+  height: 32px;
+  filter: brightness(0) invert(1);
+  opacity: 0.85;
+}
+
+.sidebar-govt-text {
+  font-size: 0.7rem;
+  color: #94a3b8;
+  line-height: 1.2;
+}
+
+.sidebar-govt-text strong {
+  color: #e2e8f0;
+  display: block;
+}
+
+.sidebar-motto {
+  font-size: 0.68rem;
+  color: #38bdf8;
+  font-weight: 600;
+  margin-top: 0.25rem;
+  letter-spacing: 0.02em;
+}
+
+/* ==========================================
+   MAIN HERO BANNER
+   ========================================== */
+.ref-hero-banner {
+  background: linear-gradient(90deg, #091a2e 0%, #0d2847 40%, rgba(13, 40, 71, 0.45) 60%, rgba(13, 40, 71, 0.1) 85%, transparent 100%),
+              url('/static/assets/cargo_vessel_hero.jpg') center right / cover no-repeat;
+  border-radius: 12px;
+  padding: 2.5rem 2.5rem;
+  margin-bottom: 1.25rem;
+  color: #ffffff;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 6px 24px rgba(10, 28, 51, 0.18);
+  min-height: 270px;
+  display: flex;
+  align-items: center;
+}
+
+.hero-sub-tag {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #60a5fa;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+  display: inline-block;
+}
+
+.hero-main-title {
+  font-size: 2.1rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.15;
+  margin-bottom: 0.65rem;
+  letter-spacing: -0.01em;
+}
+
+.hero-description {
+  font-size: 0.92rem;
+  color: #cbd5e1;
+  max-width: 580px;
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+}
+
+.hero-actions-group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.btn-hero-solid {
+  background: #ffffff;
+  color: #0f172a;
+  font-weight: 700;
+  font-size: 0.88rem;
+  padding: 0.6rem 1.4rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.15s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.btn-hero-solid:hover {
+  background: #f8fafc;
+  transform: translateY(-1px);
+  color: #1d4ed8;
+}
+
+.btn-hero-outline {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.88rem;
+  padding: 0.6rem 1.4rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.btn-hero-outline:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: #ffffff;
+  color: #ffffff;
+}
+
+/* Floating Right Card overlay in Hero */
+.hero-right-widget {
+  background: rgba(12, 35, 64, 0.75);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  width: 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  margin-left: auto;
+}
+
+.hero-feature-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #f1f5f9;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.hero-feature-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #60a5fa;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+/* ==========================================
+   WHITE CARD CONTAINERS & KPI CARDS
+   ========================================== */
+.card-ref {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 12px !important;
+  padding: 1.25rem;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
+  margin-bottom: 1.25rem;
+  transition: box-shadow 0.15s ease;
+}
+
+.card-ref:hover {
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
+}
+
+.card-ref-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.card-ref-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* KPI Summary Cards (4 Column Grid) */
+.kpi-card-ref {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.1rem 1.25rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03);
+}
+
+.kpi-icon-box {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.kpi-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #64748b;
+  margin-bottom: 0.25rem;
+}
+
+.kpi-val {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.1;
+  margin-bottom: 0.4rem;
+}
+
+.kpi-badge-green {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #16a34a;
+}
+
+.kpi-badge-sub {
+  font-size: 0.72rem;
+  color: #64748b;
+  font-weight: 500;
+  margin-left: 0.2rem;
+}
+
+.kpi-badge-slate {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #475569;
+}
+
+/* ==========================================
+   MIDDLE & BOTTOM SECTION TABLES & MAPS
+   ========================================== */
+.table-ref {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+
+.table-ref th {
+  text-align: left;
+  padding: 0.65rem 0.75rem;
+  color: #64748b;
+  font-weight: 600;
+  border-bottom: 1px solid #e2e8f0;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+.table-ref td {
+  padding: 0.65rem 0.75rem;
+  color: #1e293b;
+  font-weight: 600;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.table-ref tr:last-child td {
+  border-bottom: none;
+}
+
+.table-ref tr:hover td {
+  background: #f8fafc;
+}
+
+.route-text-icon {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.route-ship-icon {
+  color: #0284c7;
+  font-size: 0.85rem;
+}
+
+/* Global Freight Map Visual Container */
+.world-map-visual-box {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  height: 250px;
+  position: relative;
+  overflow: hidden;
+}
+
+.gps-floating-pill {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 1000;
+  background: rgba(15, 23, 42, 0.88);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #ffffff;
+  border: 1px solid rgba(56, 189, 248, 0.5);
+  border-radius: 20px;
+  padding: 0.3rem 0.75rem;
+  font-size: 0.72rem;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+  pointer-events: none;
+}
+
+.gps-vessel-marker {
+  background: transparent;
+  border: none;
+}
+
+.map-pill-badge {
+  position: absolute;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 20px;
+  padding: 0.25rem 0.65rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #0f172a;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.map-pill-badge span.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #1d4ed8;
+}
+
+/* Market Indicators List */
+.market-indicator-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 0.82rem;
+}
+
+.market-indicator-row:last-child {
+  border-bottom: none;
+}
+
+.indicator-name {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #334155;
+  font-weight: 600;
+}
+
+.indicator-val-group {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.indicator-val {
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.indicator-change {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #16a34a;
+}
+
+/* ==========================================
+   FOOTER
+   ========================================== */
+.footer-custom {
+  background: #ffffff;
+  border-top: 1px solid #e2e8f0;
+  padding: 0.85rem 1.5rem;
+  font-size: 0.78rem;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.footer-links {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.footer-links a {
+  color: #64748b;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.footer-links a:hover {
+  color: #1d4ed8;
+}
+
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  .hero-right-widget {
+    display: none;
+  }
+}
+
+@media (max-width: 991px) {
+  .dashboard-layout {
+    flex-direction: column;
+  }
+  .sidebar-custom {
+    width: 100%;
+    max-height: none;
+    position: static;
+  }
+  .ref-hero-banner {
+    padding: 1.5rem;
+  }
+  .hero-main-title {
+    font-size: 1.6rem;
+  }
+}
+
+/* ==========================================================================
+   UNIVERSAL HIGH-CONTRAST ACCESSIBLE BADGE SYSTEM & COLOR OVERRIDES
+   Guarantees text color NEVER matches background color across all pages
+   ========================================================================== */
+.bg-opacity-10 { --bs-bg-opacity: 0.1 !important; }
+.bg-opacity-15 { --bs-bg-opacity: 0.15 !important; }
+.bg-opacity-20 { --bs-bg-opacity: 0.2 !important; }
+.bg-opacity-25 { --bs-bg-opacity: 0.25 !important; }
+.bg-opacity-30 { --bs-bg-opacity: 0.3 !important; }
+.bg-opacity-40 { --bs-bg-opacity: 0.4 !important; }
+.bg-opacity-50 { --bs-bg-opacity: 0.5 !important; }
+
+/* Base Badge Standard */
+.badge {
+  letter-spacing: 0.02em;
+  font-weight: 600 !important;
+  padding: 0.32em 0.7em !important;
+  border-radius: 6px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.25rem !important;
+  line-height: 1.25 !important;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04) !important;
+  transition: all 0.15s ease !important;
+}
+
+/* SUCCESS (Green): Soft pastel mint background with deep legible emerald/forest green text */
+.badge.bg-success,
+.badge-success {
+  background-color: #dcfce7 !important;
+  color: #15803d !important;
+  border: 1px solid #86efac !important;
+}
+.badge.bg-success.text-white {
+  background-color: #16a34a !important;
+  color: #ffffff !important;
+  border: none !important;
+}
+
+/* WARNING (Amber): Soft pastel cream background with deep legible amber-brown text */
+.badge.bg-warning,
+.badge-warning {
+  background-color: #fef3c7 !important;
+  color: #b45309 !important;
+  border: 1px solid #fde68a !important;
+}
+.badge.bg-warning.text-dark {
+  background-color: #fef3c7 !important;
+  color: #78350f !important;
+  border: 1px solid #fde68a !important;
+}
+
+/* DANGER (Red): Soft pastel rose background with deep legible crimson text */
+.badge.bg-danger,
+.badge-danger {
+  background-color: #fee2e2 !important;
+  color: #b91c1c !important;
+  border: 1px solid #fca5a5 !important;
+}
+.badge.bg-danger.text-white {
+  background-color: #dc2626 !important;
+  color: #ffffff !important;
+  border: none !important;
+}
+
+/* INFO (Cyan/Sky): Soft light sky background with deep readable navy-sky text */
+.badge.bg-info,
+.badge-info {
+  background-color: #e0f2fe !important;
+  color: #0369a1 !important;
+  border: 1px solid #7dd3fc !important;
+}
+.badge.bg-info.text-white {
+  background-color: #0284c7 !important;
+  color: #ffffff !important;
+  border: none !important;
+}
+
+/* PRIMARY (Navy/Blue): Soft pastel blue background with deep corporate blue text */
+.badge.bg-primary,
+.badge-primary {
+  background-color: #eff6ff !important;
+  color: #1d4ed8 !important;
+  border: 1px solid #bfdbfe !important;
+}
+.badge.bg-primary.text-white {
+  background-color: #1d4ed8 !important;
+  color: #ffffff !important;
+  border: none !important;
+}
+
+/* SECONDARY (Slate): Soft light slate background with deep slate navy text */
+.badge.bg-secondary,
+.badge-secondary {
+  background-color: #f1f5f9 !important;
+  color: #334155 !important;
+  border: 1px solid #cbd5e1 !important;
+}
+.badge.bg-secondary.text-white {
+  background-color: #475569 !important;
+  color: #ffffff !important;
+  border: none !important;
+}
+
+/* DARK (Navy): Dark navy background with crisp white text */
+.badge.bg-dark {
+  background-color: #0c2340 !important;
+  color: #ffffff !important;
+  border: 1px solid #1e3a5f !important;
+}
+
+/* LIGHT: Crisp white background with slate border and dark text */
+.badge.bg-light {
+  background-color: #ffffff !important;
+  color: #1e293b !important;
+  border: 1px solid #e2e8f0 !important;
+}
+
+/* REFRESH BUTTONS & INTERACTIVE FEEDBACK */
+.btn-refresh-loading {
+  pointer-events: none !important;
+  opacity: 0.85 !important;
+  cursor: wait !important;
+}
+
+.btn-refresh-loading i {
+  animation: fa-spin 0.8s infinite linear !important;
+}
+
+/* Global Glassmorphic Toast Notification */
+#smartvessel-toast-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 99999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.sv-toast {
+  pointer-events: auto;
+  min-width: 280px;
+  max-width: 420px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.15), 0 8px 10px -6px rgba(15, 23, 42, 0.1);
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #0f172a;
+  transform: translateY(20px);
+  opacity: 0;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sv-toast.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.sv-toast-success {
+  border-left: 4px solid #16a34a;
+}
+.sv-toast-success i {
+  color: #16a34a;
+  font-size: 1.1rem;
+}
+
+.sv-toast-info {
+  border-left: 4px solid #1d4ed8;
+}
+.sv-toast-info i {
+  color: #1d4ed8;
+  font-size: 1.1rem;
+}
+
+.sv-toast-warning {
+  border-left: 4px solid #d97706;
+}
+.sv-toast-warning i {
+  color: #d97706;
+  font-size: 1.1rem;
+}
+

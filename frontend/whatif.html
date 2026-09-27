@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartVesselAI — What-If Scenario Simulator</title>
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <!-- Custom CSS & Workflow Engine -->
+  <link rel="stylesheet" href="/static/style.css?v=20260923_ref">
+  <script src="/static/js/workflowState.js"></script>
+  <script src="/static/js/global_ports.js"></script>
+  <script src="/static/js/currencyConfig.js"></script>
+  <script src="/static/js/currencyService.js"></script>
+</head>
+<body>
+
+  <!-- Top Header Navigation Bar -->
+  <nav class="navbar navbar-custom navbar-expand-lg">
+    <div class="container-fluid px-2">
+      
+      <!-- Brand -->
+      <div class="header-brand-container">
+        <a class="smartvessel-brand" href="index.html">
+          <div class="smartvessel-brand-icon">
+            <i class="fa-solid fa-ship"></i>
+          </div>
+          <div>
+            <div class="smartvessel-brand-title">SmartVessel<span>AI</span></div>
+            <div class="smartvessel-brand-sub">Maritime Intelligence & Optimization</div>
+          </div>
+        </a>
+      </div>
+
+      <!-- Top Header Navigation Tabs -->
+      <div class="collapse navbar-collapse show" id="headerNavTabs">
+        <div class="header-top-nav me-auto">
+          <a href="index.html" class="nav-item-link"><i class="fa-solid fa-house"></i> Dashboard</a>
+          <a href="forecast.html" class="nav-item-link"><i class="fa-solid fa-chart-line"></i> Forecast</a>
+          <a href="optimization.html" class="nav-item-link active"><i class="fa-solid fa-chart-pie"></i> Analytics</a>
+          <a href="billing.html" class="nav-item-link"><i class="fa-solid fa-file-contract"></i> Reports</a>
+        </div>
+      </div>
+
+      <!-- Header Right User & Controls -->
+      <div class="header-user-badge">
+        <button class="btn btn-light rounded-circle position-relative border p-2 shadow-sm" style="width:38px; height:38px;" title="Notifications" onclick="location.href='alerts.html'">
+          <i class="fa-regular fa-bell text-dark fs-6"></i>
+          <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
+        </button>
+
+        <div class="user-avatar-btn dropdown">
+          <div class="avatar-circle">V</div>
+          <div class="text-start d-none d-sm-block">
+            <div class="user-name-text">Vasanthan M</div>
+            <div class="user-role-text">Admin</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </nav>
+
+  <!-- Dashboard Main Layout -->
+  <div class="dashboard-layout">
+    
+    <!-- Left Navy Navigation Sidebar -->
+    <aside class="sidebar-custom d-none d-lg-flex">
+      <div class="sidebar-menu-group">
+        <a href="index.html" class="sidebar-link">
+          <div class="sidebar-link-content"><i class="fa-solid fa-house"></i> Dashboard</div>
+          <span class="sidebar-chevron"><i class="fa-solid fa-chevron-right"></i></span>
+        </a>
+        <a href="forecast.html" class="sidebar-link">
+          <div class="sidebar-link-content"><i class="fa-solid fa-chart-line"></i> Freight Forecast</div>
+          <span class="sidebar-chevron"><i class="fa-solid fa-chevron-right"></i></span>
+        </a>
+        <a href="vessels.html" class="sidebar-link">
+          <div class="sidebar-link-content"><i class="fa-solid fa-ship"></i> Vessel Chartering</div>
+          <span class="sidebar-chevron"><i class="fa-solid fa-chevron-right"></i></span>
+        </a>
+        <a href="ports.html" class="sidebar-link">
+          <div class="sidebar-link-content"><i class="fa-solid fa-cubes"></i> Bulk Cargo Procurement</div>
+          <span class="sidebar-chevron"><i class="fa-solid fa-chevron-right"></i></span>
+        </a>
+        <a href="risk.html" class="sidebar-link">
+          <div class="sidebar-link-content"><i class="fa-solid fa-globe"></i> Market Intelligence</div>
+          <span class="sidebar-chevron"><i class="fa-solid fa-chevron-right"></i></span>
+        </a>
+        <a href="whatif.html" class="sidebar-link active">
+          <div class="sidebar-link-content"><i class="fa-solid fa-sliders"></i> What-If Simulator</div>
+          <span class="sidebar-chevron"><i class="fa-solid fa-chevron-right"></i></span>
+        </a>
+        <a href="billing.html" class="sidebar-link">
+          <div class="sidebar-link-content"><i class="fa-solid fa-file-lines"></i> Reports</div>
+          <span class="sidebar-chevron"><i class="fa-solid fa-chevron-right"></i></span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content-custom">
+      
+      <!-- HERO BANNER SECTION -->
+      <div class="ref-hero-banner">
+        <div>
+          <div class="hero-sub-tag">INTERACTIVE WHAT-IF SCENARIO SIMULATOR</div>
+          <h1 class="hero-main-title">Interactive What-If<br>Scenario Simulator</h1>
+          <p class="hero-description">
+            Test real-time market sensitivity: Adjust Freight Rates, Cargo Tonnage, Congestion Levels, Fuel Prices, and Delays
+          </p>
+          <div class="hero-actions-group">
+            <button class="btn-hero-solid" id="btn-refresh-whatif" onclick="triggerButtonRefresh(this, runWhatIf, 'Sensitivity scenario recalculated successfully')">
+              <i class="fa-solid fa-rotate me-1"></i> Re-Calculate Scenario
+            </button>
+          </div>
+        </div>
+
+        <!-- Floating Feature Overlay Card -->
+        <div class="hero-right-widget ms-auto d-none d-xl-flex">
+          <div class="hero-feature-item">
+            <div class="hero-feature-icon"><i class="fa-solid fa-sliders"></i></div>
+            <span>Freight Sensitivity</span>
+          </div>
+          <div class="hero-feature-item">
+            <div class="hero-feature-icon"><i class="fa-solid fa-gas-pump"></i></div>
+            <span>Fuel Price Overrides</span>
+          </div>
+          <div class="hero-feature-item">
+            <div class="hero-feature-icon"><i class="fa-solid fa-clock"></i></div>
+            <span>Congestion Buffer</span>
+          </div>
+          <div class="hero-feature-item">
+            <div class="hero-feature-icon"><i class="fa-solid fa-calculator"></i></div>
+            <span>Real-Time Recalculation</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- MAIN SIMULATOR 2-COLUMN GRID -->
+      <div class="row g-4 mb-4">
+        
+        <!-- Left Controls Column -->
+        <div class="col-lg-5">
+          <div class="card-ref h-100">
+            <h5 class="card-ref-title mb-3"><i class="fa-solid fa-sliders text-primary me-2"></i>Scenario Parameter Sliders</h5>
+            
+            <form id="whatif-form">
+              <!-- Route & Currency Selection -->
+              <div class="row g-2 mb-3">
+                <div class="col-4">
+                  <label class="form-label text-muted fs-8 font-semibold">Origin Country</label>
+                  <select class="form-select form-select-custom" id="whatif-origin" onchange="runWhatIf()"></select>
+                </div>
+                <div class="col-4">
+                  <label class="form-label text-muted fs-8 font-semibold">Destination Port</label>
+                  <select class="form-select form-select-custom" id="whatif-dest" onchange="runWhatIf()"></select>
+                </div>
+                <div class="col-4">
+                  <label class="form-label text-muted fs-8 font-semibold">Display Currency</label>
+                  <select class="form-select form-select-custom fw-bold" id="whatif-currency" onchange="runWhatIf()">
+                    <option value="INR" selected>INR (₹)</option>
+                    <option value="USD">USD ($)</option>
+                    <option value="AUD">AUD (A$)</option>
+                    <option value="RUB">RUB (₽)</option>
+                    <option value="IDR">IDR (Rp)</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Spot Freight Rate Slider -->
+              <div class="mb-3">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <label class="form-label text-muted fs-8 font-semibold mb-0">Spot Freight Rate</label>
+                  <span class="fw-bold text-primary fs-7" id="val-spot">₹2,116.50 / T</span>
+                </div>
+                <input type="range" class="form-range" id="range-spot" min="15" max="45" step="0.5" value="25.5" oninput="runWhatIf()">
+              </div>
+
+              <!-- Cargo Quantity Slider -->
+              <div class="mb-3">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <label class="form-label text-muted fs-8 font-semibold mb-0">Cargo Quantity (Tonnes)</label>
+                  <span class="fw-bold text-primary fs-7" id="val-cargo">80,000 T</span>
+                </div>
+                <input type="range" class="form-range" id="range-cargo" min="30000" max="150000" step="5000" value="80000" oninput="runWhatIf()">
+              </div>
+
+              <!-- Port Congestion Level Dropdown -->
+              <div class="mb-3">
+                <label class="form-label text-muted fs-8 font-semibold">Port Congestion Level</label>
+                <select class="form-select form-select-custom" id="select-cong" onchange="runWhatIf()">
+                  <option value="Low">Low Congestion (&lt; 1.5 Days)</option>
+                  <option value="Medium" selected>Medium Congestion (2.5 Days)</option>
+                  <option value="High">High Congestion (&gt; 4.0 Days)</option>
+                </select>
+              </div>
+
+              <!-- Bunker Fuel Price Slider -->
+              <div class="mb-3">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <label class="form-label text-muted fs-8 font-semibold mb-0">Bunker Fuel Price ($/MT VLSFO)</label>
+                  <span class="fw-bold text-warning fs-7" id="val-fuel">$620/MT</span>
+                </div>
+                <input type="range" class="form-range" id="range-fuel" min="400" max="900" step="10" value="620" oninput="runWhatIf()">
+              </div>
+
+              <!-- Port Delay Buffer Slider -->
+              <div class="mb-3">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <label class="form-label text-muted fs-8 font-semibold mb-0">Port Delay Buffer (Days)</label>
+                  <span class="fw-bold text-warning fs-7" id="val-delay">2.5 Days</span>
+                </div>
+                <input type="range" class="form-range" id="range-delay" min="0" max="10" step="0.5" value="2.5" oninput="runWhatIf()">
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Right Recalculation Output Column -->
+        <div class="col-lg-7">
+          <div class="card-ref h-100 border-primary border-opacity-30">
+            <div class="card-ref-header mb-3">
+              <h5 class="card-ref-title mb-0"><i class="fa-solid fa-calculator text-primary me-2"></i>Real-Time Recalculation Output</h5>
+              <span class="badge bg-success fs-7 px-3 py-1.5" id="sim-decision-badge">🟢 CHART NOW</span>
+            </div>
+
+            <!-- Comparison Cost Banner Cards -->
+            <div class="row g-3 mb-4">
+              <div class="col-md-6">
+                <div class="p-3 bg-light rounded-3 border">
+                  <div class="fs-8 text-muted font-semibold">Baseline Landed Cost</div>
+                  <div class="fs-3 fw-bold text-dark" id="sim-base-cost">₹19,19,10,000.00</div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="p-3 bg-light rounded-3 border">
+                  <div class="fs-8 text-muted font-semibold">New Simulated Landed Cost</div>
+                  <div class="fs-3 fw-bold text-success" id="sim-new-cost">₹19,51,89,000.00</div>
+                  <div class="fs-8 text-warning font-semibold" id="sim-delta">Delta: ₹32,78,000.00</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- AI Rationale Box -->
+            <div class="p-3 bg-primary bg-opacity-10 rounded-3 border border-primary border-opacity-20 mb-4">
+              <h6 class="fw-bold text-primary fs-7 mb-1"><i class="fa-solid fa-brain me-1"></i> Decision Impact & AI Rationale</h6>
+              <p class="fs-7 text-dark mb-0" id="sim-rationale">Favorable port turnaround and acceptable daily hire rates.</p>
+            </div>
+
+            <!-- Itemized Simulated Landed Cost Table -->
+            <h6 class="fw-bold text-dark fs-7 mb-2"><i class="fa-solid fa-coins text-primary me-1"></i> Itemized Simulated Landed Cost Breakdown</h6>
+            <div class="table-responsive">
+              <table class="table-ref text-center align-middle">
+                <thead>
+                  <tr>
+                    <th>Freight</th>
+                    <th>Fuel</th>
+                    <th>Port Fees</th>
+                    <th>Waiting</th>
+                    <th>Risk/Delay</th>
+                    <th>Total Landed</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td id="b-freight">₹16,93,20,000.00</td>
+                    <td id="b-fuel">₹1,72,91,000.00</td>
+                    <td id="b-port">₹22,91,000.00</td>
+                    <td id="b-waiting">₹30,09,000.00</td>
+                    <td id="b-risk">₹20,75,000.00</td>
+                    <td class="fw-bold text-primary" id="b-total">₹19,51,89,000.00</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer-custom">
+    <div>SmartVessel AI Enterprise Maritime System</div>
+    <div class="footer-links">
+      <a href="#">Privacy Policy</a>
+      <span>|</span>
+      <a href="#">Terms & Conditions</a>
+      <span>|</span>
+      <a href="#">Contact Us</a>
+    </div>
+    <div class="footer-brand">
+      <i class="fa-solid fa-ship text-primary"></i> Powered by SmartVesselAI
+    </div>
+  </footer>
+
+  <!-- SCRIPT ENGINE -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    async function runWhatIf() {
+      const origin = document.getElementById('whatif-origin') ? document.getElementById('whatif-origin').value : "Australia";
+      const destination = document.getElementById('whatif-dest') ? document.getElementById('whatif-dest').value : "Paradip";
+      const displayCurrency = document.getElementById('whatif-currency') ? document.getElementById('whatif-currency').value : "INR";
+      const spot = parseFloat(document.getElementById('range-spot').value);
+      const cargo = parseFloat(document.getElementById('range-cargo').value);
+      const cong = document.getElementById('select-cong').value;
+      const fuel = parseFloat(document.getElementById('range-fuel').value);
+      const delay = parseFloat(document.getElementById('range-delay').value);
+
+      if (document.getElementById('val-spot')) document.getElementById('val-spot').innerText = CurrencyService.formatRate(spot, displayCurrency);
+      if (document.getElementById('val-cargo')) document.getElementById('val-cargo').innerText = `${cargo.toLocaleString()} T`;
+      if (document.getElementById('val-fuel')) document.getElementById('val-fuel').innerText = `$${fuel}/MT`;
+      if (document.getElementById('val-delay')) document.getElementById('val-delay').innerText = `${delay} Days`;
+
+      try {
+        const resp = await fetch('/api/simulate/what-if', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            origin: origin,
+            destination: destination,
+            vessel_type: "Panamax",
+            cargo_tonnes: cargo,
+            spot_rate_usd_t: spot,
+            fuel_price_usd_mt: fuel,
+            congestion_level: cong,
+            delay_days_override: delay
+          })
+        });
+        const data = await resp.json();
+
+        const baseUsd = data.baseline_landed_cost_usd || (data.baseline_landed_cost_lakhs * 100000 / 83.0);
+        const itemUsd = data.itemized_landed_cost_usd || {};
+        const totalUsd = itemUsd.total_landed_cost || (data.itemized_landed_cost_lakhs.total_landed_cost * 100000 / 83.0);
+        const deltaUsd = data.cost_delta_usd || (data.cost_delta_lakhs * 100000 / 83.0);
+
+        if (document.getElementById('sim-base-cost')) document.getElementById('sim-base-cost').innerText = CurrencyService.formatCost(baseUsd, displayCurrency);
+        if (document.getElementById('sim-new-cost')) document.getElementById('sim-new-cost').innerText = CurrencyService.formatCost(totalUsd, displayCurrency);
+        
+        const deltaEl = document.getElementById('sim-delta');
+        if (deltaEl) deltaEl.innerText = `Delta: ${CurrencyService.formatCost(deltaUsd, displayCurrency)}`;
+
+        const badge = document.getElementById('sim-decision-badge');
+        if (badge) {
+          badge.innerText = data.decision_badge;
+          badge.className = data.new_decision === 'CHART NOW' ? 'badge bg-success fs-7 px-3 py-1.5' : 'badge bg-warning fs-7 px-3 py-1.5';
+        }
+
+        if (document.getElementById('sim-rationale')) document.getElementById('sim-rationale').innerText = data.action_rationale;
+
+        if (document.getElementById('b-freight')) document.getElementById('b-freight').innerText = CurrencyService.formatCost(itemUsd.freight_cost || (data.itemized_landed_cost_lakhs.freight_cost * 100000 / 83.0), displayCurrency);
+        if (document.getElementById('b-fuel')) document.getElementById('b-fuel').innerText = CurrencyService.formatCost(itemUsd.fuel_cost || (data.itemized_landed_cost_lakhs.fuel_cost * 100000 / 83.0), displayCurrency);
+        if (document.getElementById('b-port')) document.getElementById('b-port').innerText = CurrencyService.formatCost(itemUsd.port_charges || (data.itemized_landed_cost_lakhs.port_charges * 100000 / 83.0), displayCurrency);
+        if (document.getElementById('b-waiting')) document.getElementById('b-waiting').innerText = CurrencyService.formatCost(itemUsd.waiting_cost || (data.itemized_landed_cost_lakhs.waiting_cost * 100000 / 83.0), displayCurrency);
+        if (document.getElementById('b-risk')) document.getElementById('b-risk').innerText = CurrencyService.formatCost(itemUsd.risk_delay_cost || (data.itemized_landed_cost_lakhs.risk_delay_cost * 100000 / 83.0), displayCurrency);
+        if (document.getElementById('b-total')) document.getElementById('b-total').innerText = CurrencyService.formatCost(totalUsd, displayCurrency);
+
+      } catch (err) {
+        console.error("What-If simulation error:", err);
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', async () => {
+      if (window.initGlobalPortDropdowns) {
+        await initGlobalPortDropdowns('whatif-origin', 'whatif-dest');
+      }
+      runWhatIf();
+    });
+  </script>
+</body>
+</html>

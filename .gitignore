@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+env/
+venv/
+ENV/
+
+# Data & Models (large binary files)
+*.sqlite3
+*.db
+*.pkl
+*.bin
+SmartVesselAI/smartvessel.db
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+catboost_info/
+

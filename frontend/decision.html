@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartVesselAI — Final Chartering Decision</title>
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="bg-dark-navy text-white">
+
+  <!-- Header Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark-navy border-bottom border-secondary border-opacity-25 py-2 px-3">
+    <div class="container-fluid">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+        <img src="/static/assets/smartvessel_logo.png" alt="SmartVessel AI Logo" height="36" onerror="this.style.display='none'">
+        <span class="fw-bold text-white fs-5 font-monospace">SMARTVESSEL <span class="text-warning">AI</span></span>
+      </a>
+      <div class="d-flex align-items-center gap-3">
+        <a href="index.html" class="btn btn-sm btn-outline-info"><i class="fa-solid fa-house me-1"></i> Dashboard</a>
+        <button class="btn btn-sm btn-warning fw-bold text-dark" onclick="SmartVesselWorkflow.openInputModal()">
+          <i class="fa-solid fa-plus-circle me-1"></i> New Analysis
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Container -->
+  <div class="container py-4">
+
+    <!-- Guided Workflow Progress Bar -->
+    <div id="workflow-progress-container"></div>
+
+    <!-- Executive Decision Card -->
+    <div class="card glass-card border border-warning border-opacity-50 mb-4 shadow-lg text-white">
+      <div class="card-header bg-gradient-navy border-bottom border-warning border-opacity-25 p-4 d-flex flex-wrap justify-content-between align-items-center">
+        <div>
+          <span class="badge bg-warning text-dark fw-bold mb-2 fs-8 font-monospace"><i class="fa-solid fa-trophy me-1"></i> EXECUTIVE DECISION STATEMENT</span>
+          <h2 class="fw-bold mb-1 text-white"><i class="fa-solid fa-shield-check text-warning me-2"></i> Final Chartering & Procurement Recommendation</h2>
+          <p class="text-info fs-7 mb-0" id="decision-session-subtitle">Session: SVAI-2026-7891 | Australia (Newcastle) ➔ Paradip Port | 75,000 MT</p>
+        </div>
+        <div class="mt-3 mt-md-0 text-md-end">
+          <div class="fs-8 text-muted mb-1">Generated: <span id="decision-timestamp">Just now</span></div>
+          <span class="badge bg-success fs-7 px-3 py-2" id="decision-confidence-badge">
+            <i class="fa-solid fa-circle-check me-1"></i> AI Confidence: 86%
+          </span>
+        </div>
+      </div>
+      <div class="card-body p-4">
+
+        <!-- Top Strategy Highlight Callout -->
+        <div class="p-3 glass-card bg-warning bg-opacity-10 border border-warning rounded-3 mb-4 text-white">
+          <div class="row align-items-center">
+            <div class="col-md-8">
+              <span class="text-warning fs-8 font-semibold text-uppercase"><i class="fa-solid fa-award me-1"></i> Recommended Procurement Strategy</span>
+              <h3 class="fw-bold text-warning mb-1" id="decision-strategy-title">LONG-TERM TIME CHARTER (6–12 MONTHS)</h3>
+              <p class="fs-7 text-light mb-0" id="decision-strategy-desc">
+                Execute a 6–12 month time charter contract. Forecast models indicate declining spot freight rates over the next 14–30 days. Locking a fixed charter rate generates substantial cost savings vs spot exposure.
+              </p>
+            </div>
+            <div class="col-md-4 text-md-end mt-3 mt-md-0">
+              <div class="fs-8 text-muted">Estimated Savings vs Spot</div>
+              <div class="fs-2 fw-bold text-success" id="decision-savings-amount">$1,729,317 USD</div>
+              <div class="fs-7 text-info" id="decision-savings-inr">₹ 14.2 Crores INR</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6 Core Decision Pillars Grid -->
+        <div class="row g-3 mb-4">
+
+          <!-- 1. Cargo & Route -->
+          <div class="col-md-4">
+            <div class="p-3 glass-card rounded-3 border border-secondary border-opacity-25 h-100">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="fs-8 text-muted fw-bold"><i class="fa-solid fa-route text-info me-1"></i> 1. CARGO & ROUTE</span>
+                <span class="badge bg-info fs-8">Verified</span>
+              </div>
+              <div class="fs-6 fw-bold text-white mb-1" id="dec-route-title">Australia ➔ Paradip Port</div>
+              <div class="fs-7 text-light mb-1">Cargo Volume: <strong class="text-warning" id="dec-cargo-mt">75,000 MT</strong></div>
+              <div class="fs-7 text-muted">Sailing Distance: <strong>4,850 NM</strong> (~17.3 Days)</div>
+            </div>
+          </div>
+
+          <!-- 2. AI Forecast & Trend -->
+          <div class="col-md-4">
+            <div class="p-3 glass-card rounded-3 border border-secondary border-opacity-25 h-100">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="fs-8 text-muted fw-bold"><i class="fa-solid fa-chart-line text-success me-1"></i> 2. AI FREIGHT FORECAST</span>
+                <span class="badge bg-success fs-8" id="dec-trend-badge">Declining</span>
+              </div>
+              <div class="fs-6 fw-bold text-success mb-1" id="dec-7d-rate">$21.84 / MT (7-Day)</div>
+              <div class="fs-7 text-light mb-1">14-Day Rate: <strong id="dec-14d-rate">$21.36 / MT</strong></div>
+              <div class="fs-7 text-muted">Model Accuracy: <strong class="text-info">R² = 97.85%</strong></div>
+            </div>
+          </div>
+
+          <!-- 3. Fleet & Vessel Selection -->
+          <div class="col-md-4">
+            <div class="p-3 glass-card rounded-3 border border-secondary border-opacity-25 h-100">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="fs-8 text-muted fw-bold"><i class="fa-solid fa-ship text-primary me-1"></i> 3. RECOMMENDED VESSEL</span>
+                <span class="badge bg-primary fs-8">Optimal</span>
+              </div>
+              <div class="fs-6 fw-bold text-white mb-1" id="dec-vessel-type">Panamax Bulk Carrier</div>
+              <div class="fs-7 text-light mb-1">DWT Capacity: <strong>78,000 MT</strong> (100% Match)</div>
+              <div class="fs-7 text-muted">Arrival Draft: <strong>13.2 meters</strong></div>
+            </div>
+          </div>
+
+          <!-- 4. Port Clearance Status -->
+          <div class="col-md-4">
+            <div class="p-3 glass-card rounded-3 border border-secondary border-opacity-25 h-100">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="fs-8 text-muted fw-bold"><i class="fa-solid fa-anchor text-warning me-1"></i> 4. PORT CLEARANCE</span>
+                <span class="badge bg-success fs-8">100% PASSED</span>
+              </div>
+              <div class="fs-6 fw-bold text-white mb-1">Paradip Port (Odisha)</div>
+              <div class="fs-7 text-light mb-1">Max Port Draft: <strong>14.5 m</strong> (Clearance: +1.3m)</div>
+              <div class="fs-7 text-muted">LOA & Beam: <strong>Cleared (222m / 32.2m)</strong></div>
+            </div>
+          </div>
+
+          <!-- 5. Total Voyage Cost -->
+          <div class="col-md-4">
+            <div class="p-3 glass-card rounded-3 border border-secondary border-opacity-25 h-100">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="fs-8 text-muted fw-bold"><i class="fa-solid fa-file-invoice-dollar text-info me-1"></i> 5. EST. LANDED COST</span>
+                <span class="badge bg-info fs-8">Pro-Forma</span>
+              </div>
+              <div class="fs-6 fw-bold text-info mb-1" id="dec-unit-cost">$37.38 / MT</div>
+              <div class="fs-7 text-light mb-1">Grand Total: <strong class="text-warning" id="dec-grand-total">$2,803,620 USD</strong></div>
+              <div class="fs-7 text-muted">INR Equivalent: <strong id="dec-inr-total">₹ 23.41 Crores</strong></div>
+            </div>
+          </div>
+
+          <!-- 6. Risk Level -->
+          <div class="col-md-4">
+            <div class="p-3 glass-card rounded-3 border border-secondary border-opacity-25 h-100">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="fs-8 text-muted fw-bold"><i class="fa-solid fa-shield-halved text-warning me-1"></i> 6. OVERALL RISK</span>
+                <span class="badge bg-warning fs-8" id="dec-risk-badge">MEDIUM</span>
+              </div>
+              <div class="fs-6 fw-bold text-warning mb-1" id="dec-risk-score">Risk Score: 2.1 / 5.0</div>
+              <div class="fs-7 text-light mb-1">Berth Waiting Queue: <strong>4 Vessels (~2.5 Days)</strong></div>
+              <div class="fs-7 text-muted">Monsoon Delay Buffer: <strong>+1.4 Days</strong></div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Action Buttons Row -->
+        <div class="p-3 glass-card bg-dark bg-opacity-50 rounded-3 border border-secondary border-opacity-25 d-flex flex-wrap justify-content-between align-items-center gap-2">
+          <div class="d-flex flex-wrap gap-2">
+            <button class="btn btn-sm btn-outline-info" id="btn-refresh-decision" onclick="triggerButtonRefresh(this, reloadDecisionData, 'Decision intelligence updated')">
+              <i class="fa-solid fa-rotate me-1"></i> Refresh Decision
+            </button>
+            <button class="btn btn-sm btn-outline-info" onclick="window.print()">
+              <i class="fa-solid fa-print me-1"></i> Print / Save PDF
+            </button>
+            <button class="btn btn-sm btn-outline-success" onclick="downloadDecisionCSV()">
+              <i class="fa-solid fa-file-csv me-1"></i> Export CSV Data
+            </button>
+            <button class="btn btn-sm btn-outline-warning" onclick="downloadDecisionJSON()">
+              <i class="fa-solid fa-file-code me-1"></i> Export JSON
+            </button>
+            <a href="whatif.html" class="btn btn-sm btn-outline-light">
+              <i class="fa-solid fa-sliders me-1"></i> Optional: Run What-If Simulation
+            </a>
+          </div>
+          <div>
+            <button class="btn btn-warning text-dark fw-bold px-4 py-2 fs-7 shadow-sm" onclick="SmartVesselWorkflow.openInputModal()">
+              <i class="fa-solid fa-rotate-right me-1"></i> START NEW CARGO ANALYSIS
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Navigation Footer -->
+    <div id="workflow-nav-footer-container"></div>
+
+  </div>
+
+  <!-- Bootstrap & Workflow Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/static/js/workflowState.js"></script>
+  <script>
+    function applyDecisionData() {
+      const session = SmartVesselWorkflow.getSession();
+      if (session && session.cargo) {
+        const c = session.cargo;
+        const res = session.results || {};
+
+        document.getElementById('decision-session-subtitle').innerText = 
+          `Session: ${session.id} | ${c.origin_country} (${c.origin_port}) ➔ ${c.destination_port} Port | ${Number(c.cargo_quantity_mt).toLocaleString()} MT (${c.vessel_type})`;
+        
+        document.getElementById('dec-route-title').innerText = `${c.origin_country} (${c.origin_port}) ➔ ${c.destination_port} Port`;
+        document.getElementById('dec-cargo-mt').innerText = `${Number(c.cargo_quantity_mt).toLocaleString()} MT (${c.cargo_type || 'Bulk Cargo'})`;
+        document.getElementById('dec-vessel-type').innerText = `${c.vessel_type} Bulk Carrier`;
+
+        if (res.forecast) {
+          if (res.forecast.h7RateUsd) document.getElementById('dec-7d-rate').innerText = `$${res.forecast.h7RateUsd.toFixed(2)} / MT (7-Day)`;
+          if (res.forecast.h14RateUsd) document.getElementById('dec-14d-rate').innerText = `$${res.forecast.h14RateUsd.toFixed(2)} / MT`;
+          if (res.forecast.trend) {
+            const badge = document.getElementById('dec-trend-badge');
+            badge.innerText = res.forecast.trend;
+            badge.className = res.forecast.trend === 'DECREASING' ? 'badge bg-success fs-8' : 'badge bg-warning fs-8';
+          }
+        }
+
+        if (res.voyageCost) {
+          const vc = res.voyageCost;
+          if (vc.costPerTonUsd) document.getElementById('dec-unit-cost').innerText = `$${vc.costPerTonUsd.toFixed(2)} / MT`;
+          if (vc.grandUsd) {
+            document.getElementById('dec-grand-total').innerText = `$${Number(vc.grandUsd).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} USD`;
+            document.getElementById('dec-inr-total').innerText = `₹ ${(vc.grandUsd * 83.21 / 10000000).toFixed(2)} Crores`;
+          }
+        }
+
+        if (res.risk) {
+          const r = res.risk;
+          if (r.overallBadge) {
+            document.getElementById('dec-risk-badge').innerText = r.overallBadge;
+            document.getElementById('dec-risk-score').innerText = `Risk Level: ${r.overallBadge}`;
+          }
+        }
+
+        if (res.optimization) {
+          const opt = res.optimization;
+          if (opt.savingsUsd) {
+            document.getElementById('decision-savings-amount').innerText = `$${Number(opt.savingsUsd).toLocaleString()} USD`;
+            document.getElementById('decision-savings-inr').innerText = `₹ ${(opt.savingsUsd * 83.21 / 10000000).toFixed(2)} Crores INR`;
+          }
+        }
+      }
+
+      document.getElementById('decision-timestamp').innerText = new Date().toLocaleString();
+    }
+
+    async function reloadDecisionData() {
+      await new Promise(r => setTimeout(r, 450));
+      applyDecisionData();
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+      if (window.SmartVesselWorkflow) {
+        SmartVesselWorkflow.renderTransactionHeader(8);
+        SmartVesselWorkflow.renderTransactionFooter(8, "optimization.html", null, null);
+      }
+      applyDecisionData();
+    });
+
+    async function downloadDecisionCSV() {
+      const session = SmartVesselWorkflow.getSession() || { id: "SVAI-2026-DEMO" };
+      const c = session.cargo || {};
+      const payload = {
+        origin_country: c.origin_country || "Australia",
+        destination_country: "India",
+        origin_port: c.origin_port || "Newcastle",
+        destination_port: c.destination_port || "Paradip",
+        cargo_tonnes: c.cargo_quantity_mt || 75000,
+        vessel_type: c.vessel_type || "Panamax",
+        forecast_months: 6,
+        format: "csv"
+      };
+
+      try {
+        const resp = await fetch('/api/reports/export', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(payload)
+        });
+        if (resp.ok) {
+          const blob = await resp.blob();
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `SmartVesselAI_Decision_${session.id || 'Report'}.csv`;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          return;
+        }
+      } catch (err) {
+        console.warn("Could not export report via API, using client fallback:", err);
+      }
+
+      const csvContent = "data:text/csv;charset=utf-8," 
+        + "Parameter,Value\n"
+        + `Session ID,${session.id}\n`
+        + `Origin,${c.origin_country || "Australia"} (${c.origin_port || "Newcastle"})\n`
+        + `Destination,${c.destination_port || "Paradip"} Port (India)\n`
+        + `Cargo Quantity,${c.cargo_quantity_mt || 75000} MT\n`
+        + `Recommended Vessel,${c.vessel_type || "Panamax"} Bulk Carrier\n`
+        + "Port Clearance Status,PASSED\n"
+        + "Model Accuracy R2,98.18%\n"
+        + "Estimated Unit Voyage Cost,$37.38 / MT\n"
+        + "Recommended Strategy,LONG-TERM TIME CHARTER (6-12 MONTHS)\n";
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", `SmartVesselAI_Decision_${session.id}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    async function downloadDecisionJSON() {
+      const session = SmartVesselWorkflow.getSession() || { id: "SVAI-2026-DEMO" };
+      const c = session.cargo || {};
+      const payload = {
+        origin_country: c.origin_country || "Australia",
+        destination_country: "India",
+        origin_port: c.origin_port || "Newcastle",
+        destination_port: c.destination_port || "Paradip",
+        cargo_tonnes: c.cargo_quantity_mt || 75000,
+        vessel_type: c.vessel_type || "Panamax",
+        forecast_months: 6,
+        format: "json"
+      };
+
+      try {
+        const resp = await fetch('/api/reports/export', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(payload)
+        });
+        if (resp.ok) {
+          const data = await resp.json();
+          const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data, null, 2));
+          const link = document.createElement("a");
+          link.setAttribute("href", dataStr);
+          link.setAttribute("download", `SmartVesselAI_Decision_${session.id}.json`);
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          return;
+        }
+      } catch (err) {
+        console.warn("Could not export JSON report via API, using client fallback:", err);
+      }
+
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(session, null, 2));
+      const link = document.createElement("a");
+      link.setAttribute("href", dataStr);
+      link.setAttribute("download", `SmartVesselAI_Decision_${session.id}.json`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  </script>
+</body>
+</html>

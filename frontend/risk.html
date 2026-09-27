@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartVesselAI — Executive Maritime Risk Center</title>
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <!-- Custom CSS & Workflow Engine -->
+  <link rel="stylesheet" href="/static/style.css?v=20260923_ref">
+  <script src="/static/js/workflowState.js"></script>
+</head>
+<body>
+
+  <!-- Top Header Navigation Bar -->
+  <nav class="navbar navbar-custom navbar-expand-lg">
+    <div class="container-fluid px-2">
+      
+      <!-- Brand -->
+      <div class="header-brand-container">
+        <a class="smartvessel-brand" href="index.html">
+          <div class="smartvessel-brand-icon">
+            <i class="fa-solid fa-ship"></i>
+          </div>
+          <div>
+            <div class="smartvessel-brand-title">SmartVessel<span>AI</span></div>
+            <div class="smartvessel-brand-sub">Maritime Intelligence & Optimization</div>
+          </div>
+        </a>
+      </div>
+
+      <!-- Top Header Navigation Tabs -->
+      <div class="collapse navbar-collapse show" id="headerNavTabs">
+        <div class="header-top-nav me-auto">
+          <a href="index.html" class="nav-item-link"><i class="fa-solid fa-house"></i> Dashboard</a>
+          <a href="forecast.html" class="nav-item-link"><i class="fa-solid fa-chart-line"></i> Forecast</a>
+          <a href="optimization.html" class="nav-item-link"><i class="fa-solid fa-chart-pie"></i> Analytics</a>
+          <a href="billing.html" class="nav-item-link"><i class="fa-solid fa-file-contract"></i> Reports</a>
+        </div>
+      </div>
+
+      <!-- Header Right User & Controls -->
+      <div class="header-user-badge">
+        <button class="btn btn-light rounded-circle position-relative border p-2 shadow-sm" style="width:38px; height:38px;" title="Notifications" onclick="location.href='alerts.html'">
+          <i class="fa-regular fa-bell text-dark fs-6"></i>
+          <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
+        </button>
+
+        <div class="user-avatar-btn dropdown">
+          <div class="avatar-circle">V</div>
+          <div class="text-start d-none d-sm-block">
+            <div class="user-name-text">Vasanthan M</div>
+            <div class="user-role-text">Admin</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </nav>
+
+  <!-- Dashboard Main Layout -->
+  <div class="dashboard-layout">
+    
+    <!-- Left Navy Navigation Sidebar -->
+    <aside class="sidebar-custom d-none d-lg-flex">
+      <div class="sidebar-menu-group">
+        <a href="index.html" class="sidebar-link">
+          <div class="sidebar-link-content"><i class="fa-solid fa-house"></i> Dashboard</div>
+          <span class="sidebar-chevron"><i class="fa-solid fa-chevron-right"></i></span>
+        </a>
+        <a href="forecast.html" class="sidebar-link">
+          <div class="sidebar-link-content"><i class="fa-solid fa-chart-line"></i> Freight Forecast</div>
+          <span class="sidebar-chevron"><i class="fa-solid fa-chevron-right"></i></span>
+        </a>
+        <a href="vessels.html" class="sidebar-link">
+          <div class="sidebar-link-content"><i class="fa-solid fa-ship"></i> Vessel Chartering</div>
+          <span class="sidebar-chevron"><i class="fa-solid fa-chevron-right"></i></span>
+        </a>
+        <a href="ports.html" class="sidebar-link">
+          <div class="sidebar-link-content"><i class="fa-solid fa-cubes"></i> Bulk Cargo Procurement</div>
+          <span class="sidebar-chevron"><i class="fa-solid fa-chevron-right"></i></span>
+        </a>
+        <a href="risk.html" class="sidebar-link active">
+          <div class="sidebar-link-content"><i class="fa-solid fa-globe"></i> Market Intelligence</div>
+          <span class="sidebar-chevron"><i class="fa-solid fa-chevron-right"></i></span>
+        </a>
+        <a href="billing.html" class="sidebar-link">
+          <div class="sidebar-link-content"><i class="fa-solid fa-file-lines"></i> Reports</div>
+          <span class="sidebar-chevron"><i class="fa-solid fa-chevron-right"></i></span>
+        </a>
+        <a href="settings.html" class="sidebar-link">
+          <div class="sidebar-link-content"><i class="fa-solid fa-gear"></i> Settings</div>
+          <span class="sidebar-chevron"><i class="fa-solid fa-chevron-right"></i></span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content-custom">
+      
+      <!-- HERO BANNER SECTION -->
+      <div class="ref-hero-banner">
+        <div>
+          <div class="hero-sub-tag">EXECUTIVE MARITIME RISK CENTER</div>
+          <h1 class="hero-main-title">Executive Maritime<br>Risk Center</h1>
+          <p class="hero-description">
+            Real-time multi-dimensional risk Assessment: Weather, Congestion, Fleet, Route & ETA Delays
+          </p>
+          <div class="hero-actions-group">
+            <button class="btn-hero-solid" id="btn-refresh-risk" onclick="triggerButtonRefresh(this, loadRiskCenter, 'Risk matrix & operational telemetry updated')">
+              <i class="fa-solid fa-rotate me-1"></i> Refresh Risk Analysis
+            </button>
+          </div>
+        </div>
+
+        <!-- Floating Feature Overlay Card -->
+        <div class="hero-right-widget ms-auto d-none d-xl-flex">
+          <div class="hero-feature-item">
+            <div class="hero-feature-icon"><i class="fa-solid fa-cloud-sun-rain"></i></div>
+            <span>Weather Risk</span>
+          </div>
+          <div class="hero-feature-item">
+            <div class="hero-feature-icon"><i class="fa-solid fa-clock"></i></div>
+            <span>Port Congestion</span>
+          </div>
+          <div class="hero-feature-item">
+            <div class="hero-feature-icon"><i class="fa-solid fa-anchor"></i></div>
+            <span>Vessel Safety</span>
+          </div>
+          <div class="hero-feature-item">
+            <div class="hero-feature-icon"><i class="fa-solid fa-shield-halved"></i></div>
+            <span>Route Security</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- WORKFLOW PROGRESS CONTAINER -->
+      <div id="workflow-progress-container"></div>
+
+      <!-- OVERALL SYSTEM RISK LEVEL HEADER CARD -->
+      <div class="card-ref mb-4 border-warning border-opacity-50">
+        <div class="d-flex flex-wrap justify-content-between align-items-center">
+          <div>
+            <h4 class="fw-bold mb-1 text-dark"><i class="fa-solid fa-triangle-exclamation text-warning me-2"></i>Overall System Risk Level</h4>
+            <p class="text-muted mb-0 fs-8">Composite risk index calculated across Bay of Bengal trade routes</p>
+          </div>
+          <div class="mt-2 mt-sm-0">
+            <span class="badge bg-warning text-dark fs-6 px-4 py-2 rounded-3 shadow-sm" id="risk-overall-badge">🟡 MEDIUM OVERALL RISK</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5 KEY RISK INDICATOR CARDS ROW -->
+      <div class="row g-3 mb-4">
+        
+        <div class="col-md-4 col-lg">
+          <div class="kpi-card-ref text-center justify-content-center">
+            <div>
+              <div class="kpi-label mb-2"><i class="fa-solid fa-cloud-sun-rain text-primary me-1"></i> Weather Risk</div>
+              <div class="fs-4 fw-bold text-success mb-1" id="risk-weather">🟢 LOW</div>
+              <div class="fs-8 text-muted">Calm surface winds (12 kts)</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4 col-lg">
+          <div class="kpi-card-ref text-center justify-content-center">
+            <div>
+              <div class="kpi-label mb-2"><i class="fa-solid fa-clock text-warning me-1"></i> Port Congestion</div>
+              <div class="fs-4 fw-bold text-warning mb-1" id="risk-congestion">🟡 MEDIUM</div>
+              <div class="fs-8 text-muted">Avg 2.5 days berth wait</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4 col-lg">
+          <div class="kpi-card-ref text-center justify-content-center">
+            <div>
+              <div class="kpi-label mb-2"><i class="fa-solid fa-anchor text-success me-1"></i> Vessel Risk</div>
+              <div class="fs-4 fw-bold text-success mb-1" id="risk-vessel">🟢 LOW</div>
+              <div class="fs-8 text-muted">Class & DNV certified</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4 col-lg">
+          <div class="kpi-card-ref text-center justify-content-center">
+            <div>
+              <div class="kpi-label mb-2"><i class="fa-solid fa-route text-success me-1"></i> Route Risk</div>
+              <div class="fs-4 fw-bold text-success mb-1" id="risk-route">🟢 LOW</div>
+              <div class="fs-8 text-muted">Direct Australia -> Paradip</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4 col-lg">
+          <div class="kpi-card-ref text-center justify-content-center">
+            <div>
+              <div class="kpi-label mb-2"><i class="fa-solid fa-hourglass-half text-warning me-1"></i> ETA Delay Risk</div>
+              <div class="fs-4 fw-bold text-warning mb-1" id="risk-eta">🟡 MEDIUM</div>
+              <div class="fs-8 text-muted">+1.4 Days predicted delay</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- STRUCTURED RISK ASSESSMENT MATRIX TABLE CARD -->
+      <div class="card-ref mb-4">
+        <h5 class="card-ref-title mb-3"><i class="fa-solid fa-list-check text-primary me-2"></i>Structured Risk Indicator Assessment Matrix</h5>
+
+        <div class="table-responsive">
+          <table class="table-ref align-middle">
+            <thead>
+              <tr>
+                <th class="text-start">Risk Category</th>
+                <th>Assessed Level</th>
+                <th>Status Badge</th>
+                <th>Operational Context & Notes</th>
+              </tr>
+            </thead>
+            <tbody id="risk-matrix-body">
+              <tr>
+                <td class="text-start"><strong class="text-dark">Weather Risk</strong></td>
+                <td><span class="text-muted">LOW</span></td>
+                <td><span class="badge bg-success fs-7">🟢 LOW</span></td>
+                <td>Favorable sea state, calm Bay of Bengal surface wind (12 kts)</td>
+              </tr>
+              <tr>
+                <td class="text-start"><strong class="text-dark">Port Congestion</strong></td>
+                <td><span class="text-muted">MEDIUM</span></td>
+                <td><span class="badge bg-warning fs-7">🟡 MEDIUM</span></td>
+                <td>Paradip berth queue: 4 vessels waiting, avg 2.5 days wait</td>
+              </tr>
+              <tr>
+                <td class="text-start"><strong class="text-dark">Vessel Risk</strong></td>
+                <td><span class="text-muted">LOW</span></td>
+                <td><span class="badge bg-success fs-7">🟢 LOW</span></td>
+                <td>Panamax fleet age &lt; 8 years, class inspection passed</td>
+              </tr>
+              <tr>
+                <td class="text-start"><strong class="text-dark">Route Risk</strong></td>
+                <td><span class="text-muted">LOW</span></td>
+                <td><span class="badge bg-success fs-7">🟢 LOW</span></td>
+                <td>Australia -&gt; Paradip direct route clear of piracy or choke points</td>
+              </tr>
+              <tr>
+                <td class="text-start"><strong class="text-dark">ETA Delay Risk</strong></td>
+                <td><span class="text-muted">MEDIUM</span></td>
+                <td><span class="badge bg-warning fs-7">🟡 MEDIUM</span></td>
+                <td>+1.4 days monsoon staging buffer added</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer-custom">
+    <div>SmartVessel AI Enterprise Maritime System</div>
+    <div class="footer-links">
+      <a href="#">Privacy Policy</a>
+      <span>|</span>
+      <a href="#">Terms & Conditions</a>
+      <span>|</span>
+      <a href="#">Contact Us</a>
+    </div>
+    <div class="footer-brand">
+      <i class="fa-solid fa-ship text-primary"></i> Powered by SmartVesselAI
+    </div>
+  </footer>
+
+  <!-- DYNAMIC RISK ENGINE SCRIPT -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    async function loadRiskCenter() {
+      try {
+        const resp = await fetch('/api/risk/center');
+        const data = await resp.json();
+
+        if (document.getElementById('risk-overall-badge')) document.getElementById('risk-overall-badge').innerText = `${data.overall_badge} OVERALL RISK`;
+        if (document.getElementById('risk-weather')) document.getElementById('risk-weather').innerText = data.weather_badge;
+        if (document.getElementById('risk-congestion')) document.getElementById('risk-congestion').innerText = data.congestion_badge;
+        if (document.getElementById('risk-vessel')) document.getElementById('risk-vessel').innerText = data.vessel_badge;
+        if (document.getElementById('risk-route')) document.getElementById('risk-route').innerText = data.route_badge;
+        if (document.getElementById('risk-eta')) document.getElementById('risk-eta').innerText = data.eta_delay_badge;
+
+        const tbody = document.getElementById('risk-matrix-body');
+        if (tbody && data.risk_matrix) {
+          tbody.innerHTML = data.risk_matrix.map(row => `
+            <tr>
+              <td class="text-start"><strong class="text-dark">${row.indicator}</strong></td>
+              <td><span class="text-muted">${row.level}</span></td>
+              <td><span class="fs-7 fw-bold">${row.status}</span></td>
+              <td>${row.notes}</td>
+            </tr>
+          `).join('');
+        }
+
+      } catch (err) {
+        console.error("Risk center load error:", err);
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', async () => {
+      await loadRiskCenter();
+    });
+  </script>
+</body>
+</html>

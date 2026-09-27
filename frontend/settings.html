@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartVesselAI — Platform Settings & Configuration</title>
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/static/style.css?v=20260919_v5">
+  <script src="/static/js/workflowState.js"></script>
+  <style>
+    .dashboard-layout { display: flex; min-height: calc(100vh - 70px); }
+    .main-content-custom { flex-grow: 1; padding: 1.5rem 2rem; overflow-x: hidden; }
+  </style>
+</head>
+<body>
+  <!-- SEPARATE MULTI-LAYER ANIMATED PHOTOREALISTIC MARITIME BACKGROUND SYSTEM -->
+  <div id="maritime-animated-bg-container" class="no-print">
+    <!-- Photorealistic Ocean & Sunset Background Layer -->
+    <div id="photorealistic-ocean-bg" style="position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:-3; background: url('/static/assets/photorealistic_ocean_bg.jpg') center center / cover no-repeat; filter: brightness(0.88) contrast(1.05);"></div>
+
+    <!-- Dynamic 2D/WebGL Ocean Wave Ripples, Bow Spray Particles, Stern Wake & Seagulls Canvas -->
+    <canvas id="maritime-3d-bg-canvas" style="position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:-2; pointer-events:none; background:transparent;"></canvas>
+    
+    <!-- Dedicated Photorealistic White Passenger Cruise Ship Layer -->
+    <div id="vessel-ship-layer">
+      <img src="/static/assets/photorealistic_cruise_ship.png" class="photorealistic-ship-img" alt="Photorealistic Luxury Passenger Cruise Ship" />
+    </div>
+  </div>
+
+
+  <!-- Top Header Navigation Bar -->
+  <nav class="navbar navbar-expand-lg navbar-custom px-3 py-2 border-bottom border-secondary border-opacity-25">
+    <div class="container-fluid px-0">
+      <a class="navbar-brand brand-logo d-flex align-items-center gap-2.5 text-decoration-none" href="index.html">
+        <img src="/static/assets/smartvessel_logo.png" alt="SmartVesselAI Logo" style="height: 44px; width: 44px; object-fit: contain; filter: drop-shadow(0 2px 8px rgba(22, 139, 255, 0.25)); border-radius: 8px;">
+        <div>
+          <div class="fw-bold text-dark-navy d-flex align-items-center" style="font-size: 1.35rem; letter-spacing: -0.02em; line-height: 1.1;">
+            <span>SMARTVESSEL</span>
+            <span style="background: linear-gradient(135deg, #168bff, #0284c7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-left: 4px; font-weight: 800;">AI</span>
+          </div>
+          <div class="fs-8 text-muted fw-semibold" style="margin-top: -1px; letter-spacing: 0.02em;">Intelligent Chartering & Freight Optimizer</div>
+        </div>
+      </a>
+      <div class="d-flex align-items-center gap-3">
+        <div class="d-flex align-items-center gap-2 bg-success bg-opacity-10 text-success px-3 py-1.5 rounded-3 border border-success border-opacity-25 fs-7">
+          <span class="pulse-dot"></span>
+          <span>System Status: <strong>ONLINE</strong></span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="dashboard-layout">
+    <!-- Left Navigation Sidebar -->
+    <aside class="sidebar-custom d-none d-lg-flex">
+      <div>
+        <a href="index.html" class="sidebar-link"><i class="fa-solid fa-gauge-high"></i> Dashboard</a>
+        <a href="forecast.html" class="sidebar-link"><i class="fa-solid fa-chart-line"></i> Freight Forecasting</a>
+        <a href="vessels.html" class="sidebar-link"><i class="fa-solid fa-anchor"></i> Vessel Intelligence</a>
+        <a href="ports.html" class="sidebar-link"><i class="fa-solid fa-warehouse"></i> Port Intelligence</a>
+        <a href="optimization.html" class="sidebar-link"><i class="fa-solid fa-calculator"></i> Cost & Optimization</a>
+        <a href="risk.html" class="sidebar-link"><i class="fa-solid fa-shield-halved"></i> Risk Center</a>
+        <a href="whatif.html" class="sidebar-link"><i class="fa-solid fa-sliders"></i> What-If Simulator</a>
+        <a href="tracking.html" class="sidebar-link"><i class="fa-solid fa-globe"></i> Live Tracking</a>
+        <a href="alerts.html" class="sidebar-link"><i class="fa-solid fa-bell"></i> Alerts & Notifications</a>
+        <a href="billing.html" class="sidebar-link"><i class="fa-solid fa-file-invoice-dollar"></i> Reports & Downloads</a>
+        <a href="health.html" class="sidebar-link"><i class="fa-solid fa-server"></i> Data & AI Health</a>
+        <a href="settings.html" class="sidebar-link active"><i class="fa-solid fa-gear"></i> Settings</a>
+      </div>
+      <div class="p-3 glass-card bg-opacity-50 rounded-3 border border-secondary border-opacity-25 mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <span class="fs-8 text-muted fw-bold"><i class="fa-solid fa-brain text-info me-1"></i> AI MODEL STATUS</span>
+          <span class="badge bg-success fs-8">🟢 Healthy</span>
+        </div>
+        <div class="fs-7 text-dark-navy mb-1">Model: <strong>XGBoost v2.4</strong></div>
+        <div class="fs-7 text-dark-navy mb-1">Accuracy ($R^2$): <strong class="text-info">91.4%</strong></div>
+        <div class="fs-8 text-muted">Last Trained: 02 Sep 2026</div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content-custom">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h2 class="fw-bold mb-1"><i class="fa-solid fa-gear text-info me-2"></i>Platform Settings & Configurations</h2>
+          <p class="text-muted mb-0">Configure procurement defaults, default display currency, API integrations, and alert preferences</p>
+        </div>
+      </div>
+
+      <div class="glass-card mb-4" style="max-width: 800px;">
+        <h5 class="fw-bold mb-3"><i class="fa-solid fa-sliders text-info me-2"></i>General Preferences</h5>
+        
+        <div id="set-status-alert" class="alert alert-success d-none mb-3 py-2 px-3 fs-7" role="alert">
+          <i class="fa-solid fa-circle-check me-2"></i><span id="set-status-text">Settings updated successfully!</span>
+        </div>
+
+        <form id="settings-form" onsubmit="handleSettingsSave(event)">
+          <div class="mb-3">
+            <label class="form-label text-muted">Default Procurement Division</label>
+            <input type="text" id="set-procurement" class="form-control form-control-custom" value="SAIL Steel Procurement Division" required>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label text-muted">Default Display Currency</label>
+            <select id="set-currency" class="form-select form-select-custom">
+              <option value="INR" selected>INR (₹) - Indian Rupee</option>
+              <option value="USD">USD ($) - US Dollar</option>
+              <option value="AUD">AUD (A$) - Australian Dollar</option>
+              <option value="RUB">RUB (₽) - Russian Ruble</option>
+              <option value="IDR">IDR (Rp) - Indonesian Rupiah</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label text-muted">VLSFO Fuel Price Benchmark ($/MT)</label>
+            <input type="number" id="set-fuel" class="form-control form-control-custom" value="620.0" step="0.1" required>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label text-muted">API Data Refresh Interval</label>
+            <select id="set-interval" class="form-select form-select-custom">
+              <option value="5">Every 5 Minutes</option>
+              <option value="15" selected>Every 15 Minutes</option>
+              <option value="60">Every Hour</option>
+            </select>
+          </div>
+
+          <button type="submit" id="set-save-btn" class="btn btn-primary-custom px-4 py-2 mt-2 fw-bold">
+            <i class="fa-solid fa-floppy-disk me-1"></i>Save Configuration
+          </button>
+        </form>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/static/js/maritime3d.js?v=20260919_v5"></script>
+  <script>
+    async function loadSettings() {
+      try {
+        const resp = await fetch('/api/settings');
+        if (resp.ok) {
+          const data = await resp.json();
+          if (data.procurement_division && document.getElementById('set-procurement')) {
+            document.getElementById('set-procurement').value = data.procurement_division;
+          }
+          if (data.default_currency && document.getElementById('set-currency')) {
+            document.getElementById('set-currency').value = data.default_currency;
+          }
+          if (data.fuel_price_benchmark_usd != null && document.getElementById('set-fuel')) {
+            document.getElementById('set-fuel').value = data.fuel_price_benchmark_usd;
+          }
+          if (data.refresh_interval_minutes && document.getElementById('set-interval')) {
+            document.getElementById('set-interval').value = String(data.refresh_interval_minutes);
+          }
+        }
+      } catch (err) {
+        console.warn("Could not load backend settings:", err);
+      }
+    }
+
+    async function handleSettingsSave(e) {
+      e.preventDefault();
+      const saveBtn = document.getElementById('set-save-btn');
+      const alertBox = document.getElementById('set-status-alert');
+      const alertText = document.getElementById('set-status-text');
+
+      const payload = {
+        procurement_division: document.getElementById('set-procurement').value,
+        default_currency: document.getElementById('set-currency').value,
+        fuel_price_benchmark_usd: parseFloat(document.getElementById('set-fuel').value) || 620.0,
+        refresh_interval_minutes: parseInt(document.getElementById('set-interval').value, 10) || 15
+      };
+
+      try {
+        if (saveBtn) saveBtn.disabled = true;
+        const resp = await fetch('/api/settings', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const resData = await resp.json();
+        
+        if (alertBox && alertText) {
+          alertText.innerText = resData.message || "Settings updated successfully.";
+          alertBox.className = "alert alert-success mb-3 py-2 px-3 fs-7";
+          alertBox.classList.remove('d-none');
+          setTimeout(() => alertBox.classList.add('d-none'), 4000);
+        }
+      } catch (err) {
+        if (alertBox && alertText) {
+          alertText.innerText = "Error saving settings to server.";
+          alertBox.className = "alert alert-danger mb-3 py-2 px-3 fs-7";
+          alertBox.classList.remove('d-none');
+        }
+      } finally {
+        if (saveBtn) saveBtn.disabled = false;
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', loadSettings);
+  </script>
+</body>
+</html>

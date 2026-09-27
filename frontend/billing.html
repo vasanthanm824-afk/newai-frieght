@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartVesselAI — Enterprise Billing & Executive Financial Reports</title>
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <!-- Plotly.js -->
+  <script src="https://cdn.plot.ly/plotly-2.24.1.min.js"></script>
+  <!-- html2pdf.js for Client-Side PDF Export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <!-- Custom CSS & Workflow Engine -->
+  <link rel="stylesheet" href="/static/style.css?v=20260923_ref">
+  <script src="/static/js/workflowState.js"></script>
+  <script src="/static/js/global_ports.js"></script>
+  <script src="/static/js/currencyConfig.js"></script>
+  <script src="/static/js/currencyService.js"></script>
+  <style>
+    @media print {
+      body { background: #ffffff !important; color: #000000 !important; }
+      .no-print, nav, .sidebar-custom, #tab-nav-bar, .btn, .card-header-actions { display: none !important; }
+      .card-ref { background: #ffffff !important; border: 1px solid #ddd !important; box-shadow: none !important; color: #000 !important; }
+    }
+    .stamp-badge {
+      border: 2px dashed #16a34a;
+      color: #16a34a;
+      font-weight: 800;
+      letter-spacing: 1px;
+      padding: 4px 12px;
+      border-radius: 4px;
+      transform: rotate(-3deg);
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header Navigation Bar -->
+  <nav class="navbar navbar-custom navbar-expand-lg no-print">
+    <div class="container-fluid px-2">
+      
+      <!-- Brand -->
+      <div class="header-brand-container">
+        <a class="smartvessel-brand" href="index.html">
+          <div class="smartvessel-brand-icon">
+            <i class="fa-solid fa-ship"></i>
+          </div>
+          <div>
+            <div class="smartvessel-brand-title">SmartVessel<span>AI</span></div>
+            <div class="smartvessel-brand-sub">Maritime Intelligence & Optimization</div>
+          </div>
+        </a>
+      </div>
+
+      <!-- Top Header Navigation Tabs -->
+      <div class="collapse navbar-collapse show" id="headerNavTabs">
+        <div class="header-top-nav me-auto">
+          <a href="index.html" class="nav-item-link"><i class="fa-solid fa-house"></i> Dashboard</a>
+          <a href="forecast.html" class="nav-item-link"><i class="fa-solid fa-chart-line"></i> Forecast</a>
+          <a href="optimization.html" class="nav-item-link"><i class="fa-solid fa-chart-pie"></i> Analytics</a>
+          <a href="billing.html" class="nav-item-link active"><i class="fa-solid fa-file-contract"></i> Reports</a>
+        </div>
+      </div>
+
+      <!-- Header Right User & Controls -->
+      <div class="header-user-badge">
+        <button class="btn btn-light rounded-circle position-relative border p-2 shadow-sm" style="width:38px; height:38px;" title="Notifications" onclick="location.href='alerts.html'">
+          <i class="fa-regular fa-bell text-dark fs-6"></i>
+          <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
+        </button>
+
+        <div class="user-avatar-btn dropdown">
+          <div class="avatar-circle">V</div>
+          <div class="text-start d-none d-sm-block">
+            <div class="user-name-text">Vasanthan M</div>
+            <div class="user-role-text">Admin</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </nav>
+
+  <!-- Dashboard Main Layout -->
+  <div class="dashboard-layout">
+    
+    <!-- Left Navy Navigation Sidebar -->
+    <aside class="sidebar-custom d-none d-lg-flex no-print">
+      <div class="sidebar-menu-group">
+        <a href="index.html" class="sidebar-link">
+          <div class="sidebar-link-content"><i class="fa-solid fa-house"></i> Dashboard</div>
+          <span class="sidebar-chevron"><i class="fa-solid fa-chevron-right"></i></span>
+        </a>
+        <a href="forecast.html" class="sidebar-link">
+          <div class="sidebar-link-content"><i class="fa-solid fa-chart-line"></i> Freight Forecast</div>
+          <span class="sidebar-chevron"><i class="fa-solid fa-chevron-right"></i></span>
+        </a>
+        <a href="vessels.html" class="sidebar-link">
+          <div class="sidebar-link-content"><i class="fa-solid fa-ship"></i> Vessel Chartering</div>
+          <span class="sidebar-chevron"><i class="fa-solid fa-chevron-right"></i></span>
+        </a>
+        <a href="ports.html" class="sidebar-link">
+          <div class="sidebar-link-content"><i class="fa-solid fa-cubes"></i> Bulk Cargo Procurement</div>
+          <span class="sidebar-chevron"><i class="fa-solid fa-chevron-right"></i></span>
+        </a>
+        <a href="risk.html" class="sidebar-link">
+          <div class="sidebar-link-content"><i class="fa-solid fa-globe"></i> Market Intelligence</div>
+          <span class="sidebar-chevron"><i class="fa-solid fa-chevron-right"></i></span>
+        </a>
+        <a href="billing.html" class="sidebar-link active">
+          <div class="sidebar-link-content"><i class="fa-solid fa-file-lines"></i> Reports</div>
+          <span class="sidebar-chevron"><i class="fa-solid fa-chevron-right"></i></span>
+        </a>
+        <a href="settings.html" class="sidebar-link">
+          <div class="sidebar-link-content"><i class="fa-solid fa-gear"></i> Settings</div>
+          <span class="sidebar-chevron"><i class="fa-solid fa-chevron-right"></i></span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content-custom">
+      
+      <!-- HERO BANNER SECTION -->
+      <div class="ref-hero-banner no-print">
+        <div>
+          <div class="hero-sub-tag">ENTERPRISE BILLING & FINANCIAL HUB</div>
+          <h1 class="hero-main-title">Enterprise Billing & Executive<br>Financial Hub</h1>
+          <p class="hero-description">
+            Generate pro-forma charter invoices, manage itemized charges, analyze voyage financial margins, and export multi-format audit reports.
+          </p>
+          <div class="hero-actions-group">
+            <button class="btn-hero-solid" onclick="downloadPDFInvoice()">
+              <i class="fa-solid fa-file-pdf me-1"></i> Export Official PDF
+            </button>
+            <button class="btn-hero-outline" onclick="window.print()">
+              <i class="fa-solid fa-print me-1"></i> Quick Print
+            </button>
+          </div>
+        </div>
+
+        <!-- Floating Feature Overlay Card -->
+        <div class="hero-right-widget ms-auto d-none d-xl-flex">
+          <div class="hero-feature-item">
+            <div class="hero-feature-icon"><i class="fa-solid fa-file-invoice"></i></div>
+            <span>Pro-Forma Invoices</span>
+          </div>
+          <div class="hero-feature-item">
+            <div class="hero-feature-icon"><i class="fa-solid fa-coins"></i></div>
+            <span>Itemized Voyage Costs</span>
+          </div>
+          <div class="hero-feature-item">
+            <div class="hero-feature-icon"><i class="fa-solid fa-chart-pie"></i></div>
+            <span>Financial Analytics</span>
+          </div>
+          <div class="hero-feature-item">
+            <div class="hero-feature-icon"><i class="fa-solid fa-file-export"></i></div>
+            <span>Multi-Format Exports</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- WORKFLOW PROGRESS CONTAINER -->
+      <div id="workflow-progress-container"></div>
+
+      <!-- WORKSPACE NAVIGATION SUB-TABS -->
+      <ul class="nav nav-pills gap-2 mb-4 no-print" id="tab-nav-bar" role="tablist">
+        <li class="nav-item">
+          <button class="btn btn-sm btn-primary active px-3 py-2 fw-bold" id="tab-invoice-btn" data-bs-toggle="tab" data-bs-target="#tab-invoice" type="button">
+            <i class="fa-solid fa-receipt me-1"></i>1. Pro-Forma Invoice & Billing Generator
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="btn btn-sm btn-outline-primary px-3 py-2 fw-bold" id="tab-analytics-btn" data-bs-toggle="tab" data-bs-target="#tab-analytics" type="button" onclick="renderFinancialAnalytics()">
+            <i class="fa-solid fa-chart-pie me-1"></i>2. Financial Analytics & Cost Charts
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="btn btn-sm btn-outline-primary px-3 py-2 fw-bold" id="tab-exports-btn" data-bs-toggle="tab" data-bs-target="#tab-exports" type="button">
+            <i class="fa-solid fa-cloud-arrow-down me-1"></i>3. Remittance Audit & Multi-Format Exports
+          </button>
+        </li>
+      </ul>
+
+      <!-- TAB CONTENT AREA -->
+      <div class="tab-content" id="billingTabContent">
+        
+        <!-- TAB 1: PRO-FORMA INVOICE & BILLING GENERATOR -->
+        <div class="tab-pane fade show active" id="tab-invoice" role="tabpanel">
+          <div class="row g-4">
+            
+            <!-- Left Parameter Controls -->
+            <div class="col-lg-4 no-print">
+              <div class="card-ref">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <h5 class="card-ref-title mb-0"><i class="fa-solid fa-sliders text-primary me-2"></i>Invoice Parameters</h5>
+                  <button class="btn btn-sm btn-outline-secondary fs-8 fw-bold" onclick="triggerButtonRefresh(this, resetFormDefaults, 'Form parameters reset to defaults')"><i class="fa-solid fa-rotate-left me-1"></i>Reset</button>
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label text-muted fs-8 font-semibold">Origin Country</label>
+                  <select class="form-select form-select-custom" id="bill-origin-country" onchange="onParameterChange()">
+                    <option value="Australia" selected>Australia (A$ AUD)</option>
+                    <option value="India">India (₹ INR)</option>
+                    <option value="USA">USA ($ USD)</option>
+                    <option value="South Africa">South Africa (R ZAR)</option>
+                    <option value="Brazil">Brazil (R$ BRL)</option>
+                    <option value="Indonesia">Indonesia (Rp IDR)</option>
+                  </select>
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label text-muted fs-8 font-semibold">Origin Port Name</label>
+                  <input type="text" class="form-control form-control-custom" id="bill-origin-port" value="Newcastle" onchange="onParameterChange()">
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label text-muted fs-8 font-semibold">Destination Port (India)</label>
+                  <select class="form-select form-select-custom" id="bill-dest-port" onchange="onParameterChange()">
+                    <option value="Paradip" selected>Paradip (East Coast)</option>
+                    <option value="Vizag">Vizag (East Coast)</option>
+                    <option value="Kolkata">Kolkata (East Coast)</option>
+                  </select>
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label text-muted fs-8 font-semibold">Vessel Category</label>
+                  <select class="form-select form-select-custom" id="bill-vessel-type" onchange="onParameterChange()">
+                    <option value="Panamax" selected>Panamax (75,000 DWT)</option>
+                    <option value="Handymax">Handymax (82,000 DWT)</option>
+                    <option value="Capesize">Capesize (180,000 DWT)</option>
+                    <option value="Supramax">Supramax (60,000 DWT)</option>
+                  </select>
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label text-muted fs-8 font-semibold">Cargo Volume (MT)</label>
+                  <input type="number" class="form-control form-control-custom" id="bill-cargo" value="80000" step="5000" onchange="onParameterChange()">
+                </div>
+
+                <div class="row g-2 mb-3">
+                  <div class="col-6">
+                    <label class="form-label text-muted fs-8 font-semibold">Spot Rate ($/MT)</label>
+                    <input type="number" class="form-control form-control-custom" id="bill-spot-rate" value="25.50" step="0.5" onchange="onParameterChange()">
+                  </div>
+                  <div class="col-6">
+                    <label class="form-label text-muted fs-8 font-semibold">Discount (%)</label>
+                    <input type="number" class="form-control form-control-custom" id="bill-discount" value="5.0" step="0.5" onchange="onParameterChange()">
+                  </div>
+                </div>
+
+                <div class="row g-2 mb-4">
+                  <div class="col-6">
+                    <label class="form-label text-muted fs-8 font-semibold">Tax & Dues (%)</label>
+                    <input type="number" class="form-control form-control-custom" id="bill-tax" value="5.0" step="0.5" onchange="onParameterChange()">
+                  </div>
+                  <div class="col-6">
+                    <label class="form-label text-muted fs-8 font-semibold">Display Currency</label>
+                    <select class="form-select form-select-custom" id="bill-currency" onchange="generateInvoice()">
+                      <option value="INR" selected>INR (₹)</option>
+                      <option value="USD">USD ($)</option>
+                      <option value="AUD">AUD (A$)</option>
+                      <option value="RUB">RUB (₽)</option>
+                      <option value="IDR">IDR (Rp)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <button class="btn btn-primary w-100 py-2.5 fw-bold shadow-sm" onclick="generateInvoice()">
+                  <i class="fa-solid fa-wand-magic-sparkles me-2"></i>Recalculate Pro-Forma Bill
+                </button>
+              </div>
+            </div>
+
+            <!-- Right Pro-Forma Invoice Document Card -->
+            <div class="col-lg-8" id="printable-invoice-container">
+              <div class="card-ref p-4">
+                
+                <div class="d-flex justify-content-between align-items-start mb-4 pb-3 border-bottom">
+                  <div>
+                    <div class="d-flex align-items-center gap-2 mb-1">
+                      <i class="fa-solid fa-ship text-primary fs-3"></i>
+                      <h3 class="fw-bold text-dark mb-0">SMARTVESSEL AI MARITIME SERVICES</h3>
+                    </div>
+                    <div class="fs-8 text-muted">International Chartering & Freight Operations Escrow</div>
+                    <div class="fs-8 text-primary font-monospace mt-1" id="inv-reference">Reference: INV-2026-FRT-5178</div>
+                  </div>
+
+                  <div class="text-end">
+                    <div class="stamp-badge mb-2">PRO-FORMA GENERATED</div>
+                    <div class="fs-8 text-muted" id="inv-date">Date: 23 Sept 2026</div>
+                    <div class="fs-8 text-muted">Terms: Net 30 Days / L/C</div>
+                  </div>
+                </div>
+
+                <!-- 4 Summary Info Boxes -->
+                <div class="row g-2 mb-4">
+                  <div class="col-md-3">
+                    <div class="p-2.5 bg-light rounded border text-center">
+                      <span class="fs-8 text-muted d-block">Loading Port</span>
+                      <strong class="text-dark fs-7" id="card-origin">Newcastle, Australia</strong>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="p-2.5 bg-light rounded border text-center">
+                      <span class="fs-8 text-muted d-block">Discharge Port</span>
+                      <strong class="text-dark fs-7" id="card-destination">Paradip, India</strong>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="p-2.5 bg-light rounded border text-center">
+                      <span class="fs-8 text-muted d-block">Vessel & Cargo</span>
+                      <strong class="text-dark fs-7" id="card-vessel-cargo">Panamax (80,000 MT)</strong>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="p-2.5 bg-light rounded border text-center">
+                      <span class="fs-8 text-muted d-block">Net Unit Rate</span>
+                      <strong class="text-primary fs-7" id="card-unit-rate">₹2,717.42 / T</strong>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Itemized Voyage Cost Breakdown Table -->
+                <div class="mb-4">
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h6 class="fw-bold text-dark mb-0 fs-7"><i class="fa-solid fa-list-check text-primary me-2"></i>Itemized Voyage Cost Breakdown</h6>
+                    <span class="fs-8 text-muted">Display Currency: <strong class="text-primary" id="active-currency-label">INR</strong></span>
+                  </div>
+
+                  <div class="table-responsive">
+                    <table class="table-ref align-middle">
+                      <thead>
+                        <tr>
+                          <th class="text-start">Billing Line Item</th>
+                          <th class="text-start">Computation & Basis Notes</th>
+                          <th class="text-end">Amount</th>
+                        </tr>
+                      </thead>
+                      <tbody id="inv-table-body">
+                        <!-- Dynamic rows -->
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <!-- Add Custom Line Item Form (no-print) -->
+                <div class="p-3 bg-light rounded border mb-4 no-print">
+                  <h6 class="fw-bold fs-8 text-dark mb-2"><i class="fa-solid fa-plus text-primary me-1"></i>Add Itemized Adjustment / Charge</h6>
+                  <div class="row g-2">
+                    <div class="col-md-4">
+                      <input type="text" class="form-control form-control-sm" id="new-item-name" placeholder="Item Name (e.g. Canal Toll)">
+                    </div>
+                    <div class="col-md-4">
+                      <input type="text" class="form-control form-control-sm" id="new-item-details" placeholder="Basis / Notes">
+                    </div>
+                    <div class="col-md-3">
+                      <input type="number" class="form-control form-control-sm" id="new-item-amount" placeholder="Amount ($ USD)">
+                    </div>
+                    <div class="col-md-1">
+                      <button class="btn btn-sm btn-primary w-100 fw-bold" onclick="addCustomLineItem()">Add</button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Financial Totals Box -->
+                <div class="p-3 bg-primary bg-opacity-10 rounded border border-primary border-opacity-30">
+                  <div class="row align-items-center">
+                    <div class="col-md-6">
+                      <div class="fs-8 text-muted mb-1">Gross Subtotal: <strong class="text-dark" id="bill-subtotal">₹20,00,00,000</strong></div>
+                      <div class="fs-8 text-muted mb-1">Volume Discount (<span id="bill-disc-pct">5.0</span>%): <strong class="text-success" id="bill-disc-amt">-₹1,00,00,000</strong></div>
+                      <div class="fs-8 text-muted">Port & Regulatory Tax (<span id="bill-tax-pct">5.0</span>%): <strong class="text-danger" id="bill-tax-amt">+₹95,00,000</strong></div>
+                    </div>
+                    <div class="col-md-6 text-md-end mt-2 mt-md-0">
+                      <div class="fs-8 text-muted font-semibold">TOTAL LANDED PAYABLE AMOUNT</div>
+                      <div class="fs-2 fw-bold text-primary" id="bill-grand-primary">₹21,73,93,600</div>
+                      <div class="fs-8 text-muted" id="bill-grand-secondary">(USD Base: $2,606,637.89)</div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- TAB 2: FINANCIAL ANALYTICS & COST CHARTS -->
+        <div class="tab-pane fade" id="tab-analytics" role="tabpanel">
+          <div class="card-ref p-4">
+            <h5 class="card-ref-title mb-3"><i class="fa-solid fa-chart-pie text-primary me-2"></i>Financial Cost Breakdown & Margin Analytics</h5>
+            <div class="row align-items-center">
+              <div class="col-lg-6">
+                <div id="analytics-donut-chart" style="height:320px; width:100%;"></div>
+              </div>
+              <div class="col-lg-6">
+                <div class="p-3 bg-light rounded border">
+                  <h6 class="fw-bold text-dark fs-7 mb-2">Executive Financial Summary</h6>
+                  <div class="fs-8 text-muted mb-2">Gross Unit Freight Cost: <strong class="text-dark" id="an-unit-gross">$25.50 / MT</strong></div>
+                  <div class="fs-8 text-muted mb-2">Net Landed Cost Per Ton: <strong class="text-primary" id="an-unit-net">$32.58 / MT</strong></div>
+                  <div class="fs-8 text-muted mb-2">IMO 2026 Carbon Levy: <strong class="text-danger" id="an-carbon-levy">$30,600.00</strong></div>
+                  <div class="fs-8 text-muted mb-2">Congestion Idle Buffer: <strong class="text-warning" id="an-idle-reserve">$25,000.00</strong></div>
+                  <div class="fs-8 text-muted">Negotiated Savings: <strong class="text-success" id="an-savings-amt">-$102,000.00</strong></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 3: REMITTANCE AUDIT & MULTI-FORMAT EXPORTS -->
+        <div class="tab-pane fade" id="tab-exports" role="tabpanel">
+          <div class="card-ref p-4">
+            <h5 class="card-ref-title mb-3"><i class="fa-solid fa-cloud-arrow-down text-primary me-2"></i>Multi-Format Export & Remittance Audit Hub</h5>
+            
+            <div class="row g-3 mb-4">
+              <div class="col-md-3">
+                <div class="p-3 bg-light rounded border text-center h-100">
+                  <i class="fa-solid fa-file-pdf text-danger fs-2 mb-2"></i>
+                  <h6 class="fw-bold text-dark fs-7">Official Pro-Forma PDF</h6>
+                  <p class="fs-8 text-muted mb-3">Download stamped official audit PDF invoice.</p>
+                  <button class="btn btn-sm btn-danger w-100 fw-bold" onclick="downloadPDFInvoice()">Download PDF</button>
+                </div>
+              </div>
+
+              <div class="col-md-3">
+                <div class="p-3 bg-light rounded border text-center h-100">
+                  <i class="fa-solid fa-file-csv text-success fs-2 mb-2"></i>
+                  <h6 class="fw-bold text-dark fs-7">Line-Item CSV Ledger</h6>
+                  <p class="fs-8 text-muted mb-3">Export raw line items for ERP & SAP ledger imports.</p>
+                  <button class="btn btn-sm btn-success w-100 fw-bold" onclick="exportCSV()">Download CSV</button>
+                </div>
+              </div>
+
+              <div class="col-md-3">
+                <div class="p-3 bg-light rounded border text-center h-100">
+                  <i class="fa-solid fa-file-lines text-info fs-2 mb-2"></i>
+                  <h6 class="fw-bold text-dark fs-7">Plain Text Statement</h6>
+                  <p class="fs-8 text-muted mb-3">Download formatted ASCII statement file.</p>
+                  <button class="btn btn-sm btn-info text-white w-100 fw-bold" onclick="exportTXT()">Download TXT</button>
+                </div>
+              </div>
+
+              <div class="col-md-3">
+                <div class="p-3 bg-light rounded border text-center h-100">
+                  <i class="fa-solid fa-code text-warning fs-2 mb-2"></i>
+                  <h6 class="fw-bold text-dark fs-7">API JSON Payload</h6>
+                  <p class="fs-8 text-muted mb-3">Export raw JSON structure for REST API integration.</p>
+                  <button class="btn btn-sm btn-warning text-dark w-100 fw-bold" onclick="exportAPIJSON()">Export JSON</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Formatted Statement Preview Box -->
+            <div class="mb-3">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <h6 class="fw-bold text-dark fs-7 mb-0">Formatted Audit Statement Text</h6>
+                <button class="btn btn-sm btn-outline-secondary fs-8 fw-bold" onclick="copyFormattedStatement()"><i class="fa-solid fa-copy me-1"></i>Copy Text</button>
+              </div>
+              <pre id="inv-formatted-text" class="p-3 bg-dark text-info font-monospace rounded fs-8" style="max-height: 250px; overflow-y: auto;"></pre>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer-custom no-print">
+    <div>SmartVessel AI Enterprise Maritime System</div>
+    <div class="footer-links">
+      <a href="#">Privacy Policy</a>
+      <span>|</span>
+      <a href="#">Terms & Conditions</a>
+      <span>|</span>
+      <a href="#">Contact Us</a>
+    </div>
+    <div class="footer-brand">
+      <i class="fa-solid fa-ship text-primary"></i> Powered by SmartVesselAI
+    </div>
+  </footer>
+
+  <!-- BOOTSTRAP JS & SCRIPT LOGIC -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    let currentLineItems = [];
+    let currentFormattedText = "";
+    let lastInvoiceData = null;
+    let lastInvoiceReq = null;
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const todayStr = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+      if (document.getElementById('inv-date')) document.getElementById('inv-date').innerText = `Date: ${todayStr}`;
+      
+      initDefaultLineItems();
+      generateInvoice();
+    });
+
+    function initDefaultLineItems() {
+      const cargo = parseFloat(document.getElementById('bill-cargo') ? document.getElementById('bill-cargo').value : 80000) || 80000;
+      const rate = parseFloat(document.getElementById('bill-spot-rate') ? document.getElementById('bill-spot-rate').value : 25.50) || 25.50;
+      const baseFreight = cargo * rate;
+      const originPort = document.getElementById('bill-origin-port') ? document.getElementById('bill-origin-port').value || "Newcastle" : "Newcastle";
+      const originCountry = document.getElementById('bill-origin-country') ? document.getElementById('bill-origin-country').value || "Australia" : "Australia";
+      const destPort = document.getElementById('bill-dest-port') ? document.getElementById('bill-dest-port').value || "Paradip" : "Paradip";
+
+      currentLineItems = [
+        { item: "Base Ocean Freight Charge", details: `${cargo.toLocaleString()} MT @ $${rate.toFixed(2)}/MT`, amount_usd: baseFreight },
+        { item: "Vessel Time Charter Hire", details: "15 days sailing + laytime", amount_usd: 250000.0 },
+        { item: "Bunker Fuel Consumption (VLSFO/MGO)", details: "At current Baltic bunker rates", amount_usd: 180000.0 },
+        { item: "Loading Port Charges & Berth Dues", details: `Port of ${originPort}, ${originCountry}`, amount_usd: 45000.0 },
+        { item: "Discharge Port Charges & Handling", details: `Port of ${destPort}, India`, amount_usd: 55000.0 },
+        { item: "Maritime Carbon & Eco Compliance Levy", details: "IMO 2026 / EU ETS Carbon Allowance (1.5%)", amount_usd: baseFreight * 0.015 },
+        { item: "Port Idle & Congestion Provision", details: "Estimated 2-3 days waiting buffer", amount_usd: 25000.0 }
+      ];
+    }
+
+    function addCustomLineItem() {
+      const name = document.getElementById('new-item-name').value.trim();
+      const details = document.getElementById('new-item-details').value.trim() || "Custom Voyage Charge";
+      const amt = parseFloat(document.getElementById('new-item-amount').value);
+
+      if (!name || isNaN(amt) || amt <= 0) {
+        alert("Please enter a valid Item Name and positive Amount ($).");
+        return;
+      }
+
+      currentLineItems.push({ item: name, details: details, amount_usd: amt });
+      document.getElementById('new-item-name').value = "";
+      document.getElementById('new-item-details').value = "";
+      document.getElementById('new-item-amount').value = "";
+
+      generateInvoice();
+    }
+
+    function removeLineItem(index) {
+      if (currentLineItems.length <= 1) {
+        alert("Invoice must contain at least one line item.");
+        return;
+      }
+      currentLineItems.splice(index, 1);
+      generateInvoice();
+    }
+
+    function onParameterChange() {
+      const cargo = parseFloat(document.getElementById('bill-cargo').value) || 80000;
+      const rate = parseFloat(document.getElementById('bill-spot-rate').value) || 25.50;
+      if (currentLineItems.length > 0 && currentLineItems[0].item === "Base Ocean Freight Charge") {
+        currentLineItems[0].details = `${cargo.toLocaleString()} MT @ $${rate.toFixed(2)}/MT`;
+        currentLineItems[0].amount_usd = cargo * rate;
+      }
+      generateInvoice();
+    }
+
+    function resetFormDefaults() {
+      if (document.getElementById('bill-origin-country')) document.getElementById('bill-origin-country').value = "Australia";
+      if (document.getElementById('bill-origin-port')) document.getElementById('bill-origin-port').value = "Newcastle";
+      if (document.getElementById('bill-dest-port')) document.getElementById('bill-dest-port').value = "Paradip";
+      if (document.getElementById('bill-vessel-type')) document.getElementById('bill-vessel-type').value = "Panamax";
+      if (document.getElementById('bill-cargo')) document.getElementById('bill-cargo').value = "80000";
+      if (document.getElementById('bill-spot-rate')) document.getElementById('bill-spot-rate').value = "25.50";
+      if (document.getElementById('bill-discount')) document.getElementById('bill-discount').value = "5.0";
+      if (document.getElementById('bill-tax')) document.getElementById('bill-tax').value = "5.0";
+      if (document.getElementById('bill-currency')) document.getElementById('bill-currency').value = "INR";
+      initDefaultLineItems();
+      generateInvoice();
+    }
+
+    async function generateInvoice() {
+      const originCountry = document.getElementById('bill-origin-country') ? document.getElementById('bill-origin-country').value : "Australia";
+      const originPort = document.getElementById('bill-origin-port') ? document.getElementById('bill-origin-port').value : "Newcastle";
+      const destPort = document.getElementById('bill-dest-port') ? document.getElementById('bill-dest-port').value : "Paradip";
+      const vesselType = document.getElementById('bill-vessel-type') ? document.getElementById('bill-vessel-type').value : "Panamax";
+      const cargoTonnes = parseFloat(document.getElementById('bill-cargo') ? document.getElementById('bill-cargo').value : 80000) || 80000;
+      const spotRate = parseFloat(document.getElementById('bill-spot-rate') ? document.getElementById('bill-spot-rate').value : 25.50) || 25.50;
+      const discountPct = parseFloat(document.getElementById('bill-discount') ? document.getElementById('bill-discount').value : 5.0) || 0.0;
+      const taxPct = parseFloat(document.getElementById('bill-tax') ? document.getElementById('bill-tax').value : 5.0) || 5.0;
+      const selectedCurrency = document.getElementById('bill-currency') ? document.getElementById('bill-currency').value : "INR";
+
+      const payload = {
+        origin_country: originCountry,
+        origin_port: originPort,
+        destination_port: destPort,
+        vessel_type: vesselType,
+        cargo_tonnes: cargoTonnes,
+        spot_rate_per_ton: spotRate,
+        discount_pct: discountPct,
+        tax_pct: taxPct,
+        currency: selectedCurrency,
+        custom_line_items: currentLineItems
+      };
+
+      try {
+        const res = await fetch('/api/voyage/billing', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (!res.ok) throw new Error('API server returned error');
+        const data = await res.json();
+        renderInvoiceData(data, payload);
+      } catch (err) {
+        renderLocalCalculation(payload);
+      }
+    }
+
+    function renderLocalCalculation(req) {
+      let subtotal = 0;
+      currentLineItems.forEach(li => subtotal += Number(li.amount_usd || 0));
+
+      const discAmt = subtotal * (req.discount_pct / 100.0);
+      const afterDisc = subtotal - discAmt;
+      const taxAmt = afterDisc * (req.tax_pct / 100.0);
+      const grandUsd = afterDisc + taxAmt;
+      const costPerTon = req.cargo_tonnes > 0 ? grandUsd / req.cargo_tonnes : 0;
+
+      const mockData = {
+        invoice_number: `INV-2026-FRT-${Math.floor(1000 + Math.random() * 9000)}`,
+        billing_summary: {
+          origin: `${req.origin_port}, ${req.origin_country}`,
+          destination: `${req.destination_port}, India`,
+          vessel_type: req.vessel_type,
+          cargo_tonnes: req.cargo_tonnes,
+          line_items: currentLineItems,
+          subtotal_usd: subtotal,
+          discount_pct: req.discount_pct,
+          discount_amount_usd: discAmt,
+          tax_pct: req.tax_pct,
+          tax_amount_usd: taxAmt,
+          grand_total_usd: grandUsd,
+          cost_per_ton_usd: costPerTon
+        }
+      };
+      renderInvoiceData(mockData, req);
+    }
+
+    function renderInvoiceData(data, req) {
+      lastInvoiceData = data;
+      lastInvoiceReq = req;
+      const bs = data.billing_summary || {};
+      const targetCurrency = document.getElementById('bill-currency') ? document.getElementById('bill-currency').value : 'INR';
+
+      if (document.getElementById('inv-reference')) document.getElementById('inv-reference').innerText = `Reference: ${data.invoice_number || 'INV-2026-FRT-9842'}`;
+      if (document.getElementById('card-origin')) document.getElementById('card-origin').innerText = bs.origin || `${req.origin_port}, ${req.origin_country}`;
+      if (document.getElementById('card-destination')) document.getElementById('card-destination').innerText = bs.destination || `${req.destination_port}, India`;
+      if (document.getElementById('card-vessel-cargo')) document.getElementById('card-vessel-cargo').innerText = `${bs.vessel_type || req.vessel_type} (${(bs.cargo_tonnes || req.cargo_tonnes).toLocaleString()} MT)`;
+      if (document.getElementById('active-currency-label')) document.getElementById('active-currency-label').innerText = `${targetCurrency}`;
+
+      const unitRateVal = bs.cost_per_ton_usd || 0;
+      if (document.getElementById('card-unit-rate')) {
+        if (typeof CurrencyService !== "undefined") {
+          document.getElementById('card-unit-rate').innerText = CurrencyService.formatRate(unitRateVal, targetCurrency);
+        } else {
+          document.getElementById('card-unit-rate').innerText = `$${unitRateVal.toFixed(2)} / MT`;
+        }
+      }
+
+      currentLineItems = bs.line_items || currentLineItems;
+      const tbody = document.getElementById('inv-table-body');
+      if (tbody) {
+        tbody.innerHTML = '';
+
+        currentLineItems.forEach((item, idx) => {
+          const tr = document.createElement('tr');
+          let itemAmtStr = `$${Number(item.amount_usd).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+          if (typeof CurrencyService !== "undefined") {
+            itemAmtStr = CurrencyService.formatCost(item.amount_usd, targetCurrency);
+          }
+
+          tr.innerHTML = `
+            <td class="text-start">
+              <div class="d-flex align-items-center justify-content-between">
+                <strong class="text-dark">${item.item}</strong>
+                <button class="btn btn-sm text-danger p-0 no-print" onclick="removeLineItem(${idx})" title="Remove Charge"><i class="fa-solid fa-xmark"></i></button>
+              </div>
+            </td>
+            <td class="text-start"><span class="text-muted">${item.details}</span></td>
+            <td class="text-end text-primary font-monospace fw-bold">${itemAmtStr}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+
+      const subtotalUsd = bs.subtotal_usd || 0;
+      const discUsd = bs.discount_amount_usd || 0;
+      const taxUsd = bs.tax_amount_usd || 0;
+      const grandUsd = bs.grand_total_usd || 0;
+
+      if (typeof CurrencyService !== "undefined") {
+        if (document.getElementById('bill-subtotal')) document.getElementById('bill-subtotal').innerText = CurrencyService.formatCost(subtotalUsd, targetCurrency);
+        if (document.getElementById('bill-disc-amt')) document.getElementById('bill-disc-amt').innerText = `-${CurrencyService.formatCost(discUsd, targetCurrency)}`;
+        if (document.getElementById('bill-tax-amt')) document.getElementById('bill-tax-amt').innerText = `+${CurrencyService.formatCost(taxUsd, targetCurrency)}`;
+        if (document.getElementById('bill-grand-primary')) document.getElementById('bill-grand-primary').innerText = CurrencyService.formatCost(grandUsd, targetCurrency);
+        if (document.getElementById('bill-grand-secondary')) document.getElementById('bill-grand-secondary').innerText = targetCurrency !== 'USD' ? `(USD Base: $${grandUsd.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})})` : `(Approx: ₹${(grandUsd * 83.5).toLocaleString(undefined, {maximumFractionDigits: 0})} INR)`;
+        
+        if (document.getElementById('an-unit-gross')) document.getElementById('an-unit-gross').innerText = CurrencyService.formatRate(subtotalUsd / req.cargo_tonnes, targetCurrency);
+        if (document.getElementById('an-unit-net')) document.getElementById('an-unit-net').innerText = CurrencyService.formatRate(bs.cost_per_ton_usd, targetCurrency);
+        if (document.getElementById('an-carbon-levy')) document.getElementById('an-carbon-levy').innerText = CurrencyService.formatCost((req.spot_rate_per_ton * req.cargo_tonnes) * 0.015, targetCurrency);
+        if (document.getElementById('an-idle-reserve')) document.getElementById('an-idle-reserve').innerText = CurrencyService.formatCost(25000.0, targetCurrency);
+        if (document.getElementById('an-savings-amt')) document.getElementById('an-savings-amt').innerText = `-${CurrencyService.formatCost(discUsd, targetCurrency)}`;
+      }
+
+      if (document.getElementById('bill-disc-pct')) document.getElementById('bill-disc-pct').innerText = bs.discount_pct || 0;
+      if (document.getElementById('bill-tax-pct')) document.getElementById('bill-tax-pct').innerText = bs.tax_pct || 5;
+
+      currentFormattedText = generateFormattedText(data.invoice_number, bs, req);
+      if (document.getElementById('inv-formatted-text')) document.getElementById('inv-formatted-text').innerText = currentFormattedText;
+    }
+
+    function generateFormattedText(invNo, bs, req) {
+      let itemsStr = "";
+      currentLineItems.forEach((li, i) => {
+        itemsStr += `  ${i+1}. ${li.item}: $ ${Number(li.amount_usd).toLocaleString(undefined, {minimumFractionDigits: 2})}\n`;
+      });
+      return `========================================================================================
+                      SMARTVESSEL AI — MARITIME CHARTER PRO-FORMA INVOICE
+========================================================================================
+Invoice Reference  : ${invNo || 'INV-2026-FRT-9842'}
+Issue Date         : ${new Date().toLocaleDateString('en-GB')}
+Status             : PRO-FORMA INVOICE GENERATED
+----------------------------------------------------------------------------------------
+CHARTER & VOYAGE DETAILS:
+  Loading Port     : ${req.origin_port}, ${req.origin_country}
+  Discharge Port   : ${req.destination_port}, India
+  Vessel Category  : ${req.vessel_type} Bulk Carrier
+  Cargo Volume     : ${req.cargo_tonnes.toLocaleString()} MT
+----------------------------------------------------------------------------------------
+FINANCIAL SUMMARY:
+  Gross Subtotal                                     : $ ${Number(bs.subtotal_usd || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}
+  Discount (${bs.discount_pct || 0}%)                                        : -$ ${Number(bs.discount_amount_usd || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}
+  Taxes & Port Dues (${bs.tax_pct || 5}%)                               : +$ ${Number(bs.tax_amount_usd || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}
+  ------------------------------------------------------------------
+  NET PAYABLE AMOUNT (USD)                           : $ ${Number(bs.grand_total_usd || 0).toLocaleString(undefined, {minimumFractionDigits: 2})} USD
+========================================================================================`;
+    }
+
+    function renderFinancialAnalytics() {
+      if (typeof Plotly === "undefined") return;
+
+      const labels = currentLineItems.map(item => item.item);
+      const values = currentLineItems.map(item => item.amount_usd);
+
+      const data = [{
+        values: values,
+        labels: labels,
+        type: 'pie',
+        hole: 0.4,
+        marker: {
+          colors: ['#1d4ed8', '#0284c7', '#d97706', '#16a34a', '#dc2626', '#9333ea', '#06b6d4']
+        },
+        textinfo: 'percent',
+        hoverinfo: 'label+value+percent'
+      }];
+
+      const layout = {
+        paper_bgcolor: 'transparent',
+        plot_bgcolor: 'transparent',
+        showlegend: true,
+        legend: { font: { color: '#64748b', size: 10 } },
+        margin: { t: 10, b: 10, l: 10, r: 10 }
+      };
+
+      Plotly.newPlot('analytics-donut-chart', data, layout, { responsive: true, displayModeBar: false });
+    }
+
+    function downloadPDFInvoice() {
+      const element = document.getElementById('printable-invoice-container');
+      const invNo = document.getElementById('inv-reference').innerText.replace('Reference: ', '');
+      const opt = {
+        margin:       0.3,
+        filename:     `SmartVessel_Invoice_${invNo}.pdf`,
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2, backgroundColor: '#ffffff' },
+        jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+      };
+      html2pdf().set(opt).from(element).save();
+    }
+
+    function exportCSV() {
+      if (!currentLineItems || currentLineItems.length === 0) return;
+      let csvContent = "data:text/csv;charset=utf-8,Item Description,Details / Basis,Amount (USD)\n";
+      currentLineItems.forEach(row => {
+        csvContent += `"${row.item}","${row.details}","${row.amount_usd}"\n`;
+      });
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", `ProForma_Invoice_${document.getElementById('inv-reference').innerText.replace('Reference: ', '')}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    function exportTXT() {
+      const blob = new Blob([currentFormattedText], { type: "text/plain;charset=utf-8" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `Official_Invoice_${document.getElementById('inv-reference').innerText.replace('Reference: ', '')}.txt`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    function exportAPIJSON() {
+      const jsonStr = JSON.stringify(lastInvoiceData || { line_items: currentLineItems }, null, 2);
+      const blob = new Blob([jsonStr], { type: "application/json" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `Invoice_Data_${document.getElementById('inv-reference').innerText.replace('Reference: ', '')}.json`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    function copyFormattedStatement() {
+      navigator.clipboard.writeText(currentFormattedText);
+      alert("Statement text copied to clipboard!");
+    }
+
+    window.addEventListener('DOMContentLoaded', async () => {
+      if (window.initGlobalPortDropdowns) {
+        await initGlobalPortDropdowns('bill-origin-country', 'bill-dest-port');
+      }
+
+      await generateInvoice();
+    });
+  </script>
+</body>
+</html>

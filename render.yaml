@@ -1,0 +1,29 @@
+# ---------------------------------------------------------------------------
+# render.yaml — Multi-Service Cloud Deployment Blueprint (Render / Railway)
+# ---------------------------------------------------------------------------
+services:
+  # FastAPI REST Backend Server
+  - type: web
+    name: freight-backend-api
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.8
+
+  # Streamlit Frontend Decision Center
+  - type: web
+    name: freight-decision-center-ui
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: streamlit run app.py --server.port $PORT --server.address 0.0.0.0 --server.headless true
+    envVars:
+      - key: BACKEND_URL
+        fromService:
+          type: web
+          name: freight-backend-api
+          property: url
+      - key: PYTHON_VERSION
+        value: 3.11.8

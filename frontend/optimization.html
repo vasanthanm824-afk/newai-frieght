@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartVesselAI — AI Voyage Cost & Charter Optimizer</title>
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <!-- Plotly.js -->
+  <script src="https://cdn.plot.ly/plotly-2.24.1.min.js"></script>
+  <!-- Custom CSS & Workflow Engine -->
+  <link rel="stylesheet" href="/static/style.css?v=20260923_ref">
+  <script src="/static/js/workflowState.js"></script>
+  <script src="/static/js/global_ports.js"></script>
+  <script src="/static/js/currencyConfig.js"></script>
+  <script src="/static/js/currencyService.js"></script>
+</head>
+<body>
+
+  <!-- Top Header Navigation Bar -->
+  <nav class="navbar navbar-custom navbar-expand-lg">
+    <div class="container-fluid px-2">
+      
+      <!-- Brand -->
+      <div class="header-brand-container">
+        <a class="smartvessel-brand" href="index.html">
+          <div class="smartvessel-brand-icon">
+            <i class="fa-solid fa-ship"></i>
+          </div>
+          <div>
+            <div class="smartvessel-brand-title">SmartVessel<span>AI</span></div>
+            <div class="smartvessel-brand-sub">Maritime Intelligence & Optimization</div>
+          </div>
+        </a>
+      </div>
+
+      <!-- Top Header Navigation Tabs -->
+      <div class="collapse navbar-collapse show" id="headerNavTabs">
+        <div class="header-top-nav me-auto">
+          <a href="index.html" class="nav-item-link"><i class="fa-solid fa-house"></i> Dashboard</a>
+          <a href="forecast.html" class="nav-item-link"><i class="fa-solid fa-chart-line"></i> Forecast</a>
+          <a href="optimization.html" class="nav-item-link active"><i class="fa-solid fa-chart-pie"></i> Analytics</a>
+          <a href="billing.html" class="nav-item-link"><i class="fa-solid fa-file-contract"></i> Reports</a>
+        </div>
+      </div>
+
+      <!-- Header Right User & Controls -->
+      <div class="header-user-badge">
+        <button class="btn btn-light rounded-circle position-relative border p-2 shadow-sm" style="width:38px; height:38px;" title="Notifications" onclick="location.href='alerts.html'">
+          <i class="fa-regular fa-bell text-dark fs-6"></i>
+          <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
+        </button>
+
+        <div class="user-avatar-btn dropdown">
+          <div class="avatar-circle">V</div>
+          <div class="text-start d-none d-sm-block">
+            <div class="user-name-text">Vasanthan M</div>
+            <div class="user-role-text">Admin</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </nav>
+
+  <!-- Dashboard Main Layout -->
+  <div class="dashboard-layout">
+    
+    <!-- Left Navy Navigation Sidebar -->
+    <aside class="sidebar-custom d-none d-lg-flex">
+      <div class="sidebar-menu-group">
+        <a href="index.html" class="sidebar-link">
+          <div class="sidebar-link-content"><i class="fa-solid fa-house"></i> Dashboard</div>
+          <span class="sidebar-chevron"><i class="fa-solid fa-chevron-right"></i></span>
+        </a>
+        <a href="forecast.html" class="sidebar-link">
+          <div class="sidebar-link-content"><i class="fa-solid fa-chart-line"></i> Freight Forecast</div>
+          <span class="sidebar-chevron"><i class="fa-solid fa-chevron-right"></i></span>
+        </a>
+        <a href="vessels.html" class="sidebar-link">
+          <div class="sidebar-link-content"><i class="fa-solid fa-ship"></i> Vessel Chartering</div>
+          <span class="sidebar-chevron"><i class="fa-solid fa-chevron-right"></i></span>
+        </a>
+        <a href="ports.html" class="sidebar-link">
+          <div class="sidebar-link-content"><i class="fa-solid fa-cubes"></i> Bulk Cargo Procurement</div>
+          <span class="sidebar-chevron"><i class="fa-solid fa-chevron-right"></i></span>
+        </a>
+        <a href="optimization.html" class="sidebar-link active">
+          <div class="sidebar-link-content"><i class="fa-solid fa-calculator"></i> Cost & Optimization</div>
+          <span class="sidebar-chevron"><i class="fa-solid fa-chevron-right"></i></span>
+        </a>
+        <a href="risk.html" class="sidebar-link">
+          <div class="sidebar-link-content"><i class="fa-solid fa-globe"></i> Market Intelligence</div>
+          <span class="sidebar-chevron"><i class="fa-solid fa-chevron-right"></i></span>
+        </a>
+        <a href="billing.html" class="sidebar-link">
+          <div class="sidebar-link-content"><i class="fa-solid fa-file-lines"></i> Reports</div>
+          <span class="sidebar-chevron"><i class="fa-solid fa-chevron-right"></i></span>
+        </a>
+        <a href="settings.html" class="sidebar-link">
+          <div class="sidebar-link-content"><i class="fa-solid fa-gear"></i> Settings</div>
+          <span class="sidebar-chevron"><i class="fa-solid fa-chevron-right"></i></span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content-custom">
+      
+      <!-- HERO BANNER SECTION -->
+      <div class="ref-hero-banner">
+        <div>
+          <div class="hero-sub-tag">AI VOYAGE COST & CHARTER OPTIMIZER</div>
+          <h1 class="hero-main-title">AI Voyage Cost & Charter<br>Optimizer</h1>
+          <p class="hero-description">
+            Multi-objective decision support: Freight + Fuel (VLSFO) + Port Charges + Waiting + Idle + Risk Penalty
+          </p>
+          <div class="hero-actions-group">
+            <button class="btn-hero-solid" id="btn-refresh-opt" onclick="triggerButtonRefresh(this, runOptimization, 'Voyage optimization refreshed')">
+              <i class="fa-solid fa-rotate me-1"></i> Refresh Optimization
+            </button>
+            <a href="whatif.html" class="btn-hero-solid">
+              Run What-If Analysis →
+            </a>
+          </div>
+        </div>
+
+        <!-- Floating Feature Overlay Card -->
+        <div class="hero-right-widget ms-auto d-none d-xl-flex">
+          <div class="hero-feature-item">
+            <div class="hero-feature-icon"><i class="fa-solid fa-calculator"></i></div>
+            <span>Multi-Objective Optimization</span>
+          </div>
+          <div class="hero-feature-item">
+            <div class="hero-feature-icon"><i class="fa-solid fa-coins"></i></div>
+            <span>Landed Cost Calculation</span>
+          </div>
+          <div class="hero-feature-item">
+            <div class="hero-feature-icon"><i class="fa-solid fa-layer-group"></i></div>
+            <span>Vessel Rank Matrix</span>
+          </div>
+          <div class="hero-feature-item">
+            <div class="hero-feature-icon"><i class="fa-solid fa-piggy-bank"></i></div>
+            <span>Savings Analysis</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- WORKFLOW PROGRESS CONTAINER -->
+      <div id="workflow-progress-container"></div>
+
+      <!-- MAIN 2-COLUMN GRID (Parameters + Featured AI Recommendation) -->
+      <div class="row g-4 mb-4">
+        
+        <!-- Voyage Parameters Form (Left Column) -->
+        <div class="col-lg-4">
+          <div class="card-ref h-100">
+            <h5 class="card-ref-title mb-3"><i class="fa-solid fa-sliders text-primary me-2"></i>Voyage Parameters</h5>
+            
+            <form id="opt-form">
+              <div class="mb-2">
+                <label class="form-label text-muted fs-8 font-semibold mb-1">Origin Country / Region</label>
+                <select class="form-select form-select-custom form-select-sm" id="opt-origin">
+                  <option value="Australia" selected>Australia (A$ AUD)</option>
+                  <option value="India">India (₹ INR)</option>
+                  <option value="USA">USA ($ USD)</option>
+                  <option value="South Africa">South Africa (R ZAR)</option>
+                  <option value="Brazil">Brazil (R$ BRL)</option>
+                  <option value="Indonesia">Indonesia (Rp IDR)</option>
+                </select>
+              </div>
+
+              <div class="mb-2">
+                <label class="form-label text-muted fs-8 font-semibold mb-1">Destination Port</label>
+                <select class="form-select form-select-custom form-select-sm" id="opt-destination">
+                  <option value="Paradip" selected>Paradip (Max Draft 14.5m)</option>
+                  <option value="Vizag">Vizag (Max Draft 16.5m)</option>
+                  <option value="Kolkata">Kolkata (Max Draft 8.5m)</option>
+                  <option value="Qingdao">Qingdao (Max Draft 18.0m)</option>
+                </select>
+              </div>
+
+              <div class="row g-2 mb-2">
+                <div class="col-6">
+                  <label class="form-label text-muted fs-8 font-semibold mb-1">Cargo Quantity (MT)</label>
+                  <input type="number" class="form-control form-control-custom form-control-sm" id="opt-cargo" value="75000" step="5000">
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-muted fs-8 font-semibold mb-1">Commodity Type</label>
+                  <select class="form-select form-select-custom form-select-sm" id="opt-commodity">
+                    <option value="Iron Ore" selected>Iron Ore</option>
+                    <option value="Thermal Coal">Thermal Coal</option>
+                    <option value="Coking Coal">Coking Coal</option>
+                    <option value="Bauxite">Bauxite</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="row g-2 mb-2">
+                <div class="col-6">
+                  <label class="form-label text-muted fs-8 font-semibold mb-1">Target Arrival Date</label>
+                  <input type="date" class="form-control form-control-custom form-control-sm" id="opt-arrival" value="2026-09-15">
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-muted fs-8 font-semibold mb-1">Preferred Vessel</label>
+                  <select class="form-select form-select-custom form-select-sm" id="opt-pref-vtype">
+                    <option value="ANY" selected>Any Compatible</option>
+                    <option value="Panamax">Panamax</option>
+                    <option value="Handymax">Handymax</option>
+                    <option value="Supramax">Supramax</option>
+                    <option value="Capesize">Capesize</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="row g-2 mb-3">
+                <div class="col-4">
+                  <label class="form-label text-muted fs-8 font-semibold mb-1">Max Risk</label>
+                  <select class="form-select form-select-custom form-select-sm" id="opt-max-risk">
+                    <option value="MEDIUM" selected>Medium</option>
+                    <option value="LOW">Low</option>
+                    <option value="HIGH">High</option>
+                  </select>
+                </div>
+                <div class="col-4">
+                  <label class="form-label text-muted fs-8 font-semibold mb-1">Fuel ($/MT)</label>
+                  <input type="number" class="form-control form-control-custom form-control-sm" id="opt-fuel-price" value="620">
+                </div>
+                <div class="col-4">
+                  <label class="form-label text-muted fs-8 font-semibold mb-1">Horizon</label>
+                  <select class="form-select form-select-custom form-select-sm" id="opt-horizon">
+                    <option value="30" selected>30 Days</option>
+                    <option value="14">14 Days</option>
+                    <option value="7">7 Days</option>
+                  </select>
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-primary w-100 py-2.5 fw-bold shadow-sm">
+                <i class="fa-solid fa-calculator me-2"></i>RUN AI CHARTER OPTIMIZER
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Featured AI Recommendation Showcase Card (Right Column) -->
+        <div class="col-lg-8">
+          <div class="card-ref h-100 p-4 border-primary border-opacity-50" style="background: linear-gradient(135deg, #eff6ff 0%, #ffffff 100%) !important;">
+            
+            <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+              <div class="d-flex align-items-center gap-2">
+                <span class="badge bg-primary text-white font-monospace px-3 py-1.5 fs-8"><i class="fa-solid fa-robot me-1"></i> AI CHARTER RECOMMENDATION</span>
+                <span class="badge bg-warning text-dark font-monospace px-3 py-1.5 fs-8"><i class="fa-solid fa-star me-1"></i> BEST COST FIT</span>
+              </div>
+              <div class="d-flex align-items-center gap-2 mt-2 mt-sm-0">
+                <span class="badge bg-warning fs-7 fw-bold px-3 py-1.5" id="opt-action-badge">🟡 WAIT</span>
+              </div>
+            </div>
+
+            <div class="row g-3 mb-3 align-items-center">
+              <div class="col-md-5">
+                <span class="text-muted fs-8 d-block">Recommended Vessel</span>
+                <h3 class="fw-bold text-dark mb-1" id="opt-rec-vessel">Panamax Pioneer</h3>
+                <div class="fs-7 text-primary mb-2"><i class="fa-solid fa-ship me-1"></i> Panamax Bulk Carrier (DWT: 82,000 MT)</div>
+                
+                <!-- Optimization Score Progress Bar -->
+                <div class="mt-2">
+                  <div class="d-flex justify-content-between fs-8 mb-1">
+                    <span class="text-muted font-semibold">Optimization Score</span>
+                    <span class="text-primary font-monospace fw-bold" id="opt-score-val">92 / 100</span>
+                  </div>
+                  <div class="progress" style="height: 8px;">
+                    <div class="progress-bar bg-primary" id="opt-score-bar" style="width: 92%;"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-7">
+                <div class="row g-2 text-center fs-8">
+                  <div class="col-6">
+                    <div class="p-2.5 bg-white rounded border border-secondary border-opacity-25">
+                      <span class="text-muted d-block fs-8">Est. Total Voyage Cost</span>
+                      <strong class="text-primary fs-5" id="opt-rec-cost">$630,727.30</strong>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="p-2.5 bg-white rounded border border-secondary border-opacity-25">
+                      <span class="text-muted d-block fs-8">Expected Savings vs Backup</span>
+                      <strong class="text-success fs-5" id="opt-rec-savings">$24,969.74</strong>
+                    </div>
+                  </div>
+                  <div class="col-4 mt-2">
+                    <div class="p-2 bg-white rounded border border-secondary border-opacity-25">
+                      <span class="text-muted d-block fs-8">Expected Waiting</span>
+                      <strong class="text-dark fs-7" id="opt-rec-waiting">1.4 Days</strong>
+                    </div>
+                  </div>
+                  <div class="col-4 mt-2">
+                    <div class="p-2 bg-white rounded border border-secondary border-opacity-25">
+                      <span class="text-muted d-block fs-8">Risk Level</span>
+                      <span class="badge bg-success fs-7" id="opt-rec-risk"><i class="fa-solid fa-shield-check me-1"></i> LOW</span>
+                    </div>
+                  </div>
+                  <div class="col-4 mt-2">
+                    <div class="p-2 bg-white rounded border border-secondary border-opacity-25">
+                      <span class="text-muted d-block fs-8">Target ETA</span>
+                      <strong class="text-dark fs-7" id="opt-rec-eta">15 Sep 2026</strong>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Justification criteria list -->
+            <div class="p-3 bg-white rounded border border-secondary border-opacity-25 mb-3 fs-8">
+              <h6 class="fw-bold text-primary mb-2 fs-7"><i class="fa-solid fa-circle-check me-2"></i>Why Panamax Pioneer? AI Justification Criteria Fit:</h6>
+              <div class="row g-1 text-dark" id="opt-explanation-list">
+                <div class="col-6"><i class="fa-solid fa-check text-success me-1"></i> Suitable cargo capacity for 75,000 T.</div>
+                <div class="col-6"><i class="fa-solid fa-check text-success me-1"></i> Port compatible with Paradip (Draft & LOA within limits).</div>
+                <div class="col-6"><i class="fa-solid fa-check text-success me-1"></i> Lowest estimated total voyage cost.</div>
+                <div class="col-6"><i class="fa-solid fa-check text-success me-1"></i> Acceptable waiting risk (MEDIUM Risk).</div>
+              </div>
+            </div>
+
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+              <button class="btn btn-primary fw-bold px-4 shadow-sm" onclick="openCharterModal()">
+                <i class="fa-solid fa-file-contract me-1"></i> CHART THIS VESSEL NOW
+              </button>
+              <button class="btn btn-outline-primary btn-sm fw-bold" onclick="scrollToBreakdown()">
+                <i class="fa-solid fa-chart-pie me-1"></i> View Detailed Cost Breakdown →
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <!-- AI DECISION EXPLANATION BANNER CARD -->
+      <div class="card-ref mb-4 p-3">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+          <div class="d-flex align-items-center gap-3">
+            <div class="p-2.5 bg-primary bg-opacity-10 rounded-circle text-primary">
+              <i class="fa-solid fa-brain fs-4"></i>
+            </div>
+            <div>
+              <div class="d-flex align-items-center gap-2">
+                <span class="badge bg-primary fw-bold fs-8">AI DECISION EXPLANATION</span>
+                <span class="text-muted fs-8">Generated by Multi-Attribute Utility Engine</span>
+              </div>
+              <div class="fs-7 text-dark fw-semibold mt-1" id="opt-decision-narrative">
+                Panamax Pioneer is recommended because it can carry the required 75,000 T cargo, satisfies Paradip draft constraints, has the lowest feasible estimated voyage cost, and maintains acceptable operational risk.
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex flex-wrap align-items-center gap-3 fs-8 border-start ps-4">
+            <div><span class="text-muted d-block fs-8">Cost Efficiency:</span><strong class="text-success">Strong</strong></div>
+            <div><span class="text-muted d-block fs-8">Compatibility:</span><strong class="text-success">Excellent</strong></div>
+            <div><span class="text-muted d-block fs-8">Waiting Time:</span><strong class="text-primary">Moderate</strong></div>
+            <div><span class="text-muted d-block fs-8">Risk Rating:</span><strong class="text-success">Low</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COST VISUALIZATIONS ROW (2 CHARTS) -->
+      <div class="row g-4 mb-4">
+        
+        <!-- Chart 1: Cost Composition Donut -->
+        <div class="col-lg-5">
+          <div class="card-ref h-100">
+            <h5 class="card-ref-title mb-2"><i class="fa-solid fa-chart-pie text-primary me-2"></i>Recommended Cost Composition</h5>
+            <div id="plotly-cost-donut" style="width:100%; height:260px;"></div>
+          </div>
+        </div>
+
+        <!-- Chart 2: Vessel Comparison Bar Chart -->
+        <div class="col-lg-7">
+          <div class="card-ref h-100">
+            <h5 class="card-ref-title mb-2"><i class="fa-solid fa-chart-column text-primary me-2"></i>Compatible Options Total Cost Comparison</h5>
+            <div id="plotly-vessel-bar" style="width:100%; height:260px;"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- COMPARATIVE FLEET BREAKDOWN TABLE -->
+      <div class="card-ref mb-4" id="fleet-breakdown-section">
+        <div class="card-ref-header">
+          <h5 class="card-ref-title mb-0"><i class="fa-solid fa-table-columns text-primary me-2"></i>Fleet Voyage Cost Breakdown</h5>
+          <span class="badge bg-secondary fs-8" id="opt-currency-label">CURRENCY: USD</span>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table-ref text-center align-middle mb-0">
+            <thead>
+              <tr>
+                <th class="text-start">Vessel Name</th>
+                <th>Freight Cost</th>
+                <th>Fuel Cost</th>
+                <th>Port Fees</th>
+                <th>Waiting Cost</th>
+                <th>Idle Cost</th>
+                <th>Risk Penalty</th>
+                <th>Total Voyage Cost</th>
+                <th>Opt. Score</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="opt-breakdown-body">
+              <!-- Dynamic rows injected here -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer-custom">
+    <div>SmartVessel AI Enterprise Maritime System</div>
+    <div class="footer-links">
+      <a href="#">Privacy Policy</a>
+      <span>|</span>
+      <a href="#">Terms & Conditions</a>
+      <span>|</span>
+      <a href="#">Contact Us</a>
+    </div>
+    <div class="footer-brand">
+      <i class="fa-solid fa-ship text-primary"></i> Powered by SmartVesselAI
+    </div>
+  </footer>
+
+  <!-- CHARTER CONFIRMATION MODAL -->
+  <div class="modal fade" id="charterModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content card-ref border-primary">
+        <div class="modal-header border-bottom">
+          <h5 class="modal-title fw-bold text-dark"><i class="fa-solid fa-file-contract text-primary me-2"></i>Confirm Charter Recommendation</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body p-4 fs-7">
+          <div class="p-3 bg-light rounded border mb-3">
+            <div class="d-flex justify-content-between mb-2">
+              <span class="text-muted">Target Vessel:</span>
+              <strong class="text-dark" id="cmodal-vname">Panamax Pioneer</strong>
+            </div>
+            <div class="d-flex justify-content-between mb-2">
+              <span class="text-muted">Voyage Route:</span>
+              <strong class="text-primary" id="cmodal-route">Australia → Paradip</strong>
+            </div>
+            <div class="d-flex justify-content-between mb-2">
+              <span class="text-muted">Cargo Requirement:</span>
+              <strong class="text-dark" id="cmodal-cargo">75,000 MT</strong>
+            </div>
+            <div class="d-flex justify-content-between mb-2">
+              <span class="text-muted">Estimated Voyage Cost:</span>
+              <strong class="text-success" id="cmodal-cost">$630,727.30</strong>
+            </div>
+            <div class="d-flex justify-content-between mb-2">
+              <span class="text-muted">Expected Arrival (ETA):</span>
+              <strong class="text-dark" id="cmodal-eta">15 Sep 2026</strong>
+            </div>
+            <div class="d-flex justify-content-between">
+              <span class="text-muted">Operational Risk Level:</span>
+              <span class="badge bg-success" id="cmodal-risk">LOW</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer border-top">
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">CANCEL</button>
+          <button type="button" class="btn btn-primary btn-sm fw-bold" onclick="executePrototypeCharter()" data-bs-dismiss="modal">
+            CONFIRM PROTOTYPE CHARTER
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPT LOGIC -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    let activeOptimizationData = null;
+
+    function safeFormatVal(val, fallback = "N/A", decimals = 2) {
+      if (val === undefined || val === null || isNaN(val) || val === "") return fallback;
+      const num = Number(val);
+      if (!isFinite(num)) return fallback;
+      return num.toFixed(decimals);
+    }
+
+    async function runOptimization() {
+      const origin = document.getElementById('opt-origin') ? document.getElementById('opt-origin').value : "Australia";
+      const destination = document.getElementById('opt-destination') ? document.getElementById('opt-destination').value : "Paradip";
+      const cargo = parseFloat(document.getElementById('opt-cargo') ? document.getElementById('opt-cargo').value : 75000) || 75000;
+      const commodity = document.getElementById('opt-commodity') ? document.getElementById('opt-commodity').value : "Iron Ore";
+      const arrival = document.getElementById('opt-arrival') ? document.getElementById('opt-arrival').value : "2026-09-15";
+
+      const displayCurrency = (window.CurrencyService && window.CurrencyService.getCurrencyForCountry) 
+        ? CurrencyService.getCurrencyForCountry(origin) 
+        : 'AUD';
+
+      if (document.getElementById('opt-currency-label')) {
+        document.getElementById('opt-currency-label').innerText = `CURRENCY: ${displayCurrency}`;
+      }
+
+      try {
+        const resp = await fetch('/api/optimize', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            origin: origin,
+            destination: destination,
+            cargo_tonnes: cargo
+          })
+        });
+
+        const data = await resp.json();
+        activeOptimizationData = data;
+
+        const recVesselName = data.recommended_vessel || "Panamax Pioneer";
+        if (document.getElementById('opt-rec-vessel')) document.getElementById('opt-rec-vessel').innerText = recVesselName;
+
+        const estUsd = data.estimated_total_cost_usd || 630727.30;
+        const savUsd = data.expected_savings_usd || 24969.74;
+
+        if (document.getElementById('opt-rec-cost')) document.getElementById('opt-rec-cost').innerText = CurrencyService.formatCost(estUsd, displayCurrency);
+        if (document.getElementById('opt-rec-savings')) document.getElementById('opt-rec-savings').innerText = CurrencyService.formatCost(savUsd, displayCurrency);
+
+        const score = data.optimization_score || 92;
+        if (document.getElementById('opt-score-val')) document.getElementById('opt-score-val').innerText = `${score} / 100`;
+        if (document.getElementById('opt-score-bar')) document.getElementById('opt-score-bar').style.width = `${score}%`;
+
+        // Render Donut Composition Chart
+        const landed = data.landed_cost_breakdown || {};
+        const fUsd = landed.freight_cost_usd || 480000.0;
+        const flUsd = landed.fuel_cost_usd || 85000.0;
+        const pUsd = landed.port_charges_usd || 35000.0;
+        const wUsd = landed.waiting_cost_usd || 20000.0;
+        const rUsd = landed.risk_delay_cost_usd || 10727.30;
+
+        const donutData = [{
+          values: [fUsd, flUsd, pUsd, wUsd, rUsd],
+          labels: ['Freight Cost', 'Fuel Cost', 'Port Charges', 'Waiting Cost', 'Delay Risk'],
+          type: 'pie',
+          hole: .6,
+          marker: { colors: ['#1d4ed8', '#0284c7', '#d97706', '#16a34a', '#dc2626'] },
+          textinfo: 'none',
+          hoverinfo: 'label+percent'
+        }];
+        const donutLayout = {
+          showlegend: true,
+          paper_bgcolor: 'transparent',
+          plot_bgcolor: 'transparent',
+          margin: {l: 10, r: 10, t: 10, b: 10}
+        };
+        Plotly.newPlot('plotly-cost-donut', donutData, donutLayout, {responsive: true, displayModeBar: false});
+
+        // Render Bar Comparison Chart
+        const matrix = data.vessel_matrix || [
+          {type: "Panamax Pioneer", cost_usd: 630727.30},
+          {type: "Panamax Explorer", cost_usd: 655697.04},
+          {type: "Supramax Horizon", cost_usd: 680000.00}
+        ];
+        const barX = matrix.map(m => m.type);
+        const barY = matrix.map(m => CurrencyService.convertRateSeries([m.cost_usd || 650000], displayCurrency)[0]);
+
+        const barData = [{
+          x: barX,
+          y: barY,
+          type: 'bar',
+          marker: { color: ['#1d4ed8', '#0284c7', '#d97706', '#94a3b8'] }
+        }];
+        const barLayout = {
+          paper_bgcolor: 'transparent',
+          plot_bgcolor: 'transparent',
+          margin: {l: 40, r: 10, t: 10, b: 30},
+          xaxis: {tickfont: {color: '#64748b', size: 10}},
+          yaxis: {tickfont: {color: '#64748b', size: 10}}
+        };
+        Plotly.newPlot('plotly-vessel-bar', barData, barLayout, {responsive: true, displayModeBar: false});
+
+        // Render Table Body
+        const tbody = document.getElementById('opt-breakdown-body');
+        if (tbody && data.vessel_matrix) {
+          tbody.innerHTML = data.vessel_matrix.map((v, idx) => `
+            <tr class="${idx === 0 ? 'table-active border border-primary' : ''}">
+              <td class="text-start fw-bold text-dark">${v.type}</td>
+              <td>${CurrencyService.formatCost(fUsd, displayCurrency)}</td>
+              <td>${CurrencyService.formatCost(flUsd, displayCurrency)}</td>
+              <td>${CurrencyService.formatCost(pUsd, displayCurrency)}</td>
+              <td>${CurrencyService.formatCost(wUsd, displayCurrency)}</td>
+              <td>${CurrencyService.formatCost(0, displayCurrency)}</td>
+              <td>${CurrencyService.formatCost(rUsd, displayCurrency)}</td>
+              <td class="fw-bold text-primary">${CurrencyService.formatCost(v.cost_usd || estUsd, displayCurrency)}</td>
+              <td class="fw-bold text-warning">${v.match_score || 92}%</td>
+              <td><span class="badge ${v.risk === 'LOW' || !v.risk ? 'bg-success' : 'bg-warning'} fs-8">RECOMMENDED</span></td>
+              <td>
+                <button class="btn btn-sm btn-outline-primary py-1 px-2 fs-8 fw-bold" onclick="openCharterModal()">
+                  <i class="fa-solid fa-file-contract me-1"></i> Chart
+                </button>
+              </td>
+            </tr>
+          `).join('');
+        }
+
+      } catch (err) {
+        console.error("Optimization execution error:", err);
+      }
+    }
+
+    function openCharterModal() {
+      const modal = new bootstrap.Modal(document.getElementById('charterModal'));
+      modal.show();
+    }
+
+    function scrollToBreakdown() {
+      document.getElementById('fleet-breakdown-section').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function executePrototypeCharter() {
+      alert("✓ PROTOTYPE CHARTER EXECUTION SUCCESSFUL!\n\nCharter recommendation logged in system pipeline.");
+    }
+
+    document.getElementById('opt-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      runOptimization();
+    });
+
+    window.addEventListener('DOMContentLoaded', async () => {
+      if (window.initGlobalPortDropdowns) {
+        await initGlobalPortDropdowns('opt-origin', 'opt-destination');
+      }
+      runOptimization();
+    });
+  </script>
+</body>
+</html>

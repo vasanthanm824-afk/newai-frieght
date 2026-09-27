@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartVesselAI — Maritime Intelligence & Optimization Dashboard</title>
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    crossorigin="anonymous" referrerpolicy="no-referrer">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    crossorigin="anonymous" referrerpolicy="no-referrer">
+  <!-- Plotly.js -->
+  <script src="https://cdn.plot.ly/plotly-2.24.1.min.js"></script>
+  <!-- Leaflet.js Maps -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <!-- Custom CSS & Workflow Engine -->
+  <link rel="stylesheet" href="/static/style.css?v=20260923_ref">
+  <script src="/static/js/workflowState.js"></script>
+</head>
+
+<body>
+
+  <!-- Top Header Navigation Bar -->
+  <nav class="navbar navbar-custom navbar-expand-lg">
+    <div class="container-fluid px-2">
+
+      <!-- Brand -->
+      <div class="header-brand-container">
+        <a class="smartvessel-brand" href="index.html">
+          <div class="smartvessel-brand-icon">
+            <i class="fa-solid fa-ship"></i>
+          </div>
+          <div>
+            <div class="smartvessel-brand-title">SmartVessel<span>AI</span></div>
+            <div class="smartvessel-brand-sub">Maritime Intelligence & Optimization</div>
+          </div>
+        </a>
+      </div>
+
+      <!-- Top Header Navigation Tabs -->
+      <div class="collapse navbar-collapse show" id="headerNavTabs">
+        <div class="header-top-nav me-auto">
+          <a href="index.html" class="nav-item-link active"><i class="fa-solid fa-house"></i> Dashboard</a>
+          <a href="forecast.html" class="nav-item-link"><i class="fa-solid fa-chart-line"></i> Forecast</a>
+          <a href="optimization.html" class="nav-item-link"><i class="fa-solid fa-chart-pie"></i> Analytics</a>
+          <a href="billing.html" class="nav-item-link"><i class="fa-solid fa-file-contract"></i> Reports</a>
+        </div>
+      </div>
+
+      <!-- Header Right User & Controls -->
+      <div class="header-user-badge">
+        <button class="btn btn-light rounded-circle position-relative border p-2 shadow-sm"
+          style="width:38px; height:38px;" title="Notifications" onclick="location.href='alerts.html'">
+          <i class="fa-regular fa-bell text-dark fs-6"></i>
+          <span
+            class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
+        </button>
+
+        <div class="user-avatar-btn dropdown" onclick="location.href='login.html'" title="Switch User / Logout" style="cursor: pointer;">
+          <div class="avatar-circle" id="navAvatarCircle">V</div>
+          <div class="text-start d-none d-sm-block">
+            <div class="user-name-text" id="navUserName">Vasan</div>
+            <div class="user-role-text" id="navUserRole">Admin</div>
+          </div>
+          <i class="fa-solid fa-arrow-right-from-bracket ms-1 text-muted small" title="Switch User / Logout"></i>
+        </div>
+      </div>
+
+    </div>
+  </nav>
+
+  <!-- Dashboard Main Layout -->
+  <div class="dashboard-layout">
+
+    <!-- Left Navy Navigation Sidebar -->
+    <aside class="sidebar-custom d-none d-lg-flex">
+      <div class="sidebar-menu-group">
+        <a href="index.html" class="sidebar-link active">
+          <div class="sidebar-link-content"><i class="fa-solid fa-house"></i> Dashboard</div>
+          <span class="sidebar-chevron"><i class="fa-solid fa-chevron-right"></i></span>
+        </a>
+        <a href="forecast.html" class="sidebar-link">
+          <div class="sidebar-link-content"><i class="fa-solid fa-chart-line"></i> Freight Forecast</div>
+          <span class="sidebar-chevron"><i class="fa-solid fa-chevron-right"></i></span>
+        </a>
+        <a href="vessels.html" class="sidebar-link">
+          <div class="sidebar-link-content"><i class="fa-solid fa-ship"></i> Vessel Chartering</div>
+          <span class="sidebar-chevron"><i class="fa-solid fa-chevron-right"></i></span>
+        </a>
+        <a href="ports.html" class="sidebar-link">
+          <div class="sidebar-link-content"><i class="fa-solid fa-cubes"></i> Bulk Cargo Procurement</div>
+          <span class="sidebar-chevron"><i class="fa-solid fa-chevron-right"></i></span>
+        </a>
+        <a href="risk.html" class="sidebar-link">
+          <div class="sidebar-link-content"><i class="fa-solid fa-globe"></i> Market Intelligence</div>
+          <span class="sidebar-chevron"><i class="fa-solid fa-chevron-right"></i></span>
+        </a>
+        <a href="billing.html" class="sidebar-link">
+          <div class="sidebar-link-content"><i class="fa-solid fa-file-lines"></i> Reports</div>
+          <span class="sidebar-chevron"><i class="fa-solid fa-chevron-right"></i></span>
+        </a>
+        <a href="settings.html" class="sidebar-link">
+          <div class="sidebar-link-content"><i class="fa-solid fa-gear"></i> Settings</div>
+          <span class="sidebar-chevron"><i class="fa-solid fa-chevron-right"></i></span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Dashboard Content -->
+    <main class="main-content-custom">
+
+      <!-- HERO BANNER SECTION -->
+      <div class="ref-hero-banner">
+        <div>
+          <div class="hero-sub-tag">INTELLIGENT FREIGHT FORECASTING</div>
+          <h1 class="hero-main-title">Smarter Decisions for<br>Global Trade</h1>
+          <p class="hero-description">
+            AI-powered maritime intelligence for vessel chartering and bulk cargo procurement from overseas to East
+            Coast of India.
+          </p>
+          <div class="hero-actions-group">
+            <button class="btn-hero-solid" id="btn-refresh-dashboard"
+              onclick="triggerButtonRefresh(this, loadDashboardData, 'Dashboard KPIs & Baltic indices refreshed')">
+              <i class="fa-solid fa-rotate me-1"></i> Refresh Dashboard
+            </button>
+            <button class="btn-hero-solid" onclick="SmartVesselWorkflow.openInputModal()">
+              Explore Forecast <i class="fa-solid fa-arrow-right"></i>
+            </button>
+            <a href="optimization.html" class="btn-hero-outline">View Analytics</a>
+          </div>
+        </div>
+
+        <!-- Floating Feature List Box Overlay -->
+        <div class="hero-right-widget ms-auto d-none d-xl-flex">
+          <div class="hero-feature-item">
+            <div class="hero-feature-icon"><i class="fa-solid fa-ship"></i></div>
+            <span>Real-time Freight Rates</span>
+          </div>
+          <div class="hero-feature-item">
+            <div class="hero-feature-icon"><i class="fa-solid fa-crosshairs"></i></div>
+            <span>AI Forecasting Models</span>
+          </div>
+          <div class="hero-feature-item">
+            <div class="hero-feature-icon"><i class="fa-solid fa-globe"></i></div>
+            <span>Global Market Insights</span>
+          </div>
+          <div class="hero-feature-item">
+            <div class="hero-feature-icon"><i class="fa-solid fa-anchor"></i></div>
+            <span>Optimized Chartering</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- WORKFLOW PROGRESS CONTAINER -->
+      <div id="workflow-progress-container"></div>
+
+      <!-- 4 KPI SUMMARY CARDS ROW -->
+      <div class="row g-3 mb-4">
+
+        <!-- Card 1: Avg Freight Rate -->
+        <div class="col-xl-3 col-md-6">
+          <div class="kpi-card-ref">
+            <div class="kpi-icon-box"><i class="fa-solid fa-ship"></i></div>
+            <div>
+              <div class="kpi-label">Avg. Freight Rate (USD/ton)</div>
+              <div class="kpi-val" id="kpi-freight-rate">24,580</div>
+              <div>
+                <span class="kpi-badge-green"><i class="fa-solid fa-arrow-up"></i> 3.8%</span>
+                <span class="kpi-badge-sub">vs. last 7 days</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2: 7-Day Forecast -->
+        <div class="col-xl-3 col-md-6">
+          <div class="kpi-card-ref">
+            <div class="kpi-icon-box"><i class="fa-solid fa-calendar-days"></i></div>
+            <div>
+              <div class="kpi-label">7-Day Forecast</div>
+              <div class="kpi-val" id="kpi-30d-rate">26,120</div>
+              <div>
+                <span class="kpi-badge-green"><i class="fa-solid fa-arrow-up"></i> 5.2%</span>
+                <span class="kpi-badge-sub">projected average</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3: Recommended Vessel Type -->
+        <div class="col-xl-3 col-md-6">
+          <div class="kpi-card-ref">
+            <div class="kpi-icon-box"><i class="fa-solid fa-anchor"></i></div>
+            <div>
+              <div class="kpi-label">Recommended Vessel Type</div>
+              <div class="kpi-val" id="kpi-vessel-match">Supramax</div>
+              <div>
+                <span class="kpi-badge-slate">Best for current market</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 4: Total Cargo Volume -->
+        <div class="col-xl-3 col-md-6">
+          <div class="kpi-card-ref">
+            <div class="kpi-icon-box"><i class="fa-solid fa-globe"></i></div>
+            <div>
+              <div class="kpi-label">Total Cargo Volume (MT)</div>
+              <div class="kpi-val">1,42,500</div>
+              <div>
+                <span class="kpi-badge-green"><i class="fa-solid fa-arrow-up"></i> 6.7%</span>
+                <span class="kpi-badge-sub">vs. last 30 days</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- MIDDLE ROW: FREIGHT TREND, GLOBAL MARKET MAP, TOP 5 ROUTES -->
+      <div class="row g-3 mb-4">
+
+        <!-- Left: Freight Rate Trend Line Chart -->
+        <div class="col-lg-5">
+          <div class="card-ref h-100">
+            <div class="card-ref-header">
+              <h5 class="card-ref-title">Freight Rate Trend</h5>
+              <div class="d-flex align-items-center gap-2 fs-8 fw-bold">
+                <span class="text-primary">● BDI</span>
+                <span style="color:#d97706">● BCI</span>
+                <span style="color:#16a34a">● BPI</span>
+                <span style="color:#9333ea">● BSI</span>
+              </div>
+            </div>
+            <div id="plotly-trend-chart" style="width:100%; height:260px;"></div>
+          </div>
+        </div>
+
+        <!-- Middle: Global Freight Market & Live GPS Tracking Map -->
+        <div class="col-lg-4">
+          <div class="card-ref h-100 d-flex flex-column">
+            <div class="card-ref-header flex-wrap gap-2">
+              <h5 class="card-ref-title mb-0"><i class="fa-solid fa-satellite-dish text-primary me-2"></i>Global Freight
+                & Live GPS</h5>
+              <div class="d-flex align-items-center gap-1.5">
+                <span class="badge bg-success fs-8"><span class="pulse-dot me-1"></span> GPS AIS LIVE</span>
+                <a href="tracking.html" class="btn btn-sm btn-outline-primary py-0.5 px-2 fs-8 fw-bold">Live Tracking
+                  →</a>
+              </div>
+            </div>
+            <div class="world-map-visual-box position-relative flex-grow-1">
+              <div id="live-route-map" style="width:100%; height:100%; border-radius:8px;"></div>
+
+              <!-- GPS Live Floating Telemetry Overlay Pill -->
+              <div class="gps-floating-pill">
+                <span class="pulse-dot"></span>
+                <span id="dash-gps-vessel-info"><strong>Panamax Explorer</strong>: 12.45° S, 93.28° E (11.4 kn)</span>
+              </div>
+            </div>
+
+            <!-- GPS Live Route Telemetry Footbar -->
+            <div
+              class="p-2 mt-2 bg-light rounded border border-secondary border-opacity-25 d-flex justify-content-between align-items-center fs-8 text-dark">
+              <div><i class="fa-solid fa-location-crosshairs text-primary me-1"></i> GPS: <strong
+                  id="dash-gps-coords">12°27'S, 93°16'E</strong></div>
+              <div><i class="fa-solid fa-compass text-warning me-1"></i> <strong id="dash-gps-hdg">298° WNW</strong>
+              </div>
+              <div><i class="fa-solid fa-ship text-success me-1"></i> Dest: <strong>Paradip</strong></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Top 5 Routes by Freight Rate -->
+        <div class="col-lg-3">
+          <div class="card-ref h-100">
+            <div class="card-ref-header">
+              <h5 class="card-ref-title">Top 5 Routes by Freight Rate</h5>
+            </div>
+            <table class="table-ref">
+              <thead>
+                <tr>
+                  <th>Route</th>
+                  <th class="text-end">Rate (USD/ton)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <div class="route-text-icon"><i class="fa-solid fa-ship route-ship-icon"></i> Australia ➔ India
+                      (Handysize)</div>
+                  </td>
+                  <td class="text-end fw-bold">22,450</td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="route-text-icon"><i class="fa-solid fa-ship route-ship-icon"></i> US Gulf ➔ India
+                      (Supramax)</div>
+                  </td>
+                  <td class="text-end fw-bold">26,800</td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="route-text-icon"><i class="fa-solid fa-ship route-ship-icon"></i> Mozambique ➔ India
+                      (Panamax)</div>
+                  </td>
+                  <td class="text-end fw-bold">31,200</td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="route-text-icon"><i class="fa-solid fa-ship route-ship-icon"></i> Russia ➔ India
+                      (Capesize)</div>
+                  </td>
+                  <td class="text-end fw-bold">34,750</td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="route-text-icon"><i class="fa-solid fa-ship route-ship-icon"></i> Indonesia ➔ India
+                      (Supramax)</div>
+                  </td>
+                  <td class="text-end fw-bold">24,900</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- BOTTOM ROW: CARGO OVERVIEW, UPCOMING CHARTER OPPORTUNITIES, MARKET INDICATORS -->
+      <div class="row g-3">
+
+        <!-- Left: Cargo & Vessel Overview Donut Chart -->
+        <div class="col-lg-4">
+          <div class="card-ref h-100">
+            <div class="card-ref-header">
+              <h5 class="card-ref-title">Cargo & Vessel Overview</h5>
+            </div>
+            <div class="row align-items-center">
+              <div class="col-6 text-center position-relative">
+                <div id="cost-donut-chart" style="height:170px; width:100%;"></div>
+                <div class="position-absolute top-50 start-50 translate-middle text-center"
+                  style="pointer-events:none;">
+                  <div class="fw-bold fs-5 text-dark" id="donut-center-total">1.42M</div>
+                  <div class="fs-8 text-muted fw-semibold">MT</div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="fs-8 fw-semibold text-secondary mb-1 d-flex justify-content-between">
+                  <span><i class="fa-solid fa-circle text-primary me-1"></i> Iron Ore</span> <strong>38%</strong>
+                </div>
+                <div class="fs-8 fw-semibold text-secondary mb-1 d-flex justify-content-between">
+                  <span><i class="fa-solid fa-circle text-warning me-1"></i> Coal</span> <strong>27%</strong>
+                </div>
+                <div class="fs-8 fw-semibold text-secondary mb-1 d-flex justify-content-between">
+                  <span><i class="fa-solid fa-circle text-success me-1"></i> Grain</span> <strong>15%</strong>
+                </div>
+                <div class="fs-8 fw-semibold text-secondary mb-1 d-flex justify-content-between">
+                  <span><i class="fa-solid fa-circle text-info me-1"></i> Fertilizers</span> <strong>10%</strong>
+                </div>
+                <div class="fs-8 fw-semibold text-secondary d-flex justify-content-between">
+                  <span><i class="fa-solid fa-circle text-muted me-1"></i> Others</span> <strong>10%</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Middle: Upcoming Charter Opportunities Table -->
+        <div class="col-lg-5">
+          <div class="card-ref h-100">
+            <div class="card-ref-header">
+              <h5 class="card-ref-title">Upcoming Charter Opportunities</h5>
+              <a href="vessels.html" class="text-primary text-decoration-none fs-8 fw-bold">View All <i
+                  class="fa-solid fa-arrow-right"></i></a>
+            </div>
+            <table class="table-ref">
+              <thead>
+                <tr>
+                  <th>Cargo</th>
+                  <th>Route</th>
+                  <th>Vessel Type</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="fw-bold text-dark">Iron Ore</td>
+                  <td>Australia ➔ India</td>
+                  <td>Handysize</td>
+                  <td class="text-muted">Oct 05, 2025</td>
+                </tr>
+                <tr>
+                  <td class="fw-bold text-dark">Coal</td>
+                  <td>Indonesia ➔ India</td>
+                  <td>Supramax</td>
+                  <td class="text-muted">Oct 08, 2025</td>
+                </tr>
+                <tr>
+                  <td class="fw-bold text-dark">Grain</td>
+                  <td>Brazil ➔ India</td>
+                  <td>Panamax</td>
+                  <td class="text-muted">Oct 12, 2025</td>
+                </tr>
+                <tr>
+                  <td class="fw-bold text-dark">Fertilizer</td>
+                  <td>Middle East ➔ India</td>
+                  <td>Capesize</td>
+                  <td class="text-muted">Oct 15, 2025</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Right: Market Indicators List -->
+        <div class="col-lg-3">
+          <div class="card-ref h-100">
+            <div class="card-ref-header">
+              <h5 class="card-ref-title">Market Indicators</h5>
+            </div>
+            <div class="d-flex flex-column gap-2">
+              <div class="market-indicator-row">
+                <div class="indicator-name"><i class="fa-solid fa-oil-well text-secondary"></i> Brent Crude <span
+                    class="fs-8 text-muted">(USD/bbl)</span></div>
+                <div class="indicator-val-group">
+                  <div class="indicator-val">74.32</div>
+                  <div class="indicator-change"><i class="fa-solid fa-arrow-up"></i> 1.2%</div>
+                </div>
+              </div>
+              <div class="market-indicator-row">
+                <div class="indicator-name"><i class="fa-solid fa-anchor text-secondary"></i> VLSFO <span
+                    class="fs-8 text-muted">(USD/MT)</span></div>
+                <div class="indicator-val-group">
+                  <div class="indicator-val">560.40</div>
+                  <div class="indicator-change"><i class="fa-solid fa-arrow-up"></i> 0.8%</div>
+                </div>
+              </div>
+              <div class="market-indicator-row">
+                <div class="indicator-name"><i class="fa-solid fa-anchor text-secondary"></i> IFO380 <span
+                    class="fs-8 text-muted">(USD/MT)</span></div>
+                <div class="indicator-val-group">
+                  <div class="indicator-val">520.75</div>
+                  <div class="indicator-change"><i class="fa-solid fa-arrow-up"></i> 0.6%</div>
+                </div>
+              </div>
+              <div class="market-indicator-row">
+                <div class="indicator-name"><i class="fa-solid fa-gas-pump text-secondary"></i> MGO <span
+                    class="fs-8 text-muted">(USD/MT)</span></div>
+                <div class="indicator-val-group">
+                  <div class="indicator-val">687.20</div>
+                  <div class="indicator-change"><i class="fa-solid fa-arrow-up"></i> 1.1%</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer-custom">
+    <div>SmartVessel AI Enterprise Maritime System</div>
+    <div class="footer-links">
+      <a href="#">Privacy Policy</a>
+      <span>|</span>
+      <a href="#">Terms & Conditions</a>
+      <span>|</span>
+      <a href="#">Contact Us</a>
+    </div>
+    <div class="footer-brand">
+      <i class="fa-solid fa-ship text-primary"></i> Powered by SmartVesselAI
+    </div>
+  </footer>
+
+  <!-- DYNAMIC DASHBOARD DATA LOADER & PLOTLY SCRIPT -->
+  <script>
+    async function loadDashboardData() {
+      const dates = ["Sep 13", "Sep 14", "Sep 15", "Sep 16", "Sep 17", "Sep 18", "Sep 19"];
+
+      // Plotly Freight Rate Trend (BDI, BCI, BPI, BSI) matching reference design
+      const traceBDI = {
+        x: dates,
+        y: [20000, 21200, 22500, 24100, 23000, 23000, 24000],
+        mode: 'lines+markers',
+        name: 'BDI',
+        line: { color: '#1d4ed8', width: 2.5 },
+        marker: { size: 5 }
+      };
+
+      const traceBCI = {
+        x: dates,
+        y: [17500, 18200, 19000, 20100, 19800, 20500, 20800],
+        mode: 'lines+markers',
+        name: 'BCI',
+        line: { color: '#d97706', width: 2.5 },
+        marker: { size: 5 }
+      };
+
+      const traceBPI = {
+        x: dates,
+        y: [14800, 15300, 15800, 16200, 16300, 16700, 17500],
+        mode: 'lines+markers',
+        name: 'BPI',
+        line: { color: '#16a34a', width: 2.5 },
+        marker: { size: 5 }
+      };
+
+      const traceBSI = {
+        x: dates,
+        y: [12500, 12900, 13100, 13200, 13500, 14000, 14800],
+        mode: 'lines+markers',
+        name: 'BSI',
+        line: { color: '#9333ea', width: 2.5 },
+        marker: { size: 5 }
+      };
+
+      const trendLayout = {
+        paper_bgcolor: 'transparent',
+        plot_bgcolor: 'transparent',
+        margin: { l: 45, r: 15, t: 10, b: 35 },
+        xaxis: {
+          gridcolor: '#e2e8f0',
+          tickfont: { color: '#64748b', size: 10 }
+        },
+        yaxis: {
+          gridcolor: '#e2e8f0',
+          tickfont: { color: '#64748b', size: 10 },
+          range: [10000, 30000]
+        },
+        showlegend: false
+      };
+
+      Plotly.newPlot('plotly-trend-chart', [traceBDI, traceBCI, traceBPI, traceBSI], trendLayout, { responsive: true, displayModeBar: false });
+
+      // Cargo Overview Donut Chart
+      const donutData = [{
+        values: [38, 27, 15, 10, 10],
+        labels: ['Iron Ore', 'Coal', 'Grain', 'Fertilizers', 'Others'],
+        type: 'pie',
+        hole: 0.7,
+        marker: { colors: ['#1d4ed8', '#d97706', '#16a34a', '#0284c7', '#94a3b8'] },
+        textinfo: 'none',
+        hoverinfo: 'label+percent'
+      }];
+      const donutLayout = {
+        showlegend: false,
+        paper_bgcolor: 'transparent',
+        plot_bgcolor: 'transparent',
+        margin: { l: 0, r: 0, t: 0, b: 0 }
+      };
+      Plotly.newPlot('cost-donut-chart', donutData, donutLayout, { responsive: true, displayModeBar: false });
+    }
+
+    async function initLiveRouteMap() {
+      const mapContainer = document.getElementById('live-route-map');
+      if (!mapContainer || mapContainer._leaflet_id) return;
+
+      const map = L.map('live-route-map', {
+        center: [2.0, 95.0],
+        zoom: 2,
+        zoomControl: false,
+        attributionControl: false
+      });
+
+      // Free, watermark-free OpenStreetMap tiles
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 18,
+        attribution: '&copy; OpenStreetMap'
+      }).addTo(map);
+
+      let vessels = [
+        {
+          vessel_name: "Panamax Explorer",
+          vessel_id: "VES-001",
+          latitude: -12.45,
+          longitude: 93.28,
+          speed_knots: 11.4,
+          course_deg: 298.0,
+          origin: "Hay Point, Australia",
+          destination: "Paradip, India"
+        },
+        {
+          vessel_name: "Handymax Star",
+          vessel_id: "VES-002",
+          latitude: -5.12,
+          longitude: 75.40,
+          speed_knots: 12.8,
+          course_deg: 45.0,
+          origin: "Durban, South Africa",
+          destination: "Vizag, India"
+        }
+      ];
+
+      try {
+        const resp = await fetch('/api/tracking/live');
+        if (resp.ok) {
+          const tData = await resp.json();
+          if (tData.active_vessels && tData.active_vessels.length > 0) {
+            vessels = tData.active_vessels;
+          }
+        }
+      } catch (e) {
+        console.warn("Using calibrated GPS telemetry:", e);
+      }
+
+      const ausPort = [-21.28, 149.30];
+      const indPort = [20.26, 86.67];
+      const v0 = vessels[0];
+      const shipCoords = [v0.latitude, v0.longitude];
+
+      // Polyline for maritime voyage route
+      L.polyline([ausPort, shipCoords, indPort], {
+        color: '#1d4ed8',
+        weight: 3,
+        dashArray: '6, 6',
+        opacity: 0.85
+      }).addTo(map);
+
+      // Port markers
+      L.circleMarker(ausPort, { radius: 5, color: '#0284c7', fillColor: '#38bdf8', fillOpacity: 1 }).addTo(map)
+        .bindTooltip("Hay Point, AU 📍", { direction: 'top', className: 'fs-8 fw-bold' });
+
+      L.circleMarker(indPort, { radius: 5, color: '#15803d', fillColor: '#22c55e', fillOpacity: 1 }).addTo(map)
+        .bindTooltip("Paradip, IN 📍", { direction: 'top', className: 'fs-8 fw-bold' });
+
+      // Live GPS vessel markers
+      vessels.forEach((v, idx) => {
+        const lat = v.latitude;
+        const lng = v.longitude;
+        const latStr = `${Math.abs(lat).toFixed(2)}° ${lat >= 0 ? 'N' : 'S'}`;
+        const lngStr = `${Math.abs(lng).toFixed(2)}° ${lng >= 0 ? 'E' : 'W'}`;
+        const markerColor = idx === 0 ? '#1d4ed8' : '#d97706';
+
+        const customIcon = L.divIcon({
+          className: 'gps-vessel-marker',
+          html: `<div style="background:${markerColor}; color:#fff; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 0 10px ${markerColor}; border:2px solid #ffffff; font-size:12px; cursor:pointer;" title="${v.vessel_name}: ${latStr}, ${lngStr}">🚢</div>`,
+          iconSize: [28, 28],
+          iconAnchor: [14, 14]
+        });
+
+        const m = L.marker([lat, lng], { icon: customIcon }).addTo(map);
+        m.bindPopup(`
+          <div style="font-size:0.75rem; min-width:180px; padding:2px;">
+            <strong class="text-primary">${v.vessel_name} (${v.vessel_id})</strong><br>
+            <span class="text-muted">🛰️ GPS Position:</span> <strong>${latStr}, ${lngStr}</strong><br>
+            <span class="text-muted">⚡ Speed:</span> <strong>${v.speed_knots} kn</strong> | <strong>${v.course_deg}°</strong><br>
+            <span class="text-muted">📍 Route:</span> ${v.origin} ➔ ${v.destination}
+          </div>
+        `);
+      });
+
+      // Update telemetry footer bar
+      if (document.getElementById('dash-gps-vessel-info')) {
+        const latStr = `${Math.abs(v0.latitude).toFixed(2)}° ${v0.latitude >= 0 ? 'N' : 'S'}`;
+        const lngStr = `${Math.abs(v0.longitude).toFixed(2)}° ${v0.longitude >= 0 ? 'E' : 'W'}`;
+        document.getElementById('dash-gps-vessel-info').innerHTML = `<strong>${v0.vessel_name}</strong>: ${latStr}, ${lngStr} (${v0.speed_knots} kn)`;
+      }
+      if (document.getElementById('dash-gps-coords')) {
+        const latStr = `${Math.abs(v0.latitude).toFixed(2)}° ${v0.latitude >= 0 ? 'N' : 'S'}`;
+        const lngStr = `${Math.abs(v0.longitude).toFixed(2)}° ${v0.longitude >= 0 ? 'E' : 'W'}`;
+        document.getElementById('dash-gps-coords').innerText = `${latStr}, ${lngStr}`;
+      }
+      if (document.getElementById('dash-gps-hdg')) {
+        document.getElementById('dash-gps-hdg').innerText = `${v0.course_deg}° Heading`;
+      }
+
+      // Initial bounds fit
+      map.fitBounds([[22, 55], [-25, 155]], { padding: [15, 15] });
+    }
+
+    window.addEventListener('DOMContentLoaded', async () => {
+      try {
+        const savedUser = JSON.parse(localStorage.getItem('smartvessel_user'));
+        if (savedUser && savedUser.name) {
+          const nameEl = document.getElementById('navUserName');
+          const roleEl = document.getElementById('navUserRole');
+          const circleEl = document.getElementById('navAvatarCircle');
+          if (nameEl) nameEl.textContent = savedUser.name;
+          if (roleEl) roleEl.textContent = savedUser.role || 'User';
+          if (circleEl) circleEl.textContent = savedUser.name.charAt(0).toUpperCase();
+        }
+      } catch(e) {}
+      loadDashboardData();
+      initLiveRouteMap();
+    });
+  </script>
+</body>
+
+</html>

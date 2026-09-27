@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartVessel AI — Login | Freight Forecasting Decision Center</title>
+
+  <!-- Google Fonts: Outfit & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    crossorigin="anonymous" referrerpolicy="no-referrer">
+
+  <!-- FontAwesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    crossorigin="anonymous" referrerpolicy="no-referrer">
+
+  <style>
+    :root {
+      --color-blue: #0B5ED7;
+      --color-blue-dark: #0947a5;
+      --color-teal: #14B8A6;
+      --color-teal-dark: #0f766e;
+      --color-green: #22C55E;
+      --color-slate-dark: #0c2340;
+      --color-slate-navy: #0f172a;
+      --color-slate-muted: #64748b;
+      --color-border: #e2e8f0;
+      --color-bg-white: #ffffff;
+      --shadow-glass: 0 25px 50px -12px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.4);
+      --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.08);
+      --radius-card: 18px;
+      --radius-input: 10px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      min-height: 100vh;
+      color: var(--color-slate-navy);
+      background-color: #0c2340;
+      position: relative;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* ========================================================
+       FULL-SCREEN BACKGROUND SHIP IMAGE WITH BLUR & OVERLAY
+       ======================================================== */
+    .bg-image-wrapper {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .bg-image {
+      position: absolute;
+      top: -3%;
+      left: -3%;
+      width: 106%;
+      height: 106%;
+      background-image: url('/static/assets/cargo_vessel_hero.jpg'), url('https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=1920&auto=format&fit=crop');
+      background-size: cover;
+      background-position: center center;
+      background-repeat: no-repeat;
+      filter: blur(5px);
+      transform: scale(1.03);
+    }
+
+    .bg-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 65% 35%, rgba(12, 35, 64, 0.65) 0%, rgba(7, 18, 36, 0.88) 100%);
+    }
+
+    /* Ambient Subtle Grid Pattern Overlay */
+    .bg-grid-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: radial-gradient(rgba(20, 184, 166, 0.12) 1px, transparent 1px);
+      background-size: 32px 32px;
+      opacity: 0.7;
+    }
+
+    /* Content Layout */
+    .page-wrapper {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* Top Brand Bar */
+    .top-header {
+      padding: 1.25rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      text-decoration: none;
+      color: #ffffff;
+    }
+
+    .brand-logo-img {
+      height: 44px;
+      width: 44px;
+      object-fit: contain;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 4px;
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .brand-title-group h1 {
+      font-size: 1.35rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin: 0;
+      line-height: 1.15;
+      color: #ffffff;
+    }
+
+    .brand-title-group h1 span {
+      color: var(--color-teal);
+    }
+
+    .brand-title-group p {
+      font-size: 0.78rem;
+      font-weight: 500;
+      margin: 0;
+      color: rgba(255, 255, 255, 0.8);
+      letter-spacing: 0.01em;
+    }
+
+    .system-status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(12, 35, 64, 0.6);
+      border: 1px solid rgba(34, 197, 94, 0.4);
+      color: #ffffff;
+      padding: 0.35rem 0.85rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      backdrop-filter: blur(8px);
+    }
+
+    .status-dot-pulse {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--color-green);
+      box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+      animation: pulse-green 2s infinite;
+    }
+
+    @keyframes pulse-green {
+      0% {
+        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+      }
+      70% {
+        box-shadow: 0 0 0 8px rgba(34, 197, 94, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+      }
+    }
+
+    /* Main Container Split Layout */
+    .login-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem 1.25rem 2rem 1.25rem;
+    }
+
+    .login-split-card {
+      width: 100%;
+      max-width: 1020px;
+      display: grid;
+      grid-template-columns: 1.05fr 1fr;
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      box-shadow: var(--shadow-glass);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    /* Left Side: Side Information (Maritime Intel & Features) */
+    .side-info-panel {
+      background: linear-gradient(145deg, rgba(12, 35, 64, 0.88) 0%, rgba(15, 23, 42, 0.94) 100%);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      padding: 3rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      color: #ffffff;
+      border-right: 1px solid rgba(255, 255, 255, 0.12);
+      position: relative;
+    }
+
+    .side-info-panel::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--color-blue), var(--color-teal), var(--color-green));
+    }
+
+    .side-hero-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      background: rgba(20, 184, 166, 0.16);
+      border: 1px solid rgba(20, 184, 166, 0.4);
+      color: #2dd4bf;
+      padding: 0.3rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1.25rem;
+      width: fit-content;
+    }
+
+    .side-title {
+      font-size: 1.85rem;
+      font-weight: 800;
+      line-height: 1.2;
+      color: #ffffff;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.02em;
+    }
+
+    .side-subtitle {
+      font-size: 0.9rem;
+      color: #cbd5e1;
+      line-height: 1.5;
+      margin-bottom: 2rem;
+    }
+
+    /* Short Features List */
+    .features-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1.05rem;
+      margin-bottom: 2.25rem;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.85rem;
+    }
+
+    .feature-check-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: rgba(34, 197, 94, 0.2);
+      border: 1px solid rgba(34, 197, 94, 0.6);
+      color: var(--color-green);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .feature-text-group h4 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin: 0;
+      line-height: 1.25;
+    }
+
+    .feature-text-group p {
+      font-size: 0.8rem;
+      color: #94a3b8;
+      margin: 0.15rem 0 0 0;
+      line-height: 1.35;
+    }
+
+    /* Live Operational Metrics Chip */
+    .side-metrics-bar {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 0.85rem;
+    }
+
+    .side-metric-item {
+      text-align: center;
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .side-metric-item:last-child {
+      border-right: none;
+    }
+
+    .metric-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #38bdf8;
+      line-height: 1.1;
+    }
+
+    .metric-label {
+      font-size: 0.68rem;
+      color: #94a3b8;
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-top: 0.25rem;
+    }
+
+    /* Right Side: Glassmorphism Login Card */
+    .login-form-panel {
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      padding: 3rem 2.75rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+    }
+
+    .login-panel-header {
+      margin-bottom: 1.75rem;
+    }
+
+    .login-panel-title {
+      font-size: 1.65rem;
+      font-weight: 800;
+      color: var(--color-slate-dark);
+      letter-spacing: -0.02em;
+      margin-bottom: 0.25rem;
+    }
+
+    .login-panel-sub {
+      font-size: 0.85rem;
+      color: var(--color-slate-muted);
+    }
+
+    /* Tab Switcher: User Login vs Admin Login */
+    .login-tabs-nav {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: #f1f5f9;
+      border-radius: 12px;
+      padding: 4px;
+      margin-bottom: 1.75rem;
+      position: relative;
+      border: 1px solid #e2e8f0;
+    }
+
+    .login-tab-btn {
+      border: none;
+      background: transparent;
+      padding: 0.65rem 1rem;
+      border-radius: 9px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--color-slate-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    .login-tab-btn:hover {
+      color: var(--color-slate-dark);
+    }
+
+    .login-tab-btn.active {
+      background: var(--color-bg-white);
+      color: var(--color-blue);
+      box-shadow: 0 2px 8px rgba(11, 94, 215, 0.12);
+      font-weight: 700;
+    }
+
+    .login-tab-btn i {
+      font-size: 0.95rem;
+    }
+
+    /* Form Groups & Inputs */
+    .form-group-custom {
+      margin-bottom: 1.25rem;
+      text-align: left;
+    }
+
+    .form-label-custom {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #334155;
+      margin-bottom: 0.45rem;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+
+    .input-wrapper-custom {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-icon-left {
+      position: absolute;
+      left: 14px;
+      color: #94a3b8;
+      font-size: 1rem;
+      pointer-events: none;
+      transition: color 0.2s ease;
+    }
+
+    .form-control-custom {
+      width: 100%;
+      height: 48px;
+      padding: 0.65rem 2.8rem 0.65rem 2.75rem;
+      border: 1.5px solid var(--color-border);
+      border-radius: var(--radius-input);
+      font-size: 0.92rem;
+      font-family: inherit;
+      color: var(--color-slate-navy);
+      background-color: #ffffff;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .form-control-custom:focus {
+      outline: none;
+      border-color: var(--color-blue);
+      box-shadow: 0 0 0 3.5px rgba(11, 94, 215, 0.15);
+    }
+
+    .form-control-custom:focus + .input-icon-left,
+    .form-control-custom:focus ~ .input-icon-left {
+      color: var(--color-blue);
+    }
+
+    .toggle-password-btn {
+      position: absolute;
+      right: 12px;
+      background: none;
+      border: none;
+      color: #94a3b8;
+      font-size: 0.95rem;
+      cursor: pointer;
+      padding: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+      transition: color 0.2s ease;
+    }
+
+    .toggle-password-btn:hover {
+      color: var(--color-slate-dark);
+    }
+
+    /* Validation Feedback */
+    .feedback-msg {
+      font-size: 0.76rem;
+      margin-top: 0.35rem;
+      display: none;
+    }
+
+    .feedback-msg.error {
+      display: block;
+      color: #dc2626;
+      font-weight: 500;
+    }
+
+    .is-invalid-input {
+      border-color: #dc2626 !important;
+      box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.12) !important;
+    }
+
+    /* Checkbox & Forgot Password Row */
+    .form-options-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+      font-size: 0.84rem;
+    }
+
+    .remember-me-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #475569;
+      cursor: pointer;
+      user-select: none;
+      font-weight: 500;
+    }
+
+    .remember-me-checkbox {
+      width: 17px;
+      height: 17px;
+      accent-color: var(--color-blue);
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    .forgot-link {
+      color: var(--color-blue);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.2s ease;
+    }
+
+    .forgot-link:hover {
+      color: var(--color-blue-dark);
+      text-decoration: underline;
+    }
+
+    /* Submit Button */
+    .btn-submit-login {
+      width: 100%;
+      height: 48px;
+      background: linear-gradient(135deg, var(--color-blue) 0%, #1e40af 100%);
+      color: #ffffff;
+      border: none;
+      border-radius: var(--radius-input);
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      box-shadow: 0 4px 14px rgba(11, 94, 215, 0.3);
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    .btn-submit-login:hover {
+      background: linear-gradient(135deg, #0947a5 0%, #172554 100%);
+      box-shadow: 0 6px 18px rgba(11, 94, 215, 0.4);
+      transform: translateY(-1px);
+    }
+
+    .btn-submit-login:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 8px rgba(11, 94, 215, 0.25);
+    }
+
+    /* Demo Quick Credentials */
+    .demo-credentials-box {
+      margin-top: 1.5rem;
+      padding: 0.85rem 1rem;
+      background: #f8fafc;
+      border: 1px dashed #cbd5e1;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      font-size: 0.78rem;
+    }
+
+    .demo-label {
+      color: var(--color-slate-muted);
+      font-weight: 500;
+    }
+
+    .demo-badge-btn {
+      background: #e2e8f0;
+      border: none;
+      padding: 0.3rem 0.65rem;
+      border-radius: 6px;
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: #1e293b;
+      cursor: pointer;
+      transition: background 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .demo-badge-btn:hover {
+      background: #cbd5e1;
+      color: var(--color-blue);
+    }
+
+    /* Global Alert Box */
+    .login-alert-banner {
+      display: none;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      font-size: 0.84rem;
+      margin-bottom: 1.25rem;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .login-alert-banner.success {
+      display: flex;
+      background: #dcfce7;
+      color: #15803d;
+      border: 1px solid #86efac;
+    }
+
+    .login-alert-banner.error {
+      display: flex;
+      background: #fee2e2;
+      color: #b91c1c;
+      border: 1px solid #fca5a5;
+    }
+
+    /* Footer */
+    .page-footer {
+      padding: 1.25rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      background: rgba(12, 35, 64, 0.75);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      color: #94a3b8;
+      font-size: 0.8rem;
+      z-index: 2;
+    }
+
+    .footer-links {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .footer-links a {
+      color: #cbd5e1;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--color-teal);
+      text-decoration: underline;
+    }
+
+    /* Modals Custom Glassmorphism */
+    .modal-content-custom {
+      border-radius: var(--radius-card);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 900px) {
+      .login-split-card {
+        grid-template-columns: 1fr;
+        max-width: 520px;
+      }
+
+      .side-info-panel {
+        display: none; /* Keep clean and minimal on mobile/tablet */
+      }
+
+      .login-form-panel {
+        padding: 2.25rem 1.75rem;
+      }
+
+      .top-header {
+        padding: 1rem 1.25rem;
+      }
+
+      .page-footer {
+        padding: 1rem 1.25rem;
+        flex-direction: column;
+        text-align: center;
+        gap: 0.6rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .brand-title-group p {
+        display: none;
+      }
+
+      .login-panel-title {
+        font-size: 1.4rem;
+      }
+
+      .form-options-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Full-Screen Cargo Ship Background with Light Dark Overlay & Subtle Blur -->
+  <div class="bg-image-wrapper">
+    <div class="bg-image"></div>
+    <div class="bg-overlay"></div>
+    <div class="bg-grid-overlay"></div>
+  </div>
+
+  <div class="page-wrapper">
+
+    <!-- Top Header Navigation -->
+    <header class="top-header">
+      <a href="index.html" class="header-brand">
+        <img src="/static/assets/smartvessel_logo.png" alt="SmartVessel AI Logo" class="brand-logo-img">
+        <div class="brand-title-group">
+          <h1>SmartVessel <span>AI</span></h1>
+          <p>AI-Powered Maritime Logistics & Freight Forecasting Platform</p>
+        </div>
+      </a>
+
+      <div class="system-status-badge d-none d-sm-inline-flex">
+        <span class="status-dot-pulse"></span>
+        <span>Decision Center Online</span>
+      </div>
+    </header>
+
+    <!-- Main Content: Split Card (Side Info + Glassmorphism Login Card) -->
+    <main class="login-container">
+      <div class="login-split-card">
+
+        <!-- Side Information Panel -->
+        <section class="side-info-panel">
+          <div>
+            <div class="side-hero-pill">
+              <i class="fa-solid fa-anchor"></i> Maritime Intelligence Engine
+            </div>
+            <h2 class="side-title">Freight Forecasting Decision Center</h2>
+            <p class="side-subtitle">
+              Enterprise AI forecasting and charter decision optimization for bulk carriers, container fleets, and port logistics.
+            </p>
+
+            <!-- Features Checklist -->
+            <ul class="features-list">
+              <li class="feature-item">
+                <div class="feature-check-icon"><i class="fa-solid fa-check"></i></div>
+                <div class="feature-text-group">
+                  <h4>Freight Rate Forecasting</h4>
+                  <p>Multi-horizon rates for 7-day, 14-day, and 30-day routes with 98.2% accuracy.</p>
+                </div>
+              </li>
+              <li class="feature-item">
+                <div class="feature-check-icon"><i class="fa-solid fa-check"></i></div>
+                <div class="feature-text-group">
+                  <h4>Vessel Recommendation</h4>
+                  <p>Automated feasibility matching for Handysize, Supramax, Panamax, and Capesize.</p>
+                </div>
+              </li>
+              <li class="feature-item">
+                <div class="feature-check-icon"><i class="fa-solid fa-check"></i></div>
+                <div class="feature-text-group">
+                  <h4>Voyage Cost Analysis</h4>
+                  <p>Comprehensive bunker fuel calculation, canal tariffs, and port charges estimation.</p>
+                </div>
+              </li>
+              <li class="feature-item">
+                <div class="feature-check-icon"><i class="fa-solid fa-check"></i></div>
+                <div class="feature-text-group">
+                  <h4>Risk Assessment</h4>
+                  <p>Real-time weather tracking, canal bottleneck alerts, and demurrage risk scoring.</p>
+                </div>
+              </li>
+              <li class="feature-item">
+                <div class="feature-check-icon"><i class="fa-solid fa-check"></i></div>
+                <div class="feature-text-group">
+                  <h4>Contract Optimization</h4>
+                  <p>Spot vs. COA vs. Long-term charter decision modeling to minimize freight spend.</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Bottom Operational Metrics Bar -->
+          <div class="side-metrics-bar">
+            <div class="side-metric-item">
+              <div class="metric-value">98.2%</div>
+              <div class="metric-label">Model Accuracy</div>
+            </div>
+            <div class="side-metric-item">
+              <div class="metric-value">7 Hubs</div>
+              <div class="metric-label">Port Feasibility</div>
+            </div>
+            <div class="side-metric-item">
+              <div class="metric-value">&lt; 15ms</div>
+              <div class="metric-label">API Latency</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Right Side: Glassmorphism Login Card -->
+        <section class="login-form-panel">
+          <div class="login-panel-header">
+            <h2 class="login-panel-title">Welcome Back</h2>
+            <p class="login-panel-sub">Sign in to access your freight analytics and vessel fleet portal</p>
+          </div>
+
+          <!-- Two Login Tabs: User Login vs Admin Login -->
+          <div class="login-tabs-nav" role="tablist">
+            <button type="button" class="login-tab-btn active" id="tabUserBtn" onclick="switchLoginTab('user')">
+              <i class="fa-solid fa-user"></i> User Login
+            </button>
+            <button type="button" class="login-tab-btn" id="tabAdminBtn" onclick="switchLoginTab('admin')">
+              <i class="fa-solid fa-shield-halved"></i> Admin Login
+            </button>
+          </div>
+
+          <!-- Alert / Feedback Banner -->
+          <div id="loginAlertBanner" class="login-alert-banner" role="alert">
+            <i id="alertIcon" class="fa-solid fa-circle-exclamation"></i>
+            <span id="alertMessage">Please provide valid credentials.</span>
+          </div>
+
+          <!-- Form 1: User Login Form -->
+          <form id="userLoginForm" onsubmit="handleUserLogin(event)" novalidate>
+            <!-- Email Address Field -->
+            <div class="form-group-custom">
+              <label for="userEmail" class="form-label-custom">Email Address</label>
+              <div class="input-wrapper-custom">
+                <i class="fa-regular fa-envelope input-icon-left"></i>
+                <input type="email" id="userEmail" class="form-control-custom" placeholder="name@maritime-logistics.com" required autocomplete="email">
+              </div>
+              <div id="userEmailFeedback" class="feedback-msg">Please enter a valid work email address.</div>
+            </div>
+
+            <!-- Password Field with Show/Hide -->
+            <div class="form-group-custom">
+              <label for="userPassword" class="form-label-custom">Password</label>
+              <div class="input-wrapper-custom">
+                <i class="fa-solid fa-lock input-icon-left"></i>
+                <input type="password" id="userPassword" class="form-control-custom" placeholder="••••••••" required autocomplete="current-password">
+                <button type="button" class="toggle-password-btn" onclick="togglePasswordVisibility('userPassword', this)" title="Show/Hide Password">
+                  <i class="fa-regular fa-eye"></i>
+                </button>
+              </div>
+              <div id="userPasswordFeedback" class="feedback-msg">Password must be at least 6 characters.</div>
+            </div>
+
+            <!-- Remember Me & Forgot Password -->
+            <div class="form-options-row">
+              <label class="remember-me-label" for="rememberMeCheckbox">
+                <input type="checkbox" id="rememberMeCheckbox" class="remember-me-checkbox" checked>
+                <span>Remember Me</span>
+              </label>
+              <a href="#" class="forgot-link" onclick="openForgotModal(event)">Forgot Password?</a>
+            </div>
+
+            <!-- User Login Button -->
+            <button type="submit" id="userSubmitBtn" class="btn-submit-login">
+              <span id="userBtnText">Sign In to Platform</span>
+              <i class="fa-solid fa-arrow-right" id="userBtnIcon"></i>
+            </button>
+          </form>
+
+          <!-- Form 2: Admin Login Form (Hidden by default) -->
+          <form id="adminLoginForm" onsubmit="handleAdminLogin(event)" style="display: none;" novalidate>
+            <!-- Admin ID Field -->
+            <div class="form-group-custom">
+              <label for="adminId" class="form-label-custom">Admin ID / Username</label>
+              <div class="input-wrapper-custom">
+                <i class="fa-solid fa-id-badge input-icon-left"></i>
+                <input type="text" id="adminId" class="form-control-custom" placeholder="ADM-8800 or admin" required autocomplete="username">
+              </div>
+              <div id="adminIdFeedback" class="feedback-msg">Please enter your assigned Admin Identifier.</div>
+            </div>
+
+            <!-- Admin Password Field with Show/Hide -->
+            <div class="form-group-custom">
+              <label for="adminPassword" class="form-label-custom">Administrator Password</label>
+              <div class="input-wrapper-custom">
+                <i class="fa-solid fa-lock input-icon-left"></i>
+                <input type="password" id="adminPassword" class="form-control-custom" placeholder="••••••••" required autocomplete="current-password">
+                <button type="button" class="toggle-password-btn" onclick="togglePasswordVisibility('adminPassword', this)" title="Show/Hide Password">
+                  <i class="fa-regular fa-eye"></i>
+                </button>
+              </div>
+              <div id="adminPasswordFeedback" class="feedback-msg">Admin security key is required.</div>
+            </div>
+
+            <!-- Admin Options Row -->
+            <div class="form-options-row">
+              <span class="text-muted" style="font-size: 0.8rem;">
+                <i class="fa-solid fa-shield-halved text-success"></i> 256-bit Encrypted Session
+              </span>
+              <a href="#" class="forgot-link" onclick="openForgotModal(event, 'admin')">Reset Key?</a>
+            </div>
+
+            <!-- Admin Login Button -->
+            <button type="submit" id="adminSubmitBtn" class="btn-submit-login">
+              <span id="adminBtnText">Authenticate as Admin</span>
+              <i class="fa-solid fa-shield-halved" id="adminBtnIcon"></i>
+            </button>
+          </form>
+
+          <!-- 1-Click Demo Credentials Quick Autofill for Convenience -->
+          <div class="demo-credentials-box">
+            <span class="demo-label"><i class="fa-solid fa-bolt text-warning"></i> Quick Demo:</span>
+            <div class="d-flex gap-2">
+              <button type="button" class="demo-badge-btn" onclick="fillDemoCredentials('user')">
+                <i class="fa-solid fa-user-check"></i> Fill User
+              </button>
+              <button type="button" class="demo-badge-btn" onclick="fillDemoCredentials('admin')">
+                <i class="fa-solid fa-user-shield"></i> Fill Admin
+              </button>
+            </div>
+          </div>
+
+        </section>
+
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="page-footer">
+      <div>
+        &copy; 2026 <strong>SmartVessel AI</strong> &mdash; Freight Forecasting Decision Center. All rights reserved.
+      </div>
+      <div class="footer-links">
+        <a href="#" onclick="openModal('privacyModal'); return false;">Privacy Policy</a>
+        <a href="#" onclick="openModal('termsModal'); return false;">Terms &amp; Conditions</a>
+        <a href="#" onclick="openModal('supportModal'); return false;">Contact Support</a>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- ========================================================
+       MODALS: Forgot Password, Privacy, Terms, Contact Support
+       ======================================================== -->
+
+  <!-- Forgot Password Modal -->
+  <div class="modal fade" id="forgotModal" tabindex="-1" aria-labelledby="forgotModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content modal-content-custom">
+        <div class="modal-header border-0 pb-0">
+          <h5 class="modal-title fw-bold" id="forgotModalLabel">
+            <i class="fa-solid fa-key text-primary me-2"></i>Reset Credentials
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body py-3">
+          <p class="text-muted small mb-3">
+            Enter your registered maritime account email. We will dispatch a secure 6-digit verification code to reset your password.
+          </p>
+          <div class="form-group-custom">
+            <label class="form-label-custom">Email Address</label>
+            <input type="email" id="resetEmailInput" class="form-control-custom" placeholder="name@maritime-logistics.com">
+          </div>
+          <div id="resetFeedback" class="alert alert-success d-none py-2 small mb-0 mt-2">
+            <i class="fa-solid fa-check-circle me-1"></i> A reset link has been dispatched to your email.
+          </div>
+        </div>
+        <div class="modal-footer border-0 pt-0">
+          <button type="button" class="btn btn-secondary rounded-pill px-4 btn-sm" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary rounded-pill px-4 btn-sm" onclick="sendPasswordReset()">Send Reset Code</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Privacy Policy Modal -->
+  <div class="modal fade" id="privacyModal" tabindex="-1" aria-labelledby="privacyModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content modal-content-custom">
+        <div class="modal-header border-bottom">
+          <h5 class="modal-title fw-bold" id="privacyModalLabel">
+            <i class="fa-solid fa-shield-halved text-primary me-2"></i>Privacy Policy
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body small text-muted">
+          <h6 class="fw-bold text-dark">1. Information Collection</h6>
+          <p>SmartVessel AI collects telemetry, port call schedules, bunker consumption benchmarks, and maritime voyage records solely to optimize charter party planning and freight analytics.</p>
+          <h6 class="fw-bold text-dark">2. Enterprise Data Encryption</h6>
+          <p>All freight rate forecasts, scenario simulations, and sensitive vessel positions are encrypted in transit via TLS 1.3 and at rest with AES-256 standard.</p>
+          <h6 class="fw-bold text-dark">3. Data Sharing & Third Parties</h6>
+          <p>We do not commercialize or distribute individual chartering records to unverified external brokers.</p>
+        </div>
+        <div class="modal-footer border-0">
+          <button type="button" class="btn btn-primary rounded-pill px-4 btn-sm" data-bs-dismiss="modal">Understood</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Terms & Conditions Modal -->
+  <div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content modal-content-custom">
+        <div class="modal-header border-bottom">
+          <h5 class="modal-title fw-bold" id="termsModalLabel">
+            <i class="fa-solid fa-file-contract text-primary me-2"></i>Terms &amp; Conditions
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body small text-muted">
+          <h6 class="fw-bold text-dark">1. Platform Authorization</h6>
+          <p>SmartVessel AI is designed for authorized commercial shipping operators, logistics managers, port authorities, and chartering teams.</p>
+          <h6 class="fw-bold text-dark">2. Forecast & Simulation Advisory</h6>
+          <p>While our Random Forest and XGBoost predictive models maintain exceptional empirical accuracy (R² &gt; 0.98), market rates are subject to force majeure, extreme weather, and geopolitical fluctuations.</p>
+          <h6 class="fw-bold text-dark">3. Acceptable Use</h6>
+          <p>Users agree not to tamper with or disrupt live API services, rate feeds, or simulated contract pipelines.</p>
+        </div>
+        <div class="modal-footer border-0">
+          <button type="button" class="btn btn-primary rounded-pill px-4 btn-sm" data-bs-dismiss="modal">Accept</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contact Support Modal -->
+  <div class="modal fade" id="supportModal" tabindex="-1" aria-labelledby="supportModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content modal-content-custom">
+        <div class="modal-header border-0 pb-0">
+          <h5 class="modal-title fw-bold" id="supportModalLabel">
+            <i class="fa-solid fa-headset text-primary me-2"></i>Maritime Operations Support
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body py-3">
+          <p class="text-muted small mb-3">Our 24/7 Maritime Intelligence Support Desk is available for live tracking, API integration, and charter analytics support.</p>
+          <div class="bg-light p-3 rounded-3 border mb-3 small">
+            <div class="mb-2"><i class="fa-solid fa-envelope text-primary me-2"></i><strong>Email:</strong> support@smartvessel.ai</div>
+            <div class="mb-2"><i class="fa-solid fa-phone text-success me-2"></i><strong>Operations Hotline:</strong> +91 44 2855 7000 / +1 (800) 555-VESSEL</div>
+            <div><i class="fa-solid fa-clock text-info me-2"></i><strong>Availability:</strong> 24/7 Worldwide Marine Ops</div>
+          </div>
+          <p class="text-muted small mb-0">For immediate API status, you may also inspect the <a href="/api/health" target="_blank" class="fw-bold text-primary">Health Diagnostics</a> endpoint.</p>
+        </div>
+        <div class="modal-footer border-0 pt-0">
+          <button type="button" class="btn btn-primary rounded-pill px-4 btn-sm" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap 5 JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <!-- Login Logic Script -->
+  <script>
+    let activeTab = 'user';
+
+    // Switch between User Login and Admin Login
+    function switchLoginTab(tab) {
+      activeTab = tab;
+      const userTabBtn = document.getElementById('tabUserBtn');
+      const adminTabBtn = document.getElementById('tabAdminBtn');
+      const userForm = document.getElementById('userLoginForm');
+      const adminForm = document.getElementById('adminLoginForm');
+      const alertBanner = document.getElementById('loginAlertBanner');
+
+      // Clear alerts
+      alertBanner.className = 'login-alert-banner';
+      alertBanner.style.display = 'none';
+
+      if (tab === 'user') {
+        userTabBtn.classList.add('active');
+        adminTabBtn.classList.remove('active');
+        userForm.style.display = 'block';
+        adminForm.style.display = 'none';
+        document.getElementById('userEmail').focus();
+      } else {
+        adminTabBtn.classList.add('active');
+        userTabBtn.classList.remove('active');
+        adminForm.style.display = 'block';
+        userForm.style.display = 'none';
+        document.getElementById('adminId').focus();
+      }
+    }
+
+    // Toggle Password Visibility (Eye Icon)
+    function togglePasswordVisibility(inputId, btn) {
+      const input = document.getElementById(inputId);
+      const icon = btn.querySelector('i');
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+      } else {
+        input.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+      }
+    }
+
+    // Quick Autofill Demo Credentials
+    function fillDemoCredentials(type) {
+      if (type === 'user') {
+        switchLoginTab('user');
+        document.getElementById('userEmail').value = 'analyst@smartvessel.ai';
+        document.getElementById('userPassword').value = 'Maritime2026!';
+        clearInputError('userEmail');
+        clearInputError('userPassword');
+      } else {
+        switchLoginTab('admin');
+        document.getElementById('adminId').value = 'ADM-VASAN';
+        document.getElementById('adminPassword').value = 'AdminMaster2026!';
+        clearInputError('adminId');
+        clearInputError('adminPassword');
+      }
+    }
+
+    // Input Helpers
+    function setInputError(inputId, feedbackId, msg) {
+      const input = document.getElementById(inputId);
+      const feedback = document.getElementById(feedbackId);
+      input.classList.add('is-invalid-input');
+      if (msg) feedback.textContent = msg;
+      feedback.classList.add('error');
+    }
+
+    function clearInputError(inputId, feedbackId) {
+      const input = document.getElementById(inputId);
+      input.classList.remove('is-invalid-input');
+      if (feedbackId) {
+        const feedback = document.getElementById(feedbackId);
+        feedback.classList.remove('error');
+      }
+    }
+
+    ['userEmail', 'userPassword'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('input', () => clearInputError(id, id + 'Feedback'));
+    });
+
+    ['adminId', 'adminPassword'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('input', () => clearInputError(id, id + 'Feedback'));
+    });
+
+    // Handle User Login Submission
+    function handleUserLogin(e) {
+      e.preventDefault();
+      const emailInput = document.getElementById('userEmail');
+      const passwordInput = document.getElementById('userPassword');
+      const email = emailInput.value.trim();
+      const password = passwordInput.value;
+
+      let isValid = true;
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      if (!email || !emailPattern.test(email)) {
+        setInputError('userEmail', 'userEmailFeedback', 'Please enter a valid work email address.');
+        isValid = false;
+      }
+
+      if (!password || password.length < 6) {
+        setInputError('userPassword', 'userPasswordFeedback', 'Password must be at least 6 characters.');
+        isValid = false;
+      }
+
+      if (!isValid) return;
+
+      // Simulate Authentication with Loading Feedback
+      const btn = document.getElementById('userSubmitBtn');
+      const btnText = document.getElementById('userBtnText');
+      const btnIcon = document.getElementById('userBtnIcon');
+      const alertBanner = document.getElementById('loginAlertBanner');
+      const alertMsg = document.getElementById('alertMessage');
+      const alertIcon = document.getElementById('alertIcon');
+
+      btn.disabled = true;
+      btnText.textContent = 'Verifying Credentials...';
+      btnIcon.className = 'fa-solid fa-circle-notch fa-spin';
+
+      setTimeout(() => {
+        // Save simulated user session in localStorage
+        const userName = email.split('@')[0];
+        const formattedName = userName.charAt(0).toUpperCase() + userName.slice(1);
+        localStorage.setItem('smartvessel_user', JSON.stringify({
+          name: formattedName,
+          email: email,
+          role: 'Charter Analyst',
+          loginTime: new Date().toISOString()
+        }));
+
+        alertBanner.className = 'login-alert-banner success';
+        alertBanner.style.display = 'flex';
+        alertIcon.className = 'fa-solid fa-circle-check';
+        alertMsg.textContent = `Welcome, ${formattedName}! Redirecting to Decision Center...`;
+
+        btnText.textContent = 'Access Granted!';
+        btnIcon.className = 'fa-solid fa-check';
+        btn.style.background = 'linear-gradient(135deg, #16a34a, #15803d)';
+
+        setTimeout(() => {
+          window.location.href = 'index.html';
+        }, 900);
+      }, 700);
+    }
+
+    // Handle Admin Login Submission
+    function handleAdminLogin(e) {
+      e.preventDefault();
+      const adminIdInput = document.getElementById('adminId');
+      const passwordInput = document.getElementById('adminPassword');
+      const adminId = adminIdInput.value.trim();
+      const password = passwordInput.value;
+
+      let isValid = true;
+
+      if (!adminId) {
+        setInputError('adminId', 'adminIdFeedback', 'Administrator ID or username is required.');
+        isValid = false;
+      }
+
+      if (!password || password.length < 4) {
+        setInputError('adminPassword', 'adminPasswordFeedback', 'Valid administrator security key is required.');
+        isValid = false;
+      }
+
+      if (!isValid) return;
+
+      const btn = document.getElementById('adminSubmitBtn');
+      const btnText = document.getElementById('adminBtnText');
+      const btnIcon = document.getElementById('adminBtnIcon');
+      const alertBanner = document.getElementById('loginAlertBanner');
+      const alertMsg = document.getElementById('alertMessage');
+      const alertIcon = document.getElementById('alertIcon');
+
+      btn.disabled = true;
+      btnText.textContent = 'Authorizing Administrator...';
+      btnIcon.className = 'fa-solid fa-circle-notch fa-spin';
+
+      setTimeout(() => {
+        localStorage.setItem('smartvessel_user', JSON.stringify({
+          name: 'Vasan (Admin)',
+          adminId: adminId,
+          role: 'System Administrator',
+          loginTime: new Date().toISOString()
+        }));
+
+        alertBanner.className = 'login-alert-banner success';
+        alertBanner.style.display = 'flex';
+        alertIcon.className = 'fa-solid fa-shield-check';
+        alertMsg.textContent = 'Administrator Authorized. Launching Decision Center...';
+
+        btnText.textContent = 'Authorized!';
+        btnIcon.className = 'fa-solid fa-check';
+        btn.style.background = 'linear-gradient(135deg, #0d9488, #0f766e)';
+
+        setTimeout(() => {
+          window.location.href = 'index.html';
+        }, 900);
+      }, 700);
+    }
+
+    // Modal Helpers
+    function openModal(modalId) {
+      const el = document.getElementById(modalId);
+      if (el && window.bootstrap) {
+        const modal = new bootstrap.Modal(el);
+        modal.show();
+      }
+    }
+
+    function openForgotModal(e, role) {
+      if (e) e.preventDefault();
+      document.getElementById('resetFeedback').classList.add('d-none');
+      const title = document.getElementById('forgotModalLabel');
+      if (role === 'admin') {
+        title.innerHTML = '<i class="fa-solid fa-shield-halved text-danger me-2"></i>Reset Admin Security Key';
+      } else {
+        title.innerHTML = '<i class="fa-solid fa-key text-primary me-2"></i>Reset User Password';
+      }
+      openModal('forgotModal');
+    }
+
+    function sendPasswordReset() {
+      const emailInput = document.getElementById('resetEmailInput');
+      const feedback = document.getElementById('resetFeedback');
+      if (emailInput.value && emailInput.value.includes('@')) {
+        feedback.classList.remove('d-none');
+        setTimeout(() => {
+          const el = document.getElementById('forgotModal');
+          const modal = bootstrap.Modal.getInstance(el);
+          if (modal) modal.hide();
+        }, 1800);
+      } else {
+        alert('Please enter a valid email address.');
+      }
+    }
+  </script>
+
+</body>
+
+</html>

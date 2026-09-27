@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 130" width="100" height="130">
+  <g fill="#1b365d" stroke="none">
+    <!-- Crown / Lions Silhouette Top -->
+    <path d="M 50,5 C 42,5 38,12 35,18 C 30,16 22,20 20,28 C 18,34 22,40 25,44 C 20,46 16,52 18,60 C 20,68 28,70 32,70 C 35,70 38,68 40,65 C 43,72 57,72 60,65 C 62,68 65,70 68,70 C 72,70 80,68 82,60 C 84,52 80,46 75,44 C 78,40 82,34 80,28 C 78,20 70,16 65,18 C 62,12 58,5 50,5 Z M 50,14 C 54,14 57,19 59,24 C 55,23 45,23 41,24 C 43,19 46,14 50,14 Z M 32,26 C 36,25 43,26 46,28 C 44,35 40,42 36,46 C 31,44 28,38 29,32 C 29,28 31,26 32,26 Z M 68,26 C 69,26 71,28 71,32 C 72,38 69,44 64,46 C 60,42 56,35 54,28 C 57,26 64,25 68,26 Z M 50,30 C 53,36 57,48 58,58 C 53,60 47,60 42,58 C 43,48 47,36 50,30 Z"/>
+    <!-- Abacus Base / Pedestal -->
+    <rect x="15" y="74" width="70" height="6" rx="2" fill="#1b365d"/>
+    <!-- Ashoka Chakra Wheel Center -->
+    <circle cx="50" cy="90" r="9" fill="none" stroke="#1b365d" stroke-width="2"/>
+    <circle cx="50" cy="90" r="2" fill="#1b365d"/>
+    <!-- Chakra Spokes -->
+    <path d="M 50,81 L 50,99 M 41,90 L 59,90 M 43.6,83.6 L 56.4,96.4 M 43.6,96.4 L 56.4,83.6 M 46.5,81.9 L 53.5,98.1 M 41.9,86.5 L 58.1,93.5 M 41.9,93.5 L 58.1,86.5 M 46.5,98.1 L 53.5,81.9" stroke="#1b365d" stroke-width="0.8"/>
+    <!-- Horse (Left) & Bull (Right) Accents -->
+    <path d="M 22,86 C 25,84 28,87 27,91 C 25,93 21,91 22,86 Z M 78,86 C 75,84 72,87 73,91 C 75,93 79,91 78,86 Z"/>
+    <!-- Lower Base -->
+    <path d="M 10,100 L 90,100 L 85,106 L 15,106 Z" fill="#1b365d"/>
+    <!-- Motto: Satyameva Jayate Text representation -->
+    <text x="50" y="118" font-family="'Outfit', 'Times New Roman', serif" font-size="7.5" font-weight="bold" text-anchor="middle" fill="#1b365d" letter-spacing="0.5"> सत्यमेव जयते </text>
+  </g>
+</svg>
