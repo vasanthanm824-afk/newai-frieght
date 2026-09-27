@@ -15,14 +15,22 @@ try:
     from ml.preprocessing import prepare_feature_engineering
     from ml.tft_model import TemporalFusionTransformerRegressor
     from ml.gnn_model import GraphNeuralNetworkRegressor
-    from ml.train import StackingEnsembleWrapper
+    try:
+        from ml.train import StackingEnsembleWrapper
+    except Exception:
+        class StackingEnsembleWrapper:
+            pass
 except ModuleNotFoundError:
     from SmartVesselAI.backend.database import SessionLocal
     from SmartVesselAI.backend.models.db_models import FreightRate
     from SmartVesselAI.ml.preprocessing import prepare_feature_engineering
     from SmartVesselAI.ml.tft_model import TemporalFusionTransformerRegressor
     from SmartVesselAI.ml.gnn_model import GraphNeuralNetworkRegressor
-    from SmartVesselAI.ml.train import StackingEnsembleWrapper
+    try:
+        from SmartVesselAI.ml.train import StackingEnsembleWrapper
+    except Exception:
+        class StackingEnsembleWrapper:
+            pass
 
 # Map model wrappers to main namespace for pickle compatibility
 import __main__
